@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L'EXIL — Dashboard Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0c;--card:#131317;--card2:#1a1a22;--bord:#23232c;--red:#e11d2a;--green:#39d56b;--gold:#e0a82e;--txt:#e7e7ea;--mut:#8a8a93}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:Barlow,system-ui,sans-serif}
+h1,h2,h3,.osw{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.04em}
+a{color:var(--gold)}
+.wrap{max-width:1100px;margin:0 auto;padding:24px 16px}
+.topbar{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bord);padding:16px}
+.logo{font-family:Oswald;font-weight:700;letter-spacing:3px;color:var(--red);font-size:22px}
+.tag{font-size:11px;color:var(--mut);letter-spacing:2px}
+.card{background:var(--card);border:1px solid var(--bord);border-radius:12px;padding:20px;margin-bottom:16px}
+label{display:block;font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.08em;margin:10px 0 5px}
+input,select{width:100%;padding:11px 12px;background:#0e0e12;border:1px solid var(--bord);border-radius:8px;color:var(--txt);font-size:15px;font-family:Barlow}
+input:focus,select:focus{outline:none;border-color:var(--red)}
+button{font-family:Oswald;text-transform:uppercase;letter-spacing:.06em;font-weight:600;cursor:pointer;border:0;border-radius:8px;padding:11px 18px;color:#fff;background:var(--red);font-size:14px}
+button:hover{filter:brightness(1.1)}button:disabled{opacity:.5;cursor:default}
+button.ghost{background:#23232c}button.green{background:#1f7a3d}button.gold{background:var(--gold);color:#1a1208}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:11px 10px;border-bottom:1px solid var(--bord);font-size:14px}
+th{font-family:Oswald;text-transform:uppercase;font-size:12px;letter-spacing:.06em;color:var(--mut)}
+tr.row{cursor:pointer}tr.row:hover{background:var(--card2)}
+.av{width:30px;height:30px;border-radius:50%;background:#000 center/cover;vertical-align:middle;margin-right:8px;border:1px solid var(--bord)}
+.grade{font-family:Oswald;font-size:13px}
+.badge{display:inline-block;font-family:Oswald;font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:3px 8px;border-radius:4px}
+.b-on{background:rgba(57,213,107,.12);border:1px solid #1f4a2e;color:var(--green)}
+.b-off{background:rgba(225,29,42,.1);border:1px solid #3a1a1d;color:var(--red)}
+.muted{color:var(--mut)}.small{font-size:13px}
+.flex{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.hidden{display:none}
+.err{color:#ff7b82;font-size:13px;margin-top:8px}
+.ok{color:var(--green);font-size:13px;margin-top:8px}
+.back{background:none;color:var(--gold);padding:0;font-size:13px}
+.stat{background:var(--card2);border:1px solid var(--bord);border-radius:10px;padding:14px;text-align:center;flex:1;min-width:120px}
+.stat b{display:block;font-family:Oswald;font-size:22px;color:var(--red)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:700px){.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div><span class="logo">L'EXIL</span> <span class="tag">· DASHBOARD ADMIN</span></div>
+  <div id="who" class="small muted"></div>
+</div>
+<div class="wrap">
+
+  <!-- LOGIN -->
+  <div id="login" class="card" style="max-width:440px;margin:40px auto">
+    <h2 style="margin:0 0 4px;color:var(--red)">Connexion admin</h2>
+    <p class="small muted" style="margin:0 0 8px">Réservé aux admins et fondateurs.</p>
+    <label>Ton SteamID64</label>
+    <input id="sid" placeholder="7656119..." inputmode="numeric">
+    <p class="small muted" style="margin:6px 0 0">Astuce : connecte-toi d'abord en Steam sur <a href="/" target="_blank">lexil.net</a>, ton ID sera pré-rempli.</p>
+    <label>Mot de passe admin</label>
+    <input id="pwd" type="password" placeholder="••••••••">
+    <div style="margin-top:14px"><button id="loginBtn" style="width:100%">Se connecter</button></div>
+    <div id="loginMsg" class="err"></div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dash" class="hidden">
+    <div class="flex" style="justify-content:space-between;margin-bottom:12px">
+      <h2 style="margin:0">Joueurs</h2>
+      <button class="ghost" id="refreshBtn">↻ Rafraîchir</button>
+    </div>
+    <div class="card" style="padding:6px 10px">
+      <table><thead><tr><th>Joueur</th><th>Grade</th><th>Total</th><th>Cmd</th><th>Discord</th></tr></thead>
+      <tbody id="usersBody"></tbody></table>
+      <p id="usersEmpty" class="muted small hidden" style="padding:14px">Aucun joueur pour l'instant.</p>
+    </div>
+  </div>
+
+  <!-- DÉTAIL JOUEUR -->
+  <div id="detail" class="hidden">
+    <button class="back" id="backBtn">← Retour à la liste</button>
+    <div class="card" style="margin-top:10px">
+      <div class="flex">
+        <div id="dAv" class="av" style="width:54px;height:54px"></div>
+        <div><h2 id="dName" style="margin:0"></h2><div class="small muted" id="dSid"></div>
+          <div class="small" id="dDiscord"></div></div>
+      </div>
+      <div class="flex" style="margin-top:14px">
+        <div class="stat"><b id="dTotal">0€</b><span class="small muted">Total dépensé</span></div>
+        <div class="stat"><b id="dOrders">0</b><span class="small muted">Commandes</span></div>
+        <div class="stat"><b id="dGrade">—</b><span class="small muted">Grade</span></div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3 style="margin:0 0 10px">Créditer un montant</h3>
+        <p class="small muted" style="margin:0 0 8px">Fait monter le grade (et le rôle Discord au prochain calcul du bot).</p>
+        <div class="flex"><input id="creditAmt" placeholder="ex: 50" inputmode="decimal" style="flex:1">
+          <button class="green" id="creditBtn">Créditer</button></div>
+        <div id="creditMsg"></div>
+      </div>
+      <div class="card">
+        <h3 style="margin:0 0 10px">Donner un produit</h3>
+        <div class="flex"><select id="giveSel" style="flex:1"></select>
+          <button class="gold" id="giveBtn">Donner</button></div>
+        <div id="giveMsg"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0 0 10px">Historique des commandes</h3>
+      <table><thead><tr><th>Date</th><th>Articles</th><th>Total</th><th></th></tr></thead>
+      <tbody id="ordersBody"></tbody></table>
+      <p id="ordersEmpty" class="muted small hidden" style="padding:8px">Aucune commande.</p>
+    </div>
+
+    <div class="grid2">
+      <div class="card"><h3 style="margin:0 0 10px">Abonnements</h3><div id="subsBox" class="small"></div></div>
+      <div class="card"><h3 style="margin:0 0 10px">Cosmétiques</h3><div id="cosBox" class="small"></div></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const BACKEND = "https://lexil-auth-production.up.railway.app";
+let TOKEN = sessionStorage.getItem('lexil_admin_token') || '';
+let ASID  = sessionStorage.getItem('lexil_admin_sid') || localStorage.getItem('lexil_steamid') || '';
+let CATALOG = [];
+let CURRENT = null; // steamId du joueur ouvert
+
+const $ = id => document.getElementById(id);
+function headers(){ return {'Content-Type':'application/json','x-admin-token':TOKEN,'x-admin-steamid':ASID}; }
+async function api(path, opts){ const r = await fetch(BACKEND+path, Object.assign({headers:headers()}, opts||{})); return r; }
+
+// prefill
+$('sid').value = ASID;
+
+$('loginBtn').onclick = async () => {
+  TOKEN = $('pwd').value.trim(); ASID = $('sid').value.trim();
+  $('loginMsg').textContent = '';
+  if(!ASID || !TOKEN){ $('loginMsg').textContent = 'SteamID et mot de passe requis.'; return; }
+  const r = await api('/api/admin/users').catch(()=>null);
+  if(r && r.ok){
+    sessionStorage.setItem('lexil_admin_token',TOKEN); sessionStorage.setItem('lexil_admin_sid',ASID);
+    $('login').classList.add('hidden'); $('dash').classList.remove('hidden');
+    $('who').textContent = 'Admin · '+ASID;
+    await loadCatalog(); renderUsers((await r.json()).users);
+  } else {
+    $('loginMsg').textContent = (r && r.status===403) ? 'Accès refusé (SteamID non admin ou mauvais mot de passe).' : 'Backend injoignable.';
+  }
+};
+
+async function loadCatalog(){ try{ const r=await api('/api/admin/catalog'); if(r.ok){ CATALOG=(await r.json()).catalog;
+  $('giveSel').innerHTML = CATALOG.map(c=>`<option value="${c.key}">${c.name} (${c.cat})</option>`).join(''); } }catch(e){} }
+
+$('refreshBtn').onclick = async () => { const r=await api('/api/admin/users'); if(r.ok) renderUsers((await r.json()).users); };
+
+function renderUsers(users){
+  const b=$('usersBody'); b.innerHTML='';
+  $('usersEmpty').classList.toggle('hidden', users.length>0);
+  users.forEach(u=>{
+    const tr=document.createElement('tr'); tr.className='row';
+    tr.innerHTML = `<td><span class="av" style="background-image:url('${(u.avatar||'').replace(/'/g,'')}')"></span>${esc(u.name)}</td>
+      <td class="grade">${u.grade.glyph||''} ${esc(u.grade.name||'')}</td>
+      <td>${u.total}</td><td>${u.orders}</td><td class="small muted">${esc(u.discord||'—')}</td>`;
+    tr.onclick=()=>openUser(u.steamId);
+    b.appendChild(tr);
+  });
+}
+
+async function openUser(sid){
+  const r=await api('/api/admin/user?steamId='+encodeURIComponent(sid)); if(!r.ok) return;
+  const d=await r.json(); CURRENT=sid;
+  $('dash').classList.add('hidden'); $('detail').classList.remove('hidden');
+  const st=d.steam||{};
+  $('dAv').style.backgroundImage = st.avatar?`url('${st.avatar}')`:'';
+  $('dName').textContent = st.name||sid; $('dSid').textContent = sid;
+  $('dDiscord').innerHTML = d.discord ? ('Discord : <span style="color:var(--green)">'+esc(d.discord.discordName)+'</span>') : '<span class="muted">Discord non lié</span>';
+  const a=d.account;
+  $('dTotal').textContent=a.stats.totalSpent; $('dOrders').textContent=a.stats.orderCount;
+  $('dGrade').textContent=(a.stats.grade.glyph||'')+' '+(a.stats.grade.name||'—');
+  // commandes
+  const ob=$('ordersBody'); ob.innerHTML='';
+  $('ordersEmpty').classList.toggle('hidden', a.orders.length>0);
+  a.orders.forEach(o=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td class="small">${esc(o.date)}</td><td class="small">${o.items.map(i=>esc(i.label)).join(', ')}</td>
+      <td>${o.total}</td><td><button class="ghost" style="padding:5px 10px;font-size:12px">Retirer</button></td>`;
+    tr.querySelector('button').onclick=()=>removeOrder(o.orderId);
+    ob.appendChild(tr);
+  });
+  // abos & cosmétiques
+  $('subsBox').innerHTML = a.subscriptions.length ? a.subscriptions.map(s=>
+    `<div class="flex" style="justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--bord)"><span>${esc(s.name)}</span>
+     <span class="badge ${s.active?'b-on':'b-off'}">${esc(s.status)} · ${esc(s.expiry)}</span></div>`).join('') : '<span class="muted">Aucun</span>';
+  $('cosBox').innerHTML = a.cosmetics.length ? a.cosmetics.map(c=>
+    `<div class="flex" style="justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--bord)"><span>${esc(c.name)}</span>
+     <span class="badge ${c.status==='Actif'?'b-on':'b-off'}">${esc(c.expiry)}</span></div>`).join('') : '<span class="muted">Aucun</span>';
+  $('creditMsg').textContent=''; $('giveMsg').textContent='';
+}
+
+$('backBtn').onclick = async () => {
+  $('detail').classList.add('hidden'); $('dash').classList.remove('hidden');
+  const r=await api('/api/admin/users'); if(r.ok) renderUsers((await r.json()).users);
+};
+
+$('creditBtn').onclick = async () => {
+  const amt=parseFloat($('creditAmt').value); if(!(amt>0)){ msg('creditMsg','Montant invalide',1); return; }
+  const r=await api('/api/admin/credit',{method:'POST',body:JSON.stringify({steamId:CURRENT,amount:amt})});
+  if(r.ok){ msg('creditMsg','Crédité ✓',0); $('creditAmt').value=''; openUser(CURRENT); } else msg('creditMsg','Erreur',1);
+};
+
+$('giveBtn').onclick = async () => {
+  const key=$('giveSel').value;
+  const r=await api('/api/admin/give',{method:'POST',body:JSON.stringify({steamId:CURRENT,productKey:key})});
+  if(r.ok){ msg('giveMsg','Donné ✓',0); openUser(CURRENT); } else msg('giveMsg','Erreur',1);
+};
+
+async function removeOrder(orderId){
+  if(!confirm('Retirer cette commande ?')) return;
+  const r=await api('/api/admin/remove-order',{method:'POST',body:JSON.stringify({orderId,steamId:CURRENT})});
+  if(r.ok) openUser(CURRENT);
+}
+
+function msg(id,t,err){ const e=$(id); e.textContent=t; e.className=err?'err':'ok'; }
+function esc(s){ return String(s==null?'':s).replace(/[<>&"']/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[c])); }
+
+// auto-login si déjà en session
+if(TOKEN && ASID){ $('loginBtn').click(); }
+</script>
+</body>
+</html>
