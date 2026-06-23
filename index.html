@@ -206,5 +206,31 @@ document.addEventListener('DOMContentLoaded', async function() {
   function chk(){n++;var r=document.querySelector("x-dc");if(r&&!/\{\{/.test(r.textContent||"")){go();return;}if(n>150){go();return;}setTimeout(chk,60);}setTimeout(chk,40);
 })();
 </script>
+<script>
+(function(){
+  function go(){
+    if(!document.body){return setTimeout(go,300);}
+    if(!document.getElementById("_lexil_legal")){
+      var a=document.createElement("a");a.id="_lexil_legal";a.href="legal.html";
+      a.textContent="CGV \u00b7 Remboursement \u00b7 Mentions l\u00e9gales";
+      a.style.cssText="position:fixed;bottom:8px;right:10px;z-index:9998;font:11px Barlow,system-ui,sans-serif;color:#8a8a93;text-decoration:none;background:rgba(10,10,12,.75);padding:4px 9px;border-radius:6px;border:1px solid #23232c";
+      document.body.appendChild(a);
+    }
+    var obs=new MutationObserver(function(){
+      [].slice.call(document.querySelectorAll("button")).forEach(function(b){
+        if(/passer la commande/i.test(b.textContent)&&!b.dataset.lexilNotice){
+          b.dataset.lexilNotice="1";
+          var n=document.createElement("div");
+          n.style.cssText="font:12px Barlow,system-ui,sans-serif;color:#9a9aa3;margin:10px 0;line-height:1.45";
+          n.innerHTML="En commandant, tu acceptes la livraison imm\u00e9diate et renonces \u00e0 ton droit de r\u00e9tractation. <b style=\"color:#e0a82e\">Produits virtuels \u2014 aucun remboursement.</b> <a href=\"legal.html\" style=\"color:#e0a82e\">Voir les CGV</a>";
+          b.parentNode.insertBefore(n,b);
+        }
+      });
+    });
+    obs.observe(document.body,{childList:true,subtree:true});
+  }
+  go();
+})();
+</script>
 </body>
 </html>
