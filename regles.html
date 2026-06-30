@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L'EXIL — Règles complètes du serveur</title>
+<meta name="description" content="Toutes les règles du serveur DayZ PvP L'EXIL : conduite, triche, combat, bases, vocal et sanctions.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0a0c;--card:#131317;--card2:#17171d;--bord:#23232c;
+  --red:#e11d2a;--gold:#e0a82e;--txt:#e7e7ea;--mut:#9a9aa3;--mut2:#6d6d77;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:Barlow,system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:920px;margin:0 auto;padding:32px 20px 100px}
+a{color:var(--gold);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* Header */
+.back{display:inline-flex;align-items:center;gap:6px;margin-bottom:24px;color:var(--gold);font-weight:600;font-size:15px}
+.hero{position:relative;border:1px solid var(--bord);border-radius:16px;padding:34px 28px;background:
+  radial-gradient(120% 140% at 100% 0%,rgba(225,29,42,.10),transparent 55%),
+  linear-gradient(180deg,#141319,#0e0e12);overflow:hidden}
+.hero::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.012) 0 2px,transparent 2px 9px);pointer-events:none}
+.kicker{font-family:Oswald,sans-serif;letter-spacing:4px;text-transform:uppercase;color:var(--red);font-size:13px;font-weight:600;margin:0 0 8px}
+h1{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:2px;font-weight:700;font-size:clamp(30px,6vw,48px);margin:0;color:#f6f4ef;line-height:1}
+.lead{color:var(--mut);margin:14px 0 0;max-width:62ch}
+.meta{margin-top:16px;font-size:13px;color:var(--mut2)}
+
+/* Search + chips */
+.tools{position:sticky;top:0;z-index:20;margin:22px 0 8px;padding:14px 0;background:linear-gradient(180deg,var(--bg) 70%,transparent)}
+.search{position:relative}
+.search input{width:100%;background:var(--card);border:1px solid var(--bord);border-radius:12px;color:var(--txt);
+  font:500 16px/1.4 Barlow,sans-serif;padding:14px 44px 14px 44px;outline:none;transition:border-color .15s,box-shadow .15s}
+.search input:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(225,29,42,.16)}
+.search .ico{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:var(--mut);font-size:17px}
+.search .clr{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--mut);
+  font-size:20px;cursor:pointer;padding:6px;line-height:1;display:none}
+.search .clr:hover{color:var(--txt)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.5px;font-size:13px;font-weight:600;
+  background:var(--card);border:1px solid var(--bord);color:var(--mut);padding:7px 13px;border-radius:999px;
+  cursor:pointer;transition:.15s;user-select:none}
+.chip:hover{color:var(--txt);border-color:#34343f}
+.chip.on{background:var(--red);border-color:var(--red);color:#fff}
+.chip .ct{opacity:.7;margin-left:5px;font-size:11px}
+
+.count{font-size:13px;color:var(--mut2);margin:6px 2px 18px}
+
+/* Category sections */
+.cat{border:1px solid var(--bord);border-radius:14px;overflow:hidden;margin-bottom:14px;background:var(--card)}
+.cat-head{display:flex;align-items:center;gap:14px;width:100%;background:none;border:0;color:inherit;cursor:pointer;
+  text-align:left;padding:18px 20px;font-family:inherit}
+.cat-head:hover{background:var(--card2)}
+.cat-ico{font-size:22px;line-height:1;flex:none}
+.cat-titles{flex:1;min-width:0}
+.cat-name{display:block;font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:1px;font-weight:700;font-size:19px;color:#f2efe9}
+.cat-sub{display:block;font-size:13px;color:var(--mut);margin-top:2px}
+.cat-arrow{color:var(--mut);font-size:14px;transition:transform .25s}
+.cat.collapsed .cat-arrow{transform:rotate(-90deg)}
+.cat-body{padding:0 20px 8px}
+.cat.collapsed .cat-body{display:none}
+
+/* Rule */
+.rule{display:flex;gap:14px;padding:16px 0;border-top:1px solid var(--bord)}
+.rule:first-child{border-top:0}
+.rule-n{flex:none;width:30px;height:30px;border-radius:8px;background:#1d1d24;border:1px solid var(--bord);
+  display:grid;place-items:center;font-family:Oswald,sans-serif;font-weight:600;font-size:14px;color:var(--gold)}
+.rule-main{flex:1;min-width:0}
+.rule-title{font-weight:600;font-size:16px;color:#f2efe9;margin:2px 0 4px}
+.rule-desc{color:var(--mut);font-size:15px}
+.rule-desc mark{background:rgba(224,168,46,.28);color:#ffe6ad;border-radius:3px;padding:0 1px}
+.sev{display:inline-block;font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.5px;font-size:11px;
+  font-weight:600;padding:3px 9px;border-radius:999px;margin-top:9px;border:1px solid}
+.sev.avert{color:var(--gold);border-color:rgba(224,168,46,.5);background:rgba(224,168,46,.08)}
+.sev.kick{color:#f0902f;border-color:rgba(240,144,47,.5);background:rgba(240,144,47,.08)}
+.sev.tempo{color:#ff5a4d;border-color:rgba(255,90,77,.5);background:rgba(255,90,77,.08)}
+.sev.perma{color:#fff;border-color:var(--red);background:var(--red)}
+
+/* Empty state */
+.empty{display:none;text-align:center;padding:54px 20px;color:var(--mut)}
+.empty.show{display:block}
+.empty .big{font-size:40px;margin-bottom:10px}
+.empty b{color:var(--txt)}
+
+/* Footer CTA */
+.cta{margin-top:34px;border:1px solid var(--bord);border-radius:16px;padding:26px;text-align:center;
+  background:radial-gradient(120% 160% at 50% 0%,rgba(225,29,42,.10),transparent 60%),var(--card)}
+.cta h3{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:1px;font-size:22px;margin:0 0 6px;color:#f6f4ef}
+.cta p{color:var(--mut);margin:0 0 18px}
+.btn{display:inline-flex;align-items:center;gap:9px;font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:1px;
+  font-weight:600;font-size:15px;color:#fff;background:var(--red);padding:12px 22px;border-radius:10px;transition:.15s}
+.btn:hover{background:#f5212f;text-decoration:none;transform:translateY(-1px)}
+.foot{margin-top:30px;text-align:center;color:var(--mut2);font-size:13px}
+.foot small{display:block;margin-top:6px}
+
+@media(max-width:560px){
+  .wrap{padding:22px 14px 80px}
+  .hero{padding:26px 20px}
+  .cat-head{padding:15px 15px}
+  .cat-body{padding:0 15px 6px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="/">← Retour à l'accueil</a>
+
+  <header class="hero">
+    <p class="kicker">Serveur DayZ · PvP · FR/EU</p>
+    <h1>Règlement complet</h1>
+    <p class="lead">Toutes les règles de L'EXIL, classées par thème. En jouant sur le serveur, tu acceptes l'intégralité de ce règlement. L'ignorance d'une règle ne dispense pas de la sanction.</p>
+    <p class="meta">Dernière mise à jour : 30 juin 2026 · Le staff peut sanctionner tout comportement nuisible non listé ici.</p>
+  </header>
+
+  <div class="tools">
+    <div class="search">
+      <span class="ico">🔍</span>
+      <input id="q" type="search" placeholder="Rechercher une règle (ex : raid, vocal, cheat)…" autocomplete="off" aria-label="Rechercher une règle">
+      <button class="clr" id="clr" aria-label="Effacer">×</button>
+    </div>
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <p class="count" id="count"></p>
+
+  <main id="list"></main>
+
+  <div class="empty" id="empty">
+    <div class="big">🗿</div>
+    <p>Aucune règle ne correspond à <b id="emptyTerm"></b>.</p>
+    <p>Essaie un autre mot-clé ou demande sur le Discord.</p>
+  </div>
+
+  <section class="cta">
+    <h3>Une question sur une règle ?</h3>
+    <p>Un doute, un litige, ou envie de signaler quelqu'un ? Ouvre un ticket sur le Discord, le staff répond vite.</p>
+    <a class="btn" href="https://discord.gg/t46RE8hYs7" target="_blank" rel="noopener">💬 Rejoindre le Discord</a>
+  </section>
+
+  <p class="foot">
+    L'EXIL — Serveur DayZ PvP FR/EU · <a href="/legal.html">Mentions légales</a>
+    <small>Non affilié à Bohemia Interactive. « DayZ » est une marque de ses détenteurs respectifs.</small>
+  </p>
+</div>
+
+<script>
+/* ============================================================
+   RÈGLES — édite librement ce tableau.
+   sev : "avert" (avertissement) · "kick" · "tempo" (ban temporaire) · "perma" (ban définitif)
+   ============================================================ */
+const CATEGORIES = [
+  {
+    id:"conduite", icon:"🤝", name:"Conduite & respect",
+    sub:"Le minimum pour que tout le monde s'amuse.",
+    rules:[
+      {t:"Respect de tous", d:"Aucune insulte gratuite, harcèlement, menace, ni propos racistes, homophobes, sexistes ou discriminatoires, en jeu comme sur le Discord.", sev:"tempo"},
+      {t:"Pas de discrimination ni de contenu haineux", d:"Symboles, pseudos ou messages haineux strictement interdits. Sanction immédiate et sans avertissement.", sev:"perma"},
+      {t:"Langue", d:"Le serveur est FR/EU : privilégie le français ou l'anglais dans les canaux publics pour que le staff puisse modérer.", sev:"avert"},
+      {t:"Pas de pub", d:"Interdit de faire la publicité d'un autre serveur, d'un cheat ou d'un service tiers, en jeu ou sur le Discord.", sev:"tempo"},
+      {t:"Respect du staff", d:"Les décisions du staff s'appliquent en jeu. Tu contestes ? On en discute calmement via un ticket, jamais en spammant le chat.", sev:"kick"}
+    ]
+  },
+  {
+    id:"triche", icon:"🚫", name:"Triche & exploits",
+    sub:"Tolérance zéro. Ces règles passent avant toutes les autres.",
+    rules:[
+      {t:"Cheats & logiciels tiers", d:"Aimbot, ESP, wallhack, macros, radar ou tout logiciel donnant un avantage : ban définitif immédiat, sans préavis.", sev:"perma"},
+      {t:"Exploits & glitches", d:"Abuser d'un bug (passer un mur, voir à travers une texture, dupliquer des objets, voler sous la map…) est interdit. Signale-le au staff plutôt que de l'exploiter.", sev:"perma"},
+      {t:"Duplication d'objets", d:"Toute technique de dupe (objets, monnaie, stuff) entraîne un ban et la suppression du stuff dupliqué.", sev:"perma"},
+      {t:"Comptes & contournement de ban", d:"Revenir avec un autre compte/VPN pour contourner un ban prolonge la sanction de façon définitive sur tous les comptes liés.", sev:"perma"},
+      {t:"Achat/vente de comptes ou de stuff réel", d:"Échanger du stuff in-game contre de l'argent réel (RMT) hors boutique officielle est interdit.", sev:"tempo"}
+    ]
+  },
+  {
+    id:"combat", icon:"⚔️", name:"Combat & PvP",
+    sub:"Le serveur est PvP : le KOS est autorisé, mais avec des limites.",
+    rules:[
+      {t:"KOS autorisé", d:"Le Kill On Sight est permis partout sauf dans les zones safe explicitement indiquées (spawn, trader). Pas besoin de prévenir avant de tirer.", sev:"avert"},
+      {t:"Combat log interdit", d:"Se déconnecter pendant un combat ou une situation à risque pour échapper à la mort est interdit. Attends 30 s sans danger avant de quitter.", sev:"tempo"},
+      {t:"Stream sniping", d:"Utiliser le stream/live d'un joueur pour le localiser ou anticiper ses actions est interdit.", sev:"tempo"},
+      {t:"Spawn kill", d:"Camper et tuer en boucle les joueurs sur leur point de spawn est interdit.", sev:"kick"},
+      {t:"Zones safe", d:"Aucun tir, vol ou agression dans les zones safe et chez les traders. Provoquer puis fuir dans une zone safe est aussi sanctionné.", sev:"kick"},
+      {t:"Teaming abusif", d:"Les alliances temporaires sont tolérées, mais le teaming massif organisé pour verrouiller la map peut être sanctionné par le staff.", sev:"avert"}
+    ]
+  },
+  {
+    id:"bases", icon:"🏠", name:"Bases & raid",
+    sub:"Construire, défendre, raider — dans les règles.",
+    rules:[
+      {t:"Raid autorisé", d:"Le raid de base est permis avec les outils prévus à cet effet. Détruire une base juste pour la détruire, sans la loot, est mal vu et peut être limité.", sev:"avert"},
+      {t:"Pas de build abusif", d:"Interdit de bloquer un loot, un trader, une route ou de rendre une zone publique inaccessible avec des constructions.", sev:"kick"},
+      {t:"Pas de base sous la map / dans les rochers", d:"Construire en exploitant un glitch de terrain (sous la map, dans une roche, hors-limites) est interdit.", sev:"tempo"},
+      {t:"Limite de base", d:"Respecte le nombre de bases/coffres autorisé par groupe indiqué par le staff. Le sur-stockage pour saturer le serveur est interdit.", sev:"avert"},
+      {t:"Despawn & inactivité", d:"Une base non entretenue se dégrade et peut despawn selon les règles du jeu. Connecte-toi régulièrement pour la conserver.", sev:"avert"}
+    ]
+  },
+  {
+    id:"vocal", icon:"🎙️", name:"Vocal & communication",
+    sub:"Le jeu utilise le vocal de proximité.",
+    rules:[
+      {t:"Vocal de proximité", d:"Le vocal in-game peut servir à négocier, intimider ou bluffer. Profites-en, c'est l'âme du RP PvP.", sev:"avert"},
+      {t:"Pas de soundboard abusif", d:"Diffuser de la musique, des cris stridents ou un soundboard pour saturer le vocal de proximité est interdit.", sev:"kick"},
+      {t:"Micro spam", d:"Le spam vocal répété pour gêner les autres joueurs peut être sanctionné.", sev:"avert"},
+      {t:"Pas d'usurpation", d:"Se faire passer pour un membre du staff dans le vocal ou le chat est interdit.", sev:"tempo"}
+    ]
+  },
+  {
+    id:"boutique", icon:"🛒", name:"Boutique & cosmétiques",
+    sub:"100 % esthétique, zéro pay-to-win.",
+    rules:[
+      {t:"No pay-to-win", d:"Tous les achats sont cosmétiques ou de confort. Aucun avantage de gameplay ne s'achète.", sev:"avert"},
+      {t:"SteamID correct", d:"À l'achat, fournis un SteamID64 valide. Une erreur de ta part n'ouvre pas droit à remboursement.", sev:"avert"},
+      {t:"Pas de revente", d:"Les cosmétiques et rôles achetés sont liés à ton compte et ne peuvent être revendus ou transférés.", sev:"avert"},
+      {t:"Litige de paiement", d:"Un chargeback abusif (annulation de paiement après livraison) entraîne un ban et la perte des produits.", sev:"perma"}
+    ]
+  },
+  {
+    id:"sanctions", icon:"⚖️", name:"Sanctions & litiges",
+    sub:"Comment ça se passe quand une règle est cassée.",
+    rules:[
+      {t:"Échelle des sanctions", d:"Selon la gravité et la récidive : avertissement → kick → ban temporaire → ban définitif. Le staff adapte au cas par cas.", sev:"avert"},
+      {t:"Faire appel", d:"Tu penses être sanctionné à tort ? Ouvre un ticket d'appel sur le Discord avec un maximum de preuves (clips, screens, heure).", sev:"avert"},
+      {t:"Signaler un joueur", d:"Pour signaler un tricheur ou un comportement abusif, ouvre un ticket avec des preuves claires. Les fausses accusations répétées sont sanctionnées.", sev:"avert"},
+      {t:"Décision finale", d:"En cas de doute, la décision du staff fait foi. Le règlement peut évoluer ; consulte cette page régulièrement.", sev:"avert"}
+    ]
+  }
+];
+
+const SEV_LABEL = { avert:"Avertissement", kick:"Kick", tempo:"Ban temporaire", perma:"Ban définitif" };
+
+/* ---- Build ---- */
+const listEl = document.getElementById('list');
+const chipsEl = document.getElementById('chips');
+const qEl = document.getElementById('q');
+const clrEl = document.getElementById('clr');
+const countEl = document.getElementById('count');
+const emptyEl = document.getElementById('empty');
+const emptyTerm = document.getElementById('emptyTerm');
+
+let activeCat = "all";
+let term = "";
+
+const totalRules = CATEGORIES.reduce((n,c)=>n+c.rules.length,0);
+
+// chips
+function makeChip(id,label,count){
+  const b=document.createElement('button');
+  b.className='chip'+(id===activeCat?' on':'');
+  b.dataset.cat=id;
+  b.innerHTML=label+' <span class="ct">'+count+'</span>';
+  b.onclick=()=>{activeCat=id;render();syncChips();};
+  return b;
+}
+function buildChips(){
+  chipsEl.innerHTML='';
+  chipsEl.appendChild(makeChip('all','Tout',totalRules));
+  CATEGORIES.forEach(c=>chipsEl.appendChild(makeChip(c.id,c.name,c.rules.length)));
+}
+function syncChips(){
+  [...chipsEl.children].forEach(ch=>ch.classList.toggle('on',ch.dataset.cat===activeCat));
+}
+
+// render
+function esc(s){return s.replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
+function highlight(text){
+  const safe=esc(text);
+  if(!term) return safe;
+  const re=new RegExp('('+term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig');
+  return safe.replace(re,'<mark>$1</mark>');
+}
+function matches(rule){
+  if(!term) return true;
+  return (rule.t+' '+rule.d).toLowerCase().includes(term);
+}
+
+function render(){
+  listEl.innerHTML='';
+  let shown=0;
+  CATEGORIES.forEach(c=>{
+    if(activeCat!=="all" && activeCat!==c.id) return;
+    const visible=c.rules.filter(matches);
+    if(!visible.length) return;
+    shown+=visible.length;
+
+    const cat=document.createElement('section');
+    cat.className='cat';
+    const open = term!=="" || activeCat===c.id; // auto-open on search/filter
+    if(!open) cat.classList.add('collapsed');
+
+    const head=document.createElement('button');
+    head.className='cat-head';
+    head.innerHTML=
+      '<span class="cat-ico">'+c.icon+'</span>'+
+      '<span class="cat-titles"><span class="cat-name">'+esc(c.name)+'</span>'+
+      '<span class="cat-sub">'+esc(c.sub)+'</span></span>'+
+      '<span class="cat-arrow">▼</span>';
+    head.onclick=()=>cat.classList.toggle('collapsed');
+    cat.appendChild(head);
+
+    const body=document.createElement('div');
+    body.className='cat-body';
+    c.rules.forEach((r,i)=>{
+      if(!matches(r)) return;
+      const div=document.createElement('div');
+      div.className='rule';
+      div.innerHTML=
+        '<div class="rule-n">'+(i+1)+'</div>'+
+        '<div class="rule-main">'+
+          '<div class="rule-title">'+highlight(r.t)+'</div>'+
+          '<div class="rule-desc">'+highlight(r.d)+'</div>'+
+          '<span class="sev '+r.sev+'">'+SEV_LABEL[r.sev]+'</span>'+
+        '</div>';
+      body.appendChild(div);
+    });
+    cat.appendChild(body);
+    listEl.appendChild(cat);
+  });
+
+  // count + empty
+  if(shown===0){
+    emptyEl.classList.add('show');
+    emptyTerm.textContent = term ? '« '+term+' »' : 'ce filtre';
+    countEl.textContent='';
+  }else{
+    emptyEl.classList.remove('show');
+    countEl.textContent = shown+' règle'+(shown>1?'s':'')+' affichée'+(shown>1?'s':'')+
+      (term?(' pour « '+term+' »'):'')+'.';
+  }
+}
+
+// search
+qEl.addEventListener('input',()=>{
+  term=qEl.value.trim().toLowerCase();
+  clrEl.style.display = term?'block':'none';
+  render();
+});
+clrEl.onclick=()=>{qEl.value='';term='';clrEl.style.display='none';qEl.focus();render();};
+
+buildChips();
+render();
+</script>
+</body>
+</html>
