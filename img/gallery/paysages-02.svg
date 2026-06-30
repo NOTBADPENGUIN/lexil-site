@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#26140f"/><stop offset="1" stop-color="#5c3320"/>
+  </linearGradient>
+  <filter id="g"><feGaussianBlur stdDeviation="6"/></filter>
+</defs>
+<rect width="800" height="600" fill="url(#sky)"/>
+<circle cx="620" cy="140" r="46" fill="#e0852e" opacity=".22" filter="url(#g)"/>
+<circle cx="620" cy="140" r="30" fill="#e0852e" opacity=".5"/>
+<polygon points="0,430 120,340 240,400 380,310 520,390 660,320 800,400 800,600 0,600" fill="#000" opacity=".30"/>
+<polygon points="0,500 160,430 320,490 480,420 640,485 800,430 800,600 0,600" fill="#000" opacity=".45"/>
+<g fill="#000" opacity=".55">
+  <polygon points="120,500 132,452 144,500"/><polygon points="150,505 160,468 170,505"/>
+  <polygon points="600,498 612,450 624,498"/><polygon points="630,503 640,470 650,503"/>
+</g>
+<rect width="800" height="600" fill="url(#sky)" opacity=".10"/>
+<rect x="0" y="0" width="800" height="600" fill="none" stroke="#e0852e" stroke-width="2" opacity=".25"/>
+<g font-family="Oswald, Arial, sans-serif" text-anchor="middle">
+  <rect x="300" y="250" width="200" height="2" fill="#e0852e" opacity=".6"/>
+  <text x="400" y="300" font-size="30" font-weight="700" fill="#f2efe9" letter-spacing="3" opacity=".92">L'EXIL</text>
+  <text x="400" y="330" font-size="15" fill="#e0852e" letter-spacing="4">PAYSAGES</text>
+  <text x="400" y="560" font-size="13" fill="#cfcfd6" opacity=".7">Coucher de soleil</text>
+</g>
+</svg>

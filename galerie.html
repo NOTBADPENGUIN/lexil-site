@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L'EXIL — Galerie</title>
+<meta name="description" content="Galerie de screenshots du serveur DayZ PvP L'EXIL : PvP, bases, paysages et events.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0a0c;--card:#131317;--card2:#17171d;--bord:#23232c;
+  --red:#e11d2a;--gold:#e0a82e;--txt:#e7e7ea;--mut:#9a9aa3;--mut2:#6d6d77;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:Barlow,system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+body.locked{overflow:hidden}
+.wrap{max-width:1180px;margin:0 auto;padding:32px 20px 100px}
+a{color:var(--gold);text-decoration:none}
+a:hover{text-decoration:underline}
+
+.back{display:inline-flex;align-items:center;gap:6px;margin-bottom:24px;color:var(--gold);font-weight:600;font-size:15px}
+
+/* Hero */
+.hero{position:relative;border:1px solid var(--bord);border-radius:16px;padding:34px 28px;background:
+  radial-gradient(120% 140% at 100% 0%,rgba(225,29,42,.10),transparent 55%),
+  linear-gradient(180deg,#141319,#0e0e12);overflow:hidden}
+.hero::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.012) 0 2px,transparent 2px 9px);pointer-events:none}
+.kicker{font-family:Oswald,sans-serif;letter-spacing:4px;text-transform:uppercase;color:var(--red);font-size:13px;font-weight:600;margin:0 0 8px}
+h1{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:2px;font-weight:700;font-size:clamp(30px,6vw,48px);margin:0;color:#f6f4ef;line-height:1}
+.lead{color:var(--mut);margin:14px 0 0;max-width:62ch}
+
+/* Filter chips */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 6px;position:sticky;top:0;z-index:20;
+  padding:14px 0;background:linear-gradient(180deg,var(--bg) 72%,transparent)}
+.chip{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.5px;font-size:13px;font-weight:600;
+  background:var(--card);border:1px solid var(--bord);color:var(--mut);padding:7px 14px;border-radius:999px;
+  cursor:pointer;transition:.15s;user-select:none}
+.chip:hover{color:var(--txt);border-color:#34343f}
+.chip.on{background:var(--red);border-color:var(--red);color:#fff}
+.chip .ct{opacity:.7;margin-left:5px;font-size:11px}
+
+.count{font-size:13px;color:var(--mut2);margin:2px 2px 18px}
+
+/* Grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.tile{position:relative;border:1px solid var(--bord);border-radius:12px;overflow:hidden;cursor:pointer;
+  background:var(--card2);aspect-ratio:4/3;transition:transform .18s,border-color .18s;opacity:0;transform:translateY(8px)}
+.tile.in{opacity:1;transform:none}
+.tile:hover{transform:translateY(-3px);border-color:#3a3a46}
+.tile img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s,filter .35s}
+.tile:hover img{transform:scale(1.06)}
+.tile .ovl{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:14px;
+  background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.78));opacity:0;transition:opacity .2s}
+.tile:hover .ovl{opacity:1}
+.tile .cap{font-weight:600;font-size:15px;color:#fff;line-height:1.25}
+.badge{align-self:flex-start;font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.5px;font-size:10px;
+  font-weight:600;color:#fff;background:var(--red);padding:3px 8px;border-radius:999px;margin-bottom:7px}
+.tile .zoom{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:8px;background:rgba(10,10,12,.6);
+  backdrop-filter:blur(4px);display:grid;place-items:center;font-size:14px;opacity:0;transition:opacity .2s}
+.tile:hover .zoom{opacity:1}
+
+.empty{display:none;text-align:center;padding:54px 20px;color:var(--mut)}
+.empty.show{display:block}.empty .big{font-size:40px;margin-bottom:10px}
+
+/* Lightbox */
+.lb{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;
+  background:rgba(6,6,8,.92);backdrop-filter:blur(6px);padding:20px}
+.lb.open{display:flex}
+.lb-img{max-width:min(1100px,94vw);max-height:82vh;border-radius:12px;border:1px solid var(--bord);
+  box-shadow:0 20px 60px rgba(0,0,0,.6);object-fit:contain;animation:pop .22s ease}
+@keyframes pop{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+.lb-cap{position:absolute;bottom:26px;left:0;right:0;text-align:center;color:#eee;font-size:15px;pointer-events:none}
+.lb-cap .b{display:inline-block;font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.5px;font-size:11px;
+  font-weight:600;color:#fff;background:var(--red);padding:3px 9px;border-radius:999px;margin-right:8px;vertical-align:1px}
+.lb-cap .ctr{display:block;color:var(--mut);font-size:12px;margin-top:6px}
+.lb-btn{position:absolute;background:rgba(20,20,24,.7);border:1px solid var(--bord);color:#fff;cursor:pointer;
+  width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-size:20px;transition:.15s;user-select:none}
+.lb-btn:hover{background:var(--red);border-color:var(--red)}
+.lb-close{top:18px;right:18px;font-size:22px}
+.lb-prev{left:18px;top:50%;transform:translateY(-50%)}
+.lb-next{right:18px;top:50%;transform:translateY(-50%)}
+@media(max-width:560px){
+  .wrap{padding:22px 14px 80px}.hero{padding:26px 20px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+  .lb-prev{left:8px}.lb-next{right:8px}
+}
+
+/* Footer */
+.note{margin-top:30px;border:1px dashed var(--bord);border-radius:14px;padding:18px 20px;color:var(--mut);font-size:14px;background:var(--card)}
+.note b{color:var(--txt)}
+.note code{background:#1d1d24;border:1px solid var(--bord);border-radius:5px;padding:1px 6px;font-size:13px;color:var(--gold)}
+.cta{margin-top:18px;text-align:center}
+.btn{display:inline-flex;align-items:center;gap:9px;font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:1px;
+  font-weight:600;font-size:15px;color:#fff;background:var(--red);padding:12px 22px;border-radius:10px;transition:.15s}
+.btn:hover{background:#f5212f;text-decoration:none;transform:translateY(-1px)}
+.foot{margin-top:30px;text-align:center;color:var(--mut2);font-size:13px}
+.foot small{display:block;margin-top:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="/">← Retour à l'accueil</a>
+
+  <header class="hero">
+    <p class="kicker">Serveur DayZ · PvP · FR/EU</p>
+    <h1>Galerie</h1>
+    <p class="lead">Les meilleurs moments de L'EXIL : embuscades, bases, paysages et events. Clique sur une image pour l'agrandir, navigue avec les flèches.</p>
+  </header>
+
+  <div class="chips" id="chips"></div>
+  <p class="count" id="count"></p>
+
+  <main class="grid" id="grid"></main>
+
+  <div class="empty" id="empty">
+    <div class="big">📷</div>
+    <p>Aucune image dans cette catégorie pour le moment.</p>
+  </div>
+
+  <div class="note">
+    <p style="margin:0 0 8px"><b>📸 Ajouter tes vrais screenshots</b></p>
+    <p style="margin:0">1. Dépose tes images dans le dossier <code>img/gallery/</code> (jpg, png ou webp).<br>
+    2. Ajoute une ligne dans le tableau <code>IMAGES</code> en haut du script de cette page :<br>
+    <code>{ src:"img/gallery/mon-screen.jpg", cat:"pvp", cap:"Ma légende" }</code><br>
+    3. Les catégories dispo : <code>pvp</code>, <code>bases</code>, <code>paysages</code>, <code>events</code> (modifiables aussi). Les images d'exemple actuelles sont des placeholders à remplacer.</p>
+  </div>
+
+  <div class="cta">
+    <a class="btn" href="https://discord.gg/t46RE8hYs7" target="_blank" rel="noopener">💬 Partage tes clips sur le Discord</a>
+  </div>
+
+  <p class="foot">
+    L'EXIL — Serveur DayZ PvP FR/EU · <a href="/regles.html">Règlement</a> · <a href="/legal.html">Mentions légales</a>
+    <small>Non affilié à Bohemia Interactive. « DayZ » est une marque de ses détenteurs respectifs.</small>
+  </p>
+</div>
+
+<!-- Lightbox -->
+<div class="lb" id="lb" aria-hidden="true">
+  <button class="lb-btn lb-close" id="lbClose" aria-label="Fermer">×</button>
+  <button class="lb-btn lb-prev" id="lbPrev" aria-label="Précédent">‹</button>
+  <img class="lb-img" id="lbImg" alt="">
+  <button class="lb-btn lb-next" id="lbNext" aria-label="Suivant">›</button>
+  <div class="lb-cap" id="lbCap"></div>
+</div>
+
+<script>
+/* ============================================================
+   GALERIE — édite ce tableau pour ajouter tes screenshots.
+   cat : "pvp" · "bases" · "paysages" · "events"  (libre, ajoute les tiennes)
+   ============================================================ */
+const IMAGES = [
+  { src:"img/gallery/pvp-01.svg",      cat:"pvp",      cap:"Embuscade au lever du jour" },
+  { src:"img/gallery/bases-01.svg",    cat:"bases",    cap:"Forteresse du nord" },
+  { src:"img/gallery/paysages-01.svg", cat:"paysages", cap:"Brume sur la côte" },
+  { src:"img/gallery/events-01.svg",   cat:"events",   cap:"Drop de ravitaillement" },
+  { src:"img/gallery/pvp-02.svg",      cat:"pvp",      cap:"Échange de tirs en ville" },
+  { src:"img/gallery/bases-02.svg",    cat:"bases",    cap:"Camp retranché" },
+  { src:"img/gallery/paysages-02.svg", cat:"paysages", cap:"Coucher de soleil" },
+  { src:"img/gallery/events-02.svg",   cat:"events",   cap:"Nuit d'event" },
+];
+
+const CAT_LABELS = { pvp:"PvP", bases:"Bases", paysages:"Paysages", events:"Events" };
+function catLabel(c){ return CAT_LABELS[c] || (c.charAt(0).toUpperCase()+c.slice(1)); }
+
+const gridEl   = document.getElementById('grid');
+const chipsEl  = document.getElementById('chips');
+const countEl  = document.getElementById('count');
+const emptyEl  = document.getElementById('empty');
+
+let activeCat = "all";
+let filtered = [];        // current visible images (for lightbox nav)
+
+/* ---- Chips ---- */
+function buildChips(){
+  const cats = [...new Set(IMAGES.map(i=>i.cat))];
+  chipsEl.innerHTML='';
+  addChip('all','Tout',IMAGES.length);
+  cats.forEach(c=>addChip(c,catLabel(c),IMAGES.filter(i=>i.cat===c).length));
+}
+function addChip(id,label,n){
+  const b=document.createElement('button');
+  b.className='chip'+(id===activeCat?' on':'');
+  b.dataset.cat=id;
+  b.innerHTML=label+' <span class="ct">'+n+'</span>';
+  b.onclick=()=>{activeCat=id;[...chipsEl.children].forEach(c=>c.classList.toggle('on',c.dataset.cat===id));render();};
+  chipsEl.appendChild(b);
+}
+
+/* ---- Grid ---- */
+function render(){
+  filtered = IMAGES.filter(i=>activeCat==="all"||i.cat===activeCat);
+  gridEl.innerHTML='';
+  filtered.forEach((img,idx)=>{
+    const t=document.createElement('button');
+    t.className='tile';t.type='button';
+    t.innerHTML=
+      '<img loading="lazy" src="'+img.src+'" alt="'+(img.cap||'')+'">'+
+      '<span class="zoom">🔍</span>'+
+      '<span class="ovl"><span class="badge">'+catLabel(img.cat)+'</span>'+
+      '<span class="cap">'+(img.cap||'')+'</span></span>';
+    t.onclick=()=>openLb(idx);
+    gridEl.appendChild(t);
+    requestAnimationFrame(()=>setTimeout(()=>t.classList.add('in'), idx*30));
+  });
+  const n=filtered.length;
+  if(n===0){emptyEl.classList.add('show');countEl.textContent='';}
+  else{emptyEl.classList.remove('show');
+    countEl.textContent=n+' image'+(n>1?'s':'')+(activeCat!=="all"?(' · '+catLabel(activeCat)):'')+'.';}
+}
+
+/* ---- Lightbox ---- */
+const lb=document.getElementById('lb'), lbImg=document.getElementById('lbImg'),
+      lbCap=document.getElementById('lbCap');
+let cur=0;
+function openLb(i){cur=i;updateLb();lb.classList.add('open');lb.setAttribute('aria-hidden','false');document.body.classList.add('locked');}
+function closeLb(){lb.classList.remove('open');lb.setAttribute('aria-hidden','true');document.body.classList.remove('locked');}
+function step(d){cur=(cur+d+filtered.length)%filtered.length;updateLb();}
+function updateLb(){
+  const img=filtered[cur];
+  lbImg.src=img.src;lbImg.alt=img.cap||'';
+  lbCap.innerHTML='<span class="b">'+catLabel(img.cat)+'</span>'+(img.cap||'')+
+    '<span class="ctr">'+(cur+1)+' / '+filtered.length+'</span>';
+}
+document.getElementById('lbClose').onclick=closeLb;
+document.getElementById('lbPrev').onclick=()=>step(-1);
+document.getElementById('lbNext').onclick=()=>step(1);
+lb.onclick=e=>{if(e.target===lb)closeLb();};
+document.addEventListener('keydown',e=>{
+  if(!lb.classList.contains('open'))return;
+  if(e.key==='Escape')closeLb();
+  else if(e.key==='ArrowLeft')step(-1);
+  else if(e.key==='ArrowRight')step(1);
+});
+
+buildChips();
+render();
+</script>
+</body>
+</html>
