@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>L'EXIL — Règles complètes du serveur</title>
-<meta name="description" content="Toutes les règles du serveur DayZ PvP L'EXIL : conduite, triche, combat, bases, vocal et sanctions.">
+<title>L'EXIL — Règlement général</title>
+<meta name="description" content="Règlement général du serveur DayZ PvP L'EXIL : support, loot, groupes, triche, conduite, events, camping et staff.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
@@ -20,7 +20,6 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:Barlow,system-ui
 a{color:var(--gold);text-decoration:none}
 a:hover{text-decoration:underline}
 
-/* Header */
 .back{display:inline-flex;align-items:center;gap:6px;margin-bottom:24px;color:var(--gold);font-weight:600;font-size:15px}
 .hero{position:relative;border:1px solid var(--bord);border-radius:16px;padding:34px 28px;background:
   radial-gradient(120% 140% at 100% 0%,rgba(225,29,42,.10),transparent 55%),
@@ -28,10 +27,9 @@ a:hover{text-decoration:underline}
 .hero::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.012) 0 2px,transparent 2px 9px);pointer-events:none}
 .kicker{font-family:Oswald,sans-serif;letter-spacing:4px;text-transform:uppercase;color:var(--red);font-size:13px;font-weight:600;margin:0 0 8px}
 h1{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:2px;font-weight:700;font-size:clamp(30px,6vw,48px);margin:0;color:#f6f4ef;line-height:1}
-.lead{color:var(--mut);margin:14px 0 0;max-width:62ch}
+.lead{color:var(--mut);margin:14px 0 0;max-width:64ch}
 .meta{margin-top:16px;font-size:13px;color:var(--mut2)}
 
-/* Search + chips */
 .tools{position:sticky;top:0;z-index:20;margin:22px 0 8px;padding:14px 0;background:linear-gradient(180deg,var(--bg) 70%,transparent)}
 .search{position:relative}
 .search input{width:100%;background:var(--card);border:1px solid var(--bord);border-radius:12px;color:var(--txt);
@@ -51,7 +49,6 @@ h1{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:2px;fon
 
 .count{font-size:13px;color:var(--mut2);margin:6px 2px 18px}
 
-/* Category sections */
 .cat{border:1px solid var(--bord);border-radius:14px;overflow:hidden;margin-bottom:14px;background:var(--card)}
 .cat-head{display:flex;align-items:center;gap:14px;width:100%;background:none;border:0;color:inherit;cursor:pointer;
   text-align:left;padding:18px 20px;font-family:inherit}
@@ -65,15 +62,16 @@ h1{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:2px;fon
 .cat-body{padding:0 20px 8px}
 .cat.collapsed .cat-body{display:none}
 
-/* Rule */
 .rule{display:flex;gap:14px;padding:16px 0;border-top:1px solid var(--bord)}
 .rule:first-child{border-top:0}
 .rule-n{flex:none;width:30px;height:30px;border-radius:8px;background:#1d1d24;border:1px solid var(--bord);
   display:grid;place-items:center;font-family:Oswald,sans-serif;font-weight:600;font-size:14px;color:var(--gold)}
 .rule-main{flex:1;min-width:0}
-.rule-title{font-weight:600;font-size:16px;color:#f2efe9;margin:2px 0 4px}
-.rule-desc{color:var(--mut);font-size:15px}
-.rule-desc mark{background:rgba(224,168,46,.28);color:#ffe6ad;border-radius:3px;padding:0 1px}
+.rule-title{font-weight:600;font-size:16px;color:#f2efe9}
+.rule-desc{color:var(--mut);font-size:14.5px;margin-top:5px}
+.rule-desc mark,.rule-title mark{background:rgba(224,168,46,.28);color:#ffe6ad;border-radius:3px;padding:0 1px}
+.rule-desc ul{margin:6px 0 0;padding-left:18px}
+.rule-desc li{margin:2px 0}
 .sev{display:inline-block;font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.5px;font-size:11px;
   font-weight:600;padding:3px 9px;border-radius:999px;margin-top:9px;border:1px solid}
 .sev.avert{color:var(--gold);border-color:rgba(224,168,46,.5);background:rgba(224,168,46,.08)}
@@ -81,13 +79,9 @@ h1{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:2px;fon
 .sev.tempo{color:#ff5a4d;border-color:rgba(255,90,77,.5);background:rgba(255,90,77,.08)}
 .sev.perma{color:#fff;border-color:var(--red);background:var(--red)}
 
-/* Empty state */
 .empty{display:none;text-align:center;padding:54px 20px;color:var(--mut)}
-.empty.show{display:block}
-.empty .big{font-size:40px;margin-bottom:10px}
-.empty b{color:var(--txt)}
+.empty.show{display:block}.empty .big{font-size:40px;margin-bottom:10px}.empty b{color:var(--txt)}
 
-/* Footer CTA */
 .cta{margin-top:34px;border:1px solid var(--bord);border-radius:16px;padding:26px;text-align:center;
   background:radial-gradient(120% 160% at 50% 0%,rgba(225,29,42,.10),transparent 60%),var(--card)}
 .cta h3{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:1px;font-size:22px;margin:0 0 6px;color:#f6f4ef}
@@ -99,10 +93,8 @@ h1{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:2px;fon
 .foot small{display:block;margin-top:6px}
 
 @media(max-width:560px){
-  .wrap{padding:22px 14px 80px}
-  .hero{padding:26px 20px}
-  .cat-head{padding:15px 15px}
-  .cat-body{padding:0 15px 6px}
+  .wrap{padding:22px 14px 80px}.hero{padding:26px 20px}
+  .cat-head{padding:15px 15px}.cat-body{padding:0 15px 6px}
 }
 </style>
 </head>
@@ -112,22 +104,21 @@ h1{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:2px;fon
 
   <header class="hero">
     <p class="kicker">Serveur DayZ · PvP · FR/EU</p>
-    <h1>Règlement complet</h1>
-    <p class="lead">Toutes les règles de L'EXIL, classées par thème. En jouant sur le serveur, tu acceptes l'intégralité de ce règlement. L'ignorance d'une règle ne dispense pas de la sanction.</p>
-    <p class="meta">Dernière mise à jour : 30 juin 2026 · Le staff peut sanctionner tout comportement nuisible non listé ici.</p>
+    <h1>Règlement général</h1>
+    <p class="lead">En jouant sur L'EXIL, tu acceptes l'intégralité de ce règlement. Les admins peuvent sanctionner toute infraction, même non listée ici. Pour tout signalement, une preuve vidéo ou screenshot de moins de 48h est obligatoire — passe toujours par un ticket.</p>
+    <p class="meta">Traduction française du règlement officiel · L'ignorance d'une règle ne dispense pas de la sanction.</p>
   </header>
 
   <div class="tools">
     <div class="search">
       <span class="ico">🔍</span>
-      <input id="q" type="search" placeholder="Rechercher une règle (ex : raid, vocal, cheat)…" autocomplete="off" aria-label="Rechercher une règle">
+      <input id="q" type="search" placeholder="Rechercher une règle (ex : loot, camping, ticket)…" autocomplete="off" aria-label="Rechercher une règle">
       <button class="clr" id="clr" aria-label="Effacer">×</button>
     </div>
     <div class="chips" id="chips"></div>
   </div>
 
   <p class="count" id="count"></p>
-
   <main id="list"></main>
 
   <div class="empty" id="empty">
@@ -138,116 +129,162 @@ h1{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:2px;fon
 
   <section class="cta">
     <h3>Une question sur une règle ?</h3>
-    <p>Un doute, un litige, ou envie de signaler quelqu'un ? Ouvre un ticket sur le Discord, le staff répond vite.</p>
+    <p>Un doute, un litige, ou envie de signaler quelqu'un ? Ouvre un ticket sur le Discord — ne DM jamais le staff.</p>
     <a class="btn" href="https://discord.gg/t46RE8hYs7" target="_blank" rel="noopener">💬 Rejoindre le Discord</a>
   </section>
 
   <p class="foot">
-    L'EXIL — Serveur DayZ PvP FR/EU · <a href="/legal.html">Mentions légales</a>
+    L'EXIL — Serveur DayZ PvP FR/EU · <a href="/galerie.html">Galerie</a> · <a href="/legal.html">Mentions légales</a>
     <small>Non affilié à Bohemia Interactive. « DayZ » est une marque de ses détenteurs respectifs.</small>
   </p>
 </div>
 
 <script>
 /* ============================================================
-   RÈGLES — édite librement ce tableau.
-   sev : "avert" (avertissement) · "kick" · "tempo" (ban temporaire) · "perma" (ban définitif)
+   RÈGLEMENT GÉNÉRAL — traduction FR du règlement officiel L'EXIL.
+   Structure : { t:"règle", d:"détail optionnel (HTML léger)", sev:"avert|kick|tempo|perma", sevLabel:"texte custom" }
+   sev et d sont optionnels.
    ============================================================ */
 const CATEGORIES = [
   {
-    id:"conduite", icon:"🤝", name:"Conduite & respect",
-    sub:"Le minimum pour que tout le monde s'amuse.",
+    id:"support", icon:"🎫", name:"Support & compensations",
+    sub:"Tickets, preuves et règles de comp.",
     rules:[
-      {t:"Respect de tous", d:"Aucune insulte gratuite, harcèlement, menace, ni propos racistes, homophobes, sexistes ou discriminatoires, en jeu comme sur le Discord.", sev:"tempo"},
-      {t:"Pas de discrimination ni de contenu haineux", d:"Symboles, pseudos ou messages haineux strictement interdits. Sanction immédiate et sans avertissement.", sev:"perma"},
-      {t:"Langue", d:"Le serveur est FR/EU : privilégie le français ou l'anglais dans les canaux publics pour que le staff puisse modérer.", sev:"avert"},
-      {t:"Pas de pub", d:"Interdit de faire la publicité d'un autre serveur, d'un cheat ou d'un service tiers, en jeu ou sur le Discord.", sev:"tempo"},
-      {t:"Respect du staff", d:"Les décisions du staff s'appliquent en jeu. Tu contestes ? On en discute calmement via un ticket, jamais en spammant le chat.", sev:"kick"}
+      {t:"Pour tout problème, ouvre un ticket — ne DM jamais le staff."},
+      {t:"Screenshots ou vidéo obligatoires pour toute compensation ou tout signalement."},
+      {t:"Les preuves doivent dater de moins de 48h."},
+      {t:"Ne dénonce pas un joueur dans le chat — passe uniquement par les tickets."},
+      {t:"Les informations d'un ticket doivent rester privées."},
+      {t:"Abuser des tickets ou causer des problèmes à répétition peut te faire perdre l'accès au support."},
+      {t:"Signaler quelqu'un après t'être fait prendre n'annule pas ta propre sanction."},
+      {t:"Interdit de mentir sur ton équipement pour obtenir une compensation."},
+      {t:"Aucune compensation pour du matériel perdu à cause des actions d'un joueur."},
+      {t:"Compensation de véhicule uniquement si un crash serveur en est la cause.",
+       d:"Un crash serveur = le serveur tombe de façon <b>inattendue</b>. Aucune comp pour une perte survenue lors d'un restart manuel planifié ou pré-annoncé."},
+      {t:"Tu es seul responsable de ton compte.", d:"Compte perdu ou piraté = aucune exception ne sera faite."},
     ]
   },
   {
-    id:"triche", icon:"🚫", name:"Triche & exploits",
-    sub:"Tolérance zéro. Ces règles passent avant toutes les autres.",
+    id:"loot", icon:"🎒", name:"Déconnexion & loot",
+    sub:"Restrictions de déco actives 24/7.",
     rules:[
-      {t:"Cheats & logiciels tiers", d:"Aimbot, ESP, wallhack, macros, radar ou tout logiciel donnant un avantage : ban définitif immédiat, sans préavis.", sev:"perma"},
-      {t:"Exploits & glitches", d:"Abuser d'un bug (passer un mur, voir à travers une texture, dupliquer des objets, voler sous la map…) est interdit. Signale-le au staff plutôt que de l'exploiter.", sev:"perma"},
-      {t:"Duplication d'objets", d:"Toute technique de dupe (objets, monnaie, stuff) entraîne un ban et la suppression du stuff dupliqué.", sev:"perma"},
-      {t:"Comptes & contournement de ban", d:"Revenir avec un autre compte/VPN pour contourner un ban prolonge la sanction de façon définitive sur tous les comptes liés.", sev:"perma"},
-      {t:"Achat/vente de comptes ou de stuff réel", d:"Échanger du stuff in-game contre de l'argent réel (RMT) hors boutique officielle est interdit.", sev:"tempo"}
+      {t:"Interdit de te déconnecter avec des objets rares ou en quantité excessive."},
+      {t:"Objets rares :", d:"lingots d'or, C4 / explosifs artisanaux, fusées éclairantes, contrebande / collectables / drogues / objets de troc, masques à gaz."},
+      {t:"Objets excessifs :", d:"plus de 3 armes sur toi, ou des sacs remplis de loot (armes, armures, etc.)."},
+      {t:"Récupère bien tes objets rares après une déco / restart / crash.",
+       d:"Les objets rares peuvent être éjectés de ton inventaire et placés dans une box — pense à les reprendre. Les objets tombés ne sont pas compensés si tu les as laissés, seulement s'ils disparaissent de façon inattendue (avec preuve)."},
     ]
   },
   {
-    id:"combat", icon:"⚔️", name:"Combat & PvP",
-    sub:"Le serveur est PvP : le KOS est autorisé, mais avec des limites.",
+    id:"groupes", icon:"👥", name:"Groupes & équipes",
+    sub:"Limites, teaming, insiding et cooldowns.",
     rules:[
-      {t:"KOS autorisé", d:"Le Kill On Sight est permis partout sauf dans les zones safe explicitement indiquées (spawn, trader). Pas besoin de prévenir avant de tirer.", sev:"avert"},
-      {t:"Combat log interdit", d:"Se déconnecter pendant un combat ou une situation à risque pour échapper à la mort est interdit. Attends 30 s sans danger avant de quitter.", sev:"tempo"},
-      {t:"Stream sniping", d:"Utiliser le stream/live d'un joueur pour le localiser ou anticiper ses actions est interdit.", sev:"tempo"},
-      {t:"Spawn kill", d:"Camper et tuer en boucle les joueurs sur leur point de spawn est interdit.", sev:"kick"},
-      {t:"Zones safe", d:"Aucun tir, vol ou agression dans les zones safe et chez les traders. Provoquer puis fuir dans une zone safe est aussi sanctionné.", sev:"kick"},
-      {t:"Teaming abusif", d:"Les alliances temporaires sont tolérées, mais le teaming massif organisé pour verrouiller la map peut être sanctionné par le staff.", sev:"avert"}
+      {t:"Maximum 6 joueurs actifs par groupe (4 pour les subs)."},
+      {t:"Dépasser la limite de groupe = ban de 3 jours.", sev:"tempo", sevLabel:"Ban 3 jours"},
+      {t:"Pas d'alliance : interdit de partager une base, de défendre ou de faire du PvP en équipe avec un autre groupe."},
+      {t:"Pas d'insiding : interdit de raid ou de griefer ta propre équipe (ou ton ancienne) dans les 24h."},
+      {t:"Pas de raid au codelock."},
+      {t:"Ne retire pas des joueurs juste pour en ajouter d'autres."},
+      {t:"Les kicks ne sont autorisés que pour une raison légitime (inactivité, départ)."},
+      {t:"Quitter une équipe est ta responsabilité."},
+      {t:"Cooldown de 3 jours pour rejoindre un groupe après l'avoir quitté ou en avoir été retiré."},
+      {t:"Le team hopping est bannissable.", sev:"tempo", sevLabel:"Bannissable"},
+      {t:"Interdit de faire tourner les joueurs (cycling) pour obtenir un avantage."},
     ]
   },
   {
-    id:"bases", icon:"🏠", name:"Bases & raid",
-    sub:"Construire, défendre, raider — dans les règles.",
+    id:"exploits", icon:"🚫", name:"Exploits & triche",
+    sub:"Tolérance zéro.",
     rules:[
-      {t:"Raid autorisé", d:"Le raid de base est permis avec les outils prévus à cet effet. Détruire une base juste pour la détruire, sans la loot, est mal vu et peut être limité.", sev:"avert"},
-      {t:"Pas de build abusif", d:"Interdit de bloquer un loot, un trader, une route ou de rendre une zone publique inaccessible avec des constructions.", sev:"kick"},
-      {t:"Pas de base sous la map / dans les rochers", d:"Construire en exploitant un glitch de terrain (sous la map, dans une roche, hors-limites) est interdit.", sev:"tempo"},
-      {t:"Limite de base", d:"Respecte le nombre de bases/coffres autorisé par groupe indiqué par le staff. Le sur-stockage pour saturer le serveur est interdit.", sev:"avert"},
-      {t:"Despawn & inactivité", d:"Une base non entretenue se dégrade et peut despawn selon les règles du jeu. Connecte-toi régulièrement pour la conserver.", sev:"avert"}
+      {t:"Interdit de glitcher, hacker ou exploiter les mécaniques du jeu.", sev:"perma"},
+      {t:"Pas d'exploits de mouvement (moonwalking inclus)."},
+      {t:"Pas d'exploits graphiques ni de logiciels tiers pour cacher des joueurs ou des objets."},
+      {t:"Pas de loot cycling."},
+      {t:"Interdit d'utiliser un véhicule (voiture ou héli) pour déplacer ou capturer les drapeaux CTF."},
+      {t:"Pas de « Hot Dropping » en héli.",
+       d:"Interdit de couper le moteur ou de descendre en chute rapide pour te larguer sur des joueurs ou un lieu. Quand on entend le moteur s'éteindre, l'héli doit <b>déjà</b> être au sol."},
+      {t:"Pour tout signalement, fournis une preuve vidéo ou screenshot."},
     ]
   },
   {
-    id:"vocal", icon:"🎙️", name:"Vocal & communication",
-    sub:"Le jeu utilise le vocal de proximité.",
+    id:"conduite", icon:"🤝", name:"Conduite du joueur",
+    sub:"Respect, toxicité et honnêteté.",
     rules:[
-      {t:"Vocal de proximité", d:"Le vocal in-game peut servir à négocier, intimider ou bluffer. Profites-en, c'est l'âme du RP PvP.", sev:"avert"},
-      {t:"Pas de soundboard abusif", d:"Diffuser de la musique, des cris stridents ou un soundboard pour saturer le vocal de proximité est interdit.", sev:"kick"},
-      {t:"Micro spam", d:"Le spam vocal répété pour gêner les autres joueurs peut être sanctionné.", sev:"avert"},
-      {t:"Pas d'usurpation", d:"Se faire passer pour un membre du staff dans le vocal ou le chat est interdit.", sev:"tempo"}
+      {t:"Pas de harcèlement, de discours haineux ni de discrimination."},
+      {t:"Pas de comportement toxique ni de provocation pour lancer des disputes (baiting)."},
+      {t:"Pas de spam dans le chat (garde ça en DM)."},
+      {t:"Pas de diffamation (slander) des admins ou du serveur, en jeu comme sur le Discord."},
+      {t:"Interdit de te connecter dans une base qui ne t'appartient pas."},
+      {t:"Ne mens pas sur du matériel que tu n'as pas, que ce soit dans le chat en jeu ou sur le Discord."},
+      {t:"Un souci ? Ouvre un ticket.",
+       d:"Si tu ne supportes pas le banter normal, désactive le side chat. Et si tu te retrouves coincé dans le sol ou les rochers à cause de tes propres actions en héli (moteur coupé en plein vol), aucun admin ne te sortira de là et ne compensera ton héli : fais <b>F11</b>."},
     ]
   },
   {
-    id:"boutique", icon:"🛒", name:"Boutique & cosmétiques",
-    sub:"100 % esthétique, zéro pay-to-win.",
+    id:"general", icon:"📜", name:"Règles générales",
+    sub:"Chat, combat, meta gaming et zones sensibles.",
     rules:[
-      {t:"No pay-to-win", d:"Tous les achats sont cosmétiques ou de confort. Aucun avantage de gameplay ne s'achète.", sev:"avert"},
-      {t:"SteamID correct", d:"À l'achat, fournis un SteamID64 valide. Une erreur de ta part n'ouvre pas droit à remboursement.", sev:"avert"},
-      {t:"Pas de revente", d:"Les cosmétiques et rôles achetés sont liés à ton compte et ne peuvent être revendus ou transférés.", sev:"avert"},
-      {t:"Litige de paiement", d:"Un chargeback abusif (annulation de paiement après livraison) entraîne un ban et la perte des produits.", sev:"perma"}
+      {t:"Anglais uniquement dans le side chat."},
+      {t:"Pas de combat logging.", d:"Interdit de te déconnecter dans les 15 min après avoir infligé des dégâts ou tiré."},
+      {t:"Pas de stream sniping."},
+      {t:"Pas de meta gaming (partage d'infos de base, de raids, de positions, etc.).",
+       d:"<b>Est du meta gaming :</b> « Tu kiffes camp le NWAF ? », « Vous allez continuer à boom nos portes ? », « Les mecs qui campent ma base peuvent partir svp ? ». <b>N'est PAS du meta gaming :</b> « Y a quelqu'un au NWAF ? », « Viens PvP à ma base », « C'est où le PvP ? ». Dire ou laisser entendre que quelqu'un est à ta base = meta / raid meta. Interdit d'annoncer des positions précises de joueurs, des emplacements de base ou un PvP en cours dans le chat global ou sur le Discord."},
+      {t:"Pas de ban evasion ni de comptes alternatifs.", sev:"perma"},
+      {t:"Ton pseudo doit être lisible."},
+      {t:"Règle du bunker.",
+       d:"Si tu es coincé dans le bunker, tu ne seras pas TP dehors : attends un coéquipier ou quelqu'un pour ouvrir les portes, ou fais F11. Interdit de te déconnecter dans le bunker ou sur Devils Island. Si tu log dans le bunker / sur l'île, tous les objets récupérés là-bas peuvent t'être retirés."},
+      {t:"Un objet / sac / arme laissé au sol qui despawn ne sera pas compensé, même s'il était « clippé »."},
+      {t:"Pas de camping sur les navires, épaves ou rochers isolés autour de Devils Island."},
     ]
   },
   {
-    id:"sanctions", icon:"⚖️", name:"Sanctions & litiges",
-    sub:"Comment ça se passe quand une règle est cassée.",
+    id:"events", icon:"🏳️", name:"Events, zones & camping",
+    sub:"CTF, KOTH, base sniping et limites de camping.",
     rules:[
-      {t:"Échelle des sanctions", d:"Selon la gravité et la récidive : avertissement → kick → ban temporaire → ban définitif. Le staff adapte au cas par cas.", sev:"avert"},
-      {t:"Faire appel", d:"Tu penses être sanctionné à tort ? Ouvre un ticket d'appel sur le Discord avec un maximum de preuves (clips, screens, heure).", sev:"avert"},
-      {t:"Signaler un joueur", d:"Pour signaler un tricheur ou un comportement abusif, ouvre un ticket avec des preuves claires. Les fausses accusations répétées sont sanctionnées.", sev:"avert"},
-      {t:"Décision finale", d:"En cas de doute, la décision du staff fait foi. Le règlement peut évoluer ; consulte cette page régulièrement.", sev:"avert"}
+      {t:"Interdit d'emmener le CTF dans les safe zones (il faut les contourner)."},
+      {t:"Les véhicules sont interdits dans la zone de capture du KOTH."},
+      {t:"Pendant un event, reviens après un restart sinon tu perds ton loot.",
+       d:"Si aucun combat n'était en cours, le relog n'est pas obligatoire."},
+      {t:"Interdit de sniper depuis ta base vers certaines zones.",
+       d:"Zones concernées : Events, Black Market, Gold Exchange, Admin Events, zones militaires et safe zones."},
+      {t:"Roof camping : 45 min max, puis 1h de pause.", d:"Ne s'applique pas pendant le Raid Weekend."},
+      {t:"Base camping : 1h max, puis 2h de pause.", d:"Ne s'applique pas pendant le Raid Weekend."},
     ]
-  }
+  },
+  {
+    id:"recording", icon:"🎥", name:"Enregistrement obligatoire",
+    sub:"Ce que tu dois pouvoir prouver en clip.",
+    rules:[
+      {t:"Les kills à plus de 900 m doivent être enregistrés.", d:"Clip à conserver 24h."},
+      {t:"Tous les wallbang kills doivent être enregistrés.", d:"Clips à conserver 24h."},
+      {t:"Les POV de raid doivent être enregistrés.", d:"À conserver 48h."},
+      {t:"Pour toute compensation, un clip est obligatoire."},
+    ]
+  },
+  {
+    id:"staff", icon:"🛡️", name:"Staff & autorité admin",
+    sub:"Respect du staff et pouvoirs d'application.",
+    rules:[
+      {t:"Interdit d'usurper l'identité d'un membre du staff."},
+      {t:"Pas de manque de respect envers le staff — utilise les tickets « Admin report » pour tout problème impliquant un membre du staff."},
+      {t:"Interdit de prétendre avoir un « pocket admin ».", d:"Ban si c'est prouvé.", sev:"tempo", sevLabel:"Ban si prouvé"},
+      {t:"Les admins peuvent bannir pour toute infraction, même non explicitement listée.", d:"Les sanctions dépendent de la gravité et de l'appréciation des admins."},
+      {t:"Avis d'autorité administrative et d'application des règles.",
+       d:"En participant au serveur, chaque joueur reconnaît et accepte que les administrateurs se réservent le droit absolu, à leur seule discrétion, de suspendre ou bannir définitivement tout joueur en infraction, adoptant un comportement perturbateur, ou impliqué dans de la diffamation, du dénigrement ou du harcèlement envers d'autres joueurs ou les admins. Ce pouvoir peut être exercé avec ou sans avertissement préalable, et sans obligation de justification supplémentaire. Continuer à jouer vaut acceptation de ces conditions."},
+    ]
+  },
 ];
 
 const SEV_LABEL = { avert:"Avertissement", kick:"Kick", tempo:"Ban temporaire", perma:"Ban définitif" };
 
-/* ---- Build ---- */
-const listEl = document.getElementById('list');
-const chipsEl = document.getElementById('chips');
-const qEl = document.getElementById('q');
-const clrEl = document.getElementById('clr');
-const countEl = document.getElementById('count');
-const emptyEl = document.getElementById('empty');
-const emptyTerm = document.getElementById('emptyTerm');
+const listEl=document.getElementById('list'), chipsEl=document.getElementById('chips'),
+      qEl=document.getElementById('q'), clrEl=document.getElementById('clr'),
+      countEl=document.getElementById('count'), emptyEl=document.getElementById('empty'),
+      emptyTerm=document.getElementById('emptyTerm');
 
-let activeCat = "all";
-let term = "";
+let activeCat="all", term="";
+const totalRules=CATEGORIES.reduce((n,c)=>n+c.rules.length,0);
 
-const totalRules = CATEGORIES.reduce((n,c)=>n+c.rules.length,0);
-
-// chips
 function makeChip(id,label,count){
   const b=document.createElement('button');
   b.className='chip'+(id===activeCat?' on':'');
@@ -261,84 +298,75 @@ function buildChips(){
   chipsEl.appendChild(makeChip('all','Tout',totalRules));
   CATEGORIES.forEach(c=>chipsEl.appendChild(makeChip(c.id,c.name,c.rules.length)));
 }
-function syncChips(){
-  [...chipsEl.children].forEach(ch=>ch.classList.toggle('on',ch.dataset.cat===activeCat));
-}
+function syncChips(){[...chipsEl.children].forEach(ch=>ch.classList.toggle('on',ch.dataset.cat===activeCat));}
 
-// render
 function esc(s){return s.replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
-function highlight(text){
-  const safe=esc(text);
-  if(!term) return safe;
-  const re=new RegExp('('+term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig');
-  return safe.replace(re,'<mark>$1</mark>');
+// highlight search term; keep light inline HTML (<b>) from data intact
+function hl(text,allowHtml){
+  let out=allowHtml?text:esc(text);
+  if(term){
+    const re=new RegExp('('+term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig');
+    // avoid corrupting tags: only wrap outside of <...>
+    out=out.replace(/(<[^>]+>)|([^<]+)/g,(m,tag,txt)=> tag?tag:txt.replace(re,'<mark>$1</mark>'));
+  }
+  return out;
 }
-function matches(rule){
+function matches(r){
   if(!term) return true;
-  return (rule.t+' '+rule.d).toLowerCase().includes(term);
+  return ((r.t||'')+' '+(r.d||'')).toLowerCase().includes(term);
 }
 
 function render(){
   listEl.innerHTML='';
   let shown=0;
   CATEGORIES.forEach(c=>{
-    if(activeCat!=="all" && activeCat!==c.id) return;
+    if(activeCat!=="all"&&activeCat!==c.id) return;
     const visible=c.rules.filter(matches);
     if(!visible.length) return;
     shown+=visible.length;
 
     const cat=document.createElement('section');
     cat.className='cat';
-    const open = term!=="" || activeCat===c.id; // auto-open on search/filter
+    const open=term!==""||activeCat===c.id;
     if(!open) cat.classList.add('collapsed');
 
     const head=document.createElement('button');
     head.className='cat-head';
-    head.innerHTML=
-      '<span class="cat-ico">'+c.icon+'</span>'+
+    head.innerHTML='<span class="cat-ico">'+c.icon+'</span>'+
       '<span class="cat-titles"><span class="cat-name">'+esc(c.name)+'</span>'+
-      '<span class="cat-sub">'+esc(c.sub)+'</span></span>'+
-      '<span class="cat-arrow">▼</span>';
+      '<span class="cat-sub">'+esc(c.sub)+'</span></span><span class="cat-arrow">▼</span>';
     head.onclick=()=>cat.classList.toggle('collapsed');
     cat.appendChild(head);
 
     const body=document.createElement('div');
     body.className='cat-body';
-    c.rules.forEach((r,i)=>{
+    let n=0;
+    c.rules.forEach(r=>{
       if(!matches(r)) return;
+      n++;
       const div=document.createElement('div');
       div.className='rule';
-      div.innerHTML=
-        '<div class="rule-n">'+(i+1)+'</div>'+
-        '<div class="rule-main">'+
-          '<div class="rule-title">'+highlight(r.t)+'</div>'+
-          '<div class="rule-desc">'+highlight(r.d)+'</div>'+
-          '<span class="sev '+r.sev+'">'+SEV_LABEL[r.sev]+'</span>'+
-        '</div>';
+      let html='<div class="rule-n">'+n+'</div><div class="rule-main">'+
+        '<div class="rule-title">'+hl(r.t||'',false)+'</div>';
+      if(r.d) html+='<div class="rule-desc">'+hl(r.d,true)+'</div>';
+      if(r.sev){
+        const lab=r.sevLabel||SEV_LABEL[r.sev]||'';
+        html+='<span class="sev '+r.sev+'">'+esc(lab)+'</span>';
+      }
+      html+='</div>';
+      div.innerHTML=html;
       body.appendChild(div);
     });
     cat.appendChild(body);
     listEl.appendChild(cat);
   });
 
-  // count + empty
-  if(shown===0){
-    emptyEl.classList.add('show');
-    emptyTerm.textContent = term ? '« '+term+' »' : 'ce filtre';
-    countEl.textContent='';
-  }else{
-    emptyEl.classList.remove('show');
-    countEl.textContent = shown+' règle'+(shown>1?'s':'')+' affichée'+(shown>1?'s':'')+
-      (term?(' pour « '+term+' »'):'')+'.';
-  }
+  if(shown===0){emptyEl.classList.add('show');emptyTerm.textContent=term?'« '+term+' »':'ce filtre';countEl.textContent='';}
+  else{emptyEl.classList.remove('show');
+    countEl.textContent=shown+' règle'+(shown>1?'s':'')+' affichée'+(shown>1?'s':'')+(term?(' pour « '+term+' »'):'')+'.';}
 }
 
-// search
-qEl.addEventListener('input',()=>{
-  term=qEl.value.trim().toLowerCase();
-  clrEl.style.display = term?'block':'none';
-  render();
-});
+qEl.addEventListener('input',()=>{term=qEl.value.trim().toLowerCase();clrEl.style.display=term?'block':'none';render();});
 clrEl.onclick=()=>{qEl.value='';term='';clrEl.style.display='none';qEl.focus();render();};
 
 buildChips();
