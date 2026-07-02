@@ -29,8 +29,9 @@
         <a class="navlink" href="regles.html">Règles</a>
         <a class="navlink" href="galerie.html">Galerie</a>
         <a class="navlink" id="discordNavLink" href="#" target="_blank">Discord</a>
+        <a class="btn btn-gold" id="discordJoinBtn" href="#" target="_blank">Rejoindre</a>
       </nav>
-      <div id="authArea"></div>
+      <div id="authArea" style="position:relative"></div>
       <button class="cart-btn" id="cartBtn">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 12.5a1.5 1.5 0 0 0 1.5 1.2h8.7a1.5 1.5 0 0 0 1.5-1.2L21 8H6"></path><circle cx="9.5" cy="20.5" r="1.3"></circle><circle cx="18" cy="20.5" r="1.3"></circle></svg>
         <span class="cart-count" id="cartCount">0</span>
@@ -306,11 +307,20 @@
     // ================================================================
     // LIENS DISCORD / NAV
     // ================================================================
-    document.querySelectorAll('#discordNavLink, #discordCta, #discordFooterLink, #heroDiscordLink').forEach((el) => (el.href = CFG.discordUrl));
+    document.querySelectorAll('#discordNavLink, #discordCta, #discordFooterLink, #heroDiscordLink, #discordJoinBtn').forEach((el) => (el.href = CFG.discordUrl));
 
     // ================================================================
-    // AUTH — zone connexion / profil
+    // AUTH — zone connexion / menu compte
     // ================================================================
+    let isFounder = false;
+
+    function goToProfileTab(tab) {
+      document.getElementById('profil').scrollIntoView({ behavior: 'smooth' });
+      const btn = document.querySelector(`.profile-tab[data-tab="${tab}"]`);
+      if (btn) btn.click();
+      document.getElementById('userMenu')?.classList.remove('open');
+    }
+
     function renderAuthArea() {
       const el = document.getElementById('authArea');
       if (!steamId) {
@@ -319,12 +329,53 @@
       }
       const name = (account && account.steam && account.steam.name) || 'Joueur';
       const avatar = (account && account.steam && account.steam.avatar) || '';
+      const steamProfileUrl = (account && account.steam && account.steam.profileUrl) || `https://steamcommunity.com/profiles/${steamId}`;
+      const discordName = account && account.discord && account.discord.discordName;
+
       el.innerHTML = `
-        <div class="user-chip" onclick="document.getElementById('profil').scrollIntoView({behavior:'smooth'})">
+        <div class="user-chip" id="userChipBtn">
           ${avatar ? `<img src="${avatar}" alt="">` : ''}
           <span>${name}</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
+        </div>
+        <div class="user-menu" id="userMenu">
+          <div class="user-menu-linked">
+            <div class="linked-title">Comptes liés</div>
+            <div class="linked-row"><span>${name}</span><span class="linked-status ok">✓ Lié</span></div>
+            <div class="linked-row"><span>${discordName || 'Discord non lié'}</span><span class="linked-status ${discordName ? 'ok' : ''}">${discordName ? '✓ Lié' : ''}</span></div>
+          </div>
+          <div class="user-menu-items">
+            <button class="user-menu-item" data-tab="orders">Mon profil</button>
+            <button class="user-menu-item" data-tab="orders">Mes achats</button>
+            <button class="user-menu-item" data-tab="perso">Personnalisation</button>
+            <button class="user-menu-item" data-tab="items">Abonnements</button>
+            <button class="user-menu-item" data-tab="items">File prioritaire</button>
+            <a class="user-menu-item" href="${steamProfileUrl}" target="_blank">Profil Steam</a>
+          </div>
+          <div class="user-menu-items" id="userMenuAdmin" style="display:none">
+            <a class="user-menu-item admin" href="admin.html">Dashboard admin</a>
+          </div>
+          <div class="user-menu-items">
+            <button class="user-menu-item signout" id="signOutBtn">Se déconnecter</button>
+          </div>
         </div>`;
+
+      document.getElementById('userChipBtn').addEventListener('click', () => document.getElementById('userMenu').classList.toggle('open'));
+      document.querySelectorAll('#userMenu button[data-tab]').forEach((btn) => btn.addEventListener('click', () => goToProfileTab(btn.dataset.tab)));
+      document.getElementById('signOutBtn').addEventListener('click', () => {
+        localStorage.removeItem('lexil_steamid');
+        location.reload();
+      });
+      document.getElementById('userMenuAdmin').style.display = isFounder ? '' : 'none';
     }
+
+    document.addEventListener('click', (e) => {
+      const menu = document.getElementById('userMenu');
+      const chip = document.getElementById('userChipBtn');
+      if (menu && menu.classList.contains('open') && !menu.contains(e.target) && e.target !== chip && !chip?.contains(e.target)) {
+        menu.classList.remove('open');
+      }
+    });
 
     async function loadAccount() {
       if (!steamId) { renderAuthArea(); return; }
@@ -345,7 +396,10 @@
       try {
         const res = await fetch(`${AUTH}/api/is-founder?steamId=${encodeURIComponent(steamId)}`);
         const data = await res.json();
-        document.getElementById('adminFooterLink').style.display = data.founder ? '' : 'none';
+        isFounder = !!data.founder;
+        document.getElementById('adminFooterLink').style.display = isFounder ? '' : 'none';
+        const menuAdmin = document.getElementById('userMenuAdmin');
+        if (menuAdmin) menuAdmin.style.display = isFounder ? '' : 'none';
       } catch (e) { /* pas grave, on masque juste le lien */ }
     }
 

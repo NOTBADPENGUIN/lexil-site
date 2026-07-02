@@ -106,6 +106,29 @@ a:hover { text-decoration: underline; }
 .user-chip img { width: 26px; height: 26px; border-radius: 50%; }
 .user-chip span { font-family: var(--font-head); font-size: 13px; color: var(--txt); }
 
+.user-menu {
+  position: absolute; top: calc(100% + 8px); right: 0; width: 240px;
+  background: #141d36; border: 1px solid var(--bord-2); border-radius: 6px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, .6); z-index: 50; overflow: hidden;
+  display: none;
+}
+.user-menu.open { display: block; }
+.user-menu-linked { padding: 14px 16px; border-bottom: 1px solid var(--bord); }
+.linked-title { font-family: var(--font-head); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--mut4); margin-bottom: 8px; }
+.linked-row { display: flex; align-items: center; justify-content: space-between; gap: 9px; font-size: 13px; color: var(--mut); padding: 3px 0; }
+.linked-status { font-size: 11px; color: var(--mut4); font-weight: 600; }
+.linked-status.ok { color: var(--green); }
+.user-menu-items { padding: 6px 0; border-bottom: 1px solid var(--bord); }
+.user-menu-items:last-child { border-bottom: none; }
+.user-menu-item {
+  display: block; width: 100%; padding: 10px 16px; background: transparent; border: none;
+  text-align: left; font-family: var(--font-body); font-size: 14px; color: var(--mut);
+  cursor: pointer; text-decoration: none;
+}
+.user-menu-item:hover { background: rgba(232, 187, 69, .08); color: var(--txt); text-decoration: none; }
+.user-menu-item.admin { color: var(--gold); }
+.user-menu-item.signout { color: var(--red); }
+
 .cart-btn { position: relative; display: flex; align-items: center; gap: 8px; padding: 9px 13px; background: #152039; border: 1px solid var(--bord-2); border-radius: 4px; color: var(--txt); cursor: pointer; }
 .cart-btn:hover { border-color: var(--gold); }
 .cart-count { min-width: 19px; height: 19px; padding: 0 5px; display: inline-grid; place-items: center; background: linear-gradient(180deg, var(--gold-2), var(--gold-3)); color: #12183a; font-size: 11px; font-weight: 700; border-radius: 3px; font-family: var(--font-head); }
