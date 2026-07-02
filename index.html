@@ -59,12 +59,12 @@
         <p>Survie brutale, full loot, zéro pitié. Équipe-toi de skins exclusifs et impose ton style sur le serveur FR/EU le plus nerveux. <b style="color:var(--txt)">100% cosmétique — jamais de pay-to-win.</b></p>
         <div class="tag-row">
           <span class="tag">Skins &amp; tenues</span>
-          <span class="tag">Accès &amp; couleurs</span>
+          <span class="tag">Véhicules</span>
           <span class="tag">Livraison instantanée</span>
         </div>
         <div class="hero-cta">
           <a href="#boutique" class="btn btn-gold">Voir la boutique</a>
-          <a href="#rejoindre" class="link">Rejoindre le serveur</a>
+          <a href="#" class="link" id="heroDiscordLink" target="_blank">lexil.net</a>
         </div>
       </div>
       <div class="hero-logo">
@@ -85,7 +85,7 @@
     <div class="sec-head">
       <div class="sec-eyebrow">Catalogue</div>
       <h2>La boutique</h2>
-      <p>Tous les articles sont strictement cosmétiques ou de confort.</p>
+      <p>Clique sur un produit pour le détail complet. Tous les articles sont strictement cosmétiques ou de confort.</p>
     </div>
     <div class="filters" id="filters"></div>
     <div class="grid" id="grid"></div>
@@ -164,7 +164,7 @@
     <div class="rules-box">
       <div>
         <div class="sec-eyebrow" style="margin-bottom:6px">À lire avant de jouer</div>
-        <h2 style="font-size:clamp(24px,3.4vw,34px);margin:0">Règlement du serveur</h2>
+        <h2 style="font-size:clamp(24px,3.4vw,34px);margin:0">Règles essentielles</h2>
         <p style="margin:10px 0 0;color:var(--mut);font-size:14px">Le règlement complet est disponible sur sa propre page.</p>
       </div>
       <a href="regles.html" class="btn btn-gold">Voir le règlement complet →</a>
@@ -306,7 +306,7 @@
     // ================================================================
     // LIENS DISCORD / NAV
     // ================================================================
-    document.querySelectorAll('#discordNavLink, #discordCta, #discordFooterLink').forEach((el) => (el.href = CFG.discordUrl));
+    document.querySelectorAll('#discordNavLink, #discordCta, #discordFooterLink, #heroDiscordLink').forEach((el) => (el.href = CFG.discordUrl));
 
     // ================================================================
     // AUTH — zone connexion / profil
