@@ -359,6 +359,30 @@ section { max-width: 1200px; margin: 0 auto; padding: 64px 24px 40px; }
 @keyframes goldShimmer { to { background-position: 200% center; } }
 @keyframes haloPulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.06); opacity: .8; } }
 @keyframes badgeFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+@keyframes floaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+/* ============ BOUTON DISCORD FLOTTANT ============ */
+.discord-float {
+  position: fixed; bottom: 24px; right: 24px; z-index: 45;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--discord); border: 2px solid var(--gold);
+  color: #fff; display: grid; place-items: center;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .5);
+  animation: floaty 4s ease-in-out infinite;
+}
+.discord-float:hover { text-decoration: none; filter: brightness(1.08); }
+
+/* ============ BANNIÈRE COOKIES ============ */
+.cookie-banner {
+  position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+  z-index: 70; display: none; align-items: center; gap: 20px; flex-wrap: wrap;
+  max-width: 640px; width: calc(100% - 40px);
+  background: var(--card); border: 1px solid var(--bord-2); border-radius: 8px;
+  padding: 18px 22px; box-shadow: 0 16px 48px rgba(0, 0, 0, .5);
+}
+.cookie-banner.show { display: flex; }
+.cookie-text { flex: 1; min-width: 220px; font-size: 13px; line-height: 1.5; color: var(--mut); }
+.cookie-text b { color: var(--txt); }
 
 /* ============ RESPONSIVE ============ */
 @media (max-width: 720px) {
