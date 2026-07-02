@@ -7,7 +7,7 @@
 
 window.CONFIG = {
   authUrl: "https://lexil-auth-production.up.railway.app",
-  discordUrl: "TODO_DISCORD_INVITE_URL", // ex: "https://discord.gg/tonserveur"
+  discordUrl: "https://discord.gg/t46RE8hYs7",
 
   serveur: {
     ip: "", // ex: "51.83.XX.XX:2402" — laisse vide pour afficher "à configurer"
