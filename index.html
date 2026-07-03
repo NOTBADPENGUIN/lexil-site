@@ -127,7 +127,11 @@
     <div class="features-grid" id="featuresGrid"></div>
   </section>
 
-  <section id="profil" style="display:none">
+  <section id="profil" class="account-overlay">
+    <button class="account-back" id="accountBackBtn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>
+      Retour
+    </button>
     <div class="sec-head">
       <div class="sec-eyebrow">Ton compte</div>
       <h2>Mon profil</h2>
@@ -173,7 +177,10 @@
           <div class="form-row">
             <input type="text" id="roleNameInput" placeholder="Nom du rôle" maxlength="32" />
             <input type="color" id="roleColorInput" value="#e0a82e" />
-            <button class="btn btn-gold" id="saveRoleBtn">Enregistrer</button>
+            <button class="btn btn-discord-solid" id="saveRoleBtn">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z M17 21v-8H7v8 M7 3v5h8"></path></svg>
+              Créer / modifier mon rôle
+            </button>
           </div>
           <div class="role-char-count" id="roleCharCount">0/32</div>
         </div>
@@ -300,9 +307,15 @@
   </a>
 
   <div class="cookie-banner" id="cookieBanner">
+    <div class="cookie-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5z"></path>
+        <path d="M8.5 10.5h.01 M12 15h.01 M15.5 11.5h.01"></path>
+      </svg>
+    </div>
     <div class="cookie-text">
-      <b>Cookies &amp; stockage</b> — L'EXIL utilise uniquement le stockage local nécessaire à ton panier et ta session. Aucun cookie de suivi ni publicité.
-      <a href="legal.html">En savoir plus</a>
+      <div class="cookie-title">Cookies &amp; stockage</div>
+      <p>L'EXIL utilise uniquement le stockage local nécessaire à ton panier et ta session. Aucun cookie de suivi ni publicité. <a href="legal.html">En savoir plus</a></p>
     </div>
     <button class="btn btn-gold" id="cookieOkBtn">J'ai compris</button>
   </div>
@@ -382,11 +395,20 @@
     let isFounder = false;
 
     function goToProfileTab(tab) {
-      document.getElementById('profil').scrollIntoView({ behavior: 'smooth' });
+      const section = document.getElementById('profil');
+      section.classList.add('open');
+      document.body.style.overflow = 'hidden';
       const btn = document.querySelector(`.profile-tab[data-tab="${tab}"]`);
       if (btn) btn.click();
       document.getElementById('userMenu')?.classList.remove('open');
+      section.scrollTop = 0;
     }
+    function closeAccount() {
+      document.getElementById('profil').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.getElementById('accountBackBtn').addEventListener('click', closeAccount);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAccount(); });
 
     function renderAuthArea() {
       const el = document.getElementById('authArea');
@@ -475,8 +497,7 @@
     // ================================================================
     function renderProfile() {
       const section = document.getElementById('profil');
-      if (!steamId || !account) { section.style.display = 'none'; return; }
-      section.style.display = '';
+      if (!steamId || !account) { section.classList.remove('open'); document.body.style.overflow = ''; return; }
 
       const steam = account.steam || {};
       document.getElementById('profAvatar').src = steam.avatar || '';
@@ -555,11 +576,18 @@
         .map((r) => `
           <div class="color-picker-row">
             <span>${r.title}</span>
-            <input type="color" data-type="${r.type}" value="${colors[r.type] || '#e0a82e'}" />
+            <div class="color-pick-val">
+              <span class="color-hex">${(colors[r.type] || '#e0a82e').toUpperCase()}</span>
+              <input type="color" data-type="${r.type}" value="${colors[r.type] || '#e0a82e'}" />
+            </div>
           </div>`)
         .join('');
       document.getElementById('colorPickers').innerHTML = html || '<p style="color:var(--mut);font-size:14px">Achète une couleur lifetime pour la personnaliser ici.</p>';
       document.querySelectorAll('#colorPickers input[type="color"]').forEach((input) => {
+        input.addEventListener('input', () => {
+          const hex = input.parentElement.querySelector('.color-hex');
+          if (hex) hex.textContent = input.value.toUpperCase();
+        });
         input.addEventListener('change', async () => {
           try {
             const res = await fetch(`${AUTH}/api/customize/color`, {

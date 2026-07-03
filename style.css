@@ -66,6 +66,14 @@ a:hover { text-decoration: underline; }
 .btn-outline:hover { border-color: var(--gold); text-decoration: none; }
 .btn-discord { background: rgba(88, 101, 242, .14); border-color: var(--discord); color: #c8cdff; padding: 9px 16px; }
 .btn-discord:hover { background: rgba(88, 101, 242, .26); text-decoration: none; }
+.btn-discord-solid {
+  padding: 14px 26px; gap: 10px;
+  background: linear-gradient(180deg, #5865f2, #4450e0);
+  border-color: #6b78ff; color: #fff;
+  font-weight: 700; font-size: 14px; border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(88, 101, 242, .3);
+}
+.btn-discord-solid:hover { filter: brightness(1.07); text-decoration: none; }
 .btn:disabled { opacity: .5; cursor: default; }
 
 /* ============ NAV ============ */
@@ -150,6 +158,7 @@ a:hover { text-decoration: underline; }
   background:
     radial-gradient(120% 90% at 85% 18%, rgba(232, 187, 69, .12), transparent 55%),
     radial-gradient(95% 85% at 10% 95%, rgba(42, 64, 120, .30), transparent 62%),
+    radial-gradient(135% 120% at 50% 45%, rgba(30, 44, 82, .42), transparent 78%),
     linear-gradient(135deg, #0c1428 0%, #0a1020 48%, #080d1c 100%);
   background-size: 170% 170%;
   animation: bgShift 24s ease-in-out infinite;
@@ -204,7 +213,7 @@ a:hover { text-decoration: underline; }
 .hero-logo img { position: relative; width: min(430px, 86%); max-width: 430px; filter: drop-shadow(0 24px 55px rgba(0, 0, 0, .55)) drop-shadow(0 0 34px rgba(232, 187, 69, .22)); animation: badgeFloat 6s ease-in-out infinite; }
 
 /* ============ HERO — FINITIONS (grille, braises, reflet CTA) ============ */
-/* Grille en filigrane, atténuée sur les bords par un masque radial. */
+/* Grille en filigrane, couvrant tout le hero (bords remplis) avec un léger vignettage aux coins extrêmes. */
 .hero::before {
   content: "";
   position: absolute;
@@ -212,11 +221,11 @@ a:hover { text-decoration: underline; }
   z-index: 0;
   pointer-events: none;
   background-image:
-    linear-gradient(rgba(232, 187, 69, .05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(232, 187, 69, .05) 1px, transparent 1px);
+    linear-gradient(rgba(232, 187, 69, .09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232, 187, 69, .09) 1px, transparent 1px);
   background-size: 46px 46px;
-  -webkit-mask-image: radial-gradient(125% 95% at 72% 28%, #000 26%, transparent 78%);
-  mask-image: radial-gradient(125% 95% at 72% 28%, #000 26%, transparent 78%);
+  -webkit-mask-image: radial-gradient(150% 150% at 50% 45%, #000 78%, transparent 100%);
+  mask-image: radial-gradient(150% 150% at 50% 45%, #000 78%, transparent 100%);
 }
 
 /* Braises dorées qui montent. Positions/délais/durées définis en inline dans le HTML. */
@@ -358,6 +367,25 @@ section { max-width: 1200px; margin: 0 auto; padding: 64px 24px 40px; }
 .feature-card h3 { font-family: var(--font-head); font-weight: 600; font-size: 19px; color: var(--txt); text-transform: uppercase; letter-spacing: .02em; margin: 0; }
 .feature-card p { margin-top: 9px; font-size: 14px; line-height: 1.55; color: var(--mut3); }
 
+/* ============ PROFIL (overlay plein écran, README §6) ============ */
+.account-overlay { display: none; }
+.account-overlay.open {
+  display: block; position: fixed; inset: 0; z-index: 55;
+  max-width: none; margin: 0; padding: 84px 24px 64px;
+  background: var(--bg); overflow-y: auto; animation: fadeIn .18s ease;
+}
+.account-overlay.open .sec-head,
+.account-overlay.open .profile-box { max-width: 1000px; margin-left: auto; margin-right: auto; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.account-back {
+  position: fixed; top: 22px; left: 24px; z-index: 2;
+  display: inline-flex; align-items: center; gap: 7px;
+  background: #152039; border: 1px solid var(--bord-2); color: var(--txt);
+  font-family: var(--font-head); font-size: 13px; letter-spacing: .06em; text-transform: uppercase;
+  padding: 9px 16px; border-radius: 4px; cursor: pointer;
+}
+.account-back:hover { border-color: var(--gold); }
+
 /* ============ PROFIL ============ */
 .profile-box { border: 1px solid var(--bord); background: linear-gradient(180deg, rgba(16, 24, 46, .9), rgba(9, 14, 30, .4)); border-radius: 6px; padding: 30px; }
 .profile-head { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
@@ -395,6 +423,8 @@ section { max-width: 1200px; margin: 0 auto; padding: 64px 24px 40px; }
 
 .color-picker-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--bord); gap: 12px; flex-wrap: wrap; }
 .color-picker-row input[type="color"] { width: 40px; height: 32px; border: 1px solid var(--bord-2); border-radius: 4px; background: #0d1428; cursor: pointer; }
+.color-pick-val { display: flex; align-items: center; gap: 12px; }
+.color-hex { font-family: var(--font-head); font-weight: 600; font-size: 16px; color: var(--txt); text-transform: uppercase; letter-spacing: .04em; }
 .form-row { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
 .form-row input[type="text"] { flex: 1; min-width: 160px; padding: 10px 12px; background: #0d1428; border: 1px solid var(--bord-2); border-radius: 4px; color: var(--txt); font-family: var(--font-body); }
 .role-preview { display: inline-block; padding: 6px 14px; border: 1px solid var(--gold); border-radius: 4px; font-family: var(--font-head); font-size: 13px; letter-spacing: .04em; color: var(--gold); background: rgba(232, 187, 69, .06); }
@@ -466,15 +496,24 @@ section { max-width: 1200px; margin: 0 auto; padding: 64px 24px 40px; }
 
 /* ============ BANNIÈRE COOKIES ============ */
 .cookie-banner {
-  position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
-  z-index: 70; display: none; align-items: center; gap: 20px; flex-wrap: wrap;
-  max-width: 640px; width: calc(100% - 40px);
-  background: var(--card); border: 1px solid var(--bord-2); border-radius: 8px;
-  padding: 18px 22px; box-shadow: 0 16px 48px rgba(0, 0, 0, .5);
+  position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%);
+  z-index: 70; display: none; align-items: center; gap: 18px; flex-wrap: wrap;
+  max-width: 760px; width: calc(100% - 32px);
+  background: var(--card); border: 1px solid var(--bord-2); border-radius: 10px;
+  padding: 16px 20px; box-shadow: 0 18px 50px rgba(0, 0, 0, .55);
 }
 .cookie-banner.show { display: flex; }
-.cookie-text { flex: 1; min-width: 220px; font-size: 13px; line-height: 1.5; color: var(--mut); }
-.cookie-text b { color: var(--txt); }
+.cookie-icon {
+  flex: none; width: 40px; height: 40px; display: grid; place-items: center;
+  background: rgba(232, 187, 69, .1); border: 1px solid #3d3016; border-radius: 9px;
+  color: var(--gold);
+}
+.cookie-text { flex: 1; min-width: 220px; }
+.cookie-title {
+  font-family: var(--font-head); font-weight: 600; font-size: 15px;
+  color: var(--txt); letter-spacing: .02em; text-transform: uppercase;
+}
+.cookie-text p { margin: 4px 0 0; font-size: 13px; line-height: 1.5; color: var(--mut); }
 
 /* ============ RESPONSIVE ============ */
 @media (max-width: 720px) {

@@ -8,22 +8,26 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0a1020;--card:#111a30;--card2:#152039;--bord:#233150;--red:#cf3a2c;--green:#39d56b;--gold:#e8bb45;--txt:#f2efe9;--mut:#aeb7c6}
+:root{--bg:#0a1020;--card:#111a30;--card2:#152039;--bord:#233150;--bord-2:#2a3a5c;--red:#cf3a2c;--green:#39d56b;--gold:#e8bb45;--gold-2:#f4d477;--gold-3:#d19f2f;--txt:#f2efe9;--mut:#aeb7c6;--mut4:#63708a}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--txt);font-family:Barlow,system-ui,sans-serif}
 h1,h2,h3,.osw{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.04em}
 a{color:var(--gold)}
 .wrap{max-width:1100px;margin:0 auto;padding:24px 16px}
 .topbar{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bord);padding:16px}
-.logo{font-family:Oswald;font-weight:700;letter-spacing:3px;color:var(--red);font-size:22px}
+.logo{font-family:Oswald;font-weight:700;letter-spacing:3px;color:var(--gold);font-size:22px}
 .tag{font-size:11px;color:var(--mut);letter-spacing:2px}
-.card{background:var(--card);border:1px solid var(--bord);border-radius:12px;padding:20px;margin-bottom:16px}
+.card{background:var(--card);border:1px solid var(--bord);border-radius:6px;padding:20px;margin-bottom:16px}
 label{display:block;font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.08em;margin:10px 0 5px}
-input,select{width:100%;padding:11px 12px;background:#0e0e12;border:1px solid var(--bord);border-radius:8px;color:var(--txt);font-size:15px;font-family:Barlow}
-input:focus,select:focus{outline:none;border-color:var(--red)}
-button{font-family:Oswald;text-transform:uppercase;letter-spacing:.06em;font-weight:600;cursor:pointer;border:0;border-radius:8px;padding:11px 18px;color:#fff;background:var(--red);font-size:14px}
-button:hover{filter:brightness(1.1)}button:disabled{opacity:.5;cursor:default}
-button.ghost{background:#23232c}button.green{background:#1f7a3d}button.gold{background:var(--gold);color:#1a1208}
+input,select{width:100%;padding:11px 12px;background:#0d1428;border:1px solid var(--bord-2);border-radius:4px;color:var(--txt);font-size:15px;font-family:Barlow}
+input:focus,select:focus{outline:none;border-color:var(--gold)}
+button{font-family:Oswald;text-transform:uppercase;letter-spacing:.06em;font-weight:600;cursor:pointer;border:1px solid #f6dc84;border-radius:4px;padding:11px 18px;color:#12183a;background:linear-gradient(180deg,var(--gold-2),var(--gold-3));font-size:14px;box-shadow:0 0 16px rgba(232,187,69,.32)}
+button:hover{filter:brightness(1.07)}button:disabled{opacity:.5;cursor:default}
+button.ghost{background:#152039;border:1px solid var(--bord-2);color:var(--txt);box-shadow:none}
+button.ghost:hover{border-color:var(--gold);filter:none}
+button.green{background:linear-gradient(180deg,#3ec07a,#2a9c5c);border-color:#4fd08a;color:#08210f;box-shadow:none}
+button.gold{background:linear-gradient(180deg,var(--gold-2),var(--gold-3));border-color:#f6dc84;color:#12183a}
+button.danger{background:var(--red);border-color:#e0554a;color:#fff;box-shadow:none}
 table{width:100%;border-collapse:collapse}
 th,td{text-align:left;padding:11px 10px;border-bottom:1px solid var(--bord);font-size:14px}
 th{font-family:Oswald;text-transform:uppercase;font-size:12px;letter-spacing:.06em;color:var(--mut)}
@@ -38,9 +42,9 @@ tr.row{cursor:pointer}tr.row:hover{background:var(--card2)}
 .hidden{display:none}
 .err{color:#ff7b82;font-size:13px;margin-top:8px}
 .ok{color:var(--green);font-size:13px;margin-top:8px}
-.back{background:none;color:var(--gold);padding:0;font-size:13px}
-.stat{background:var(--card2);border:1px solid var(--bord);border-radius:10px;padding:14px;text-align:center;flex:1;min-width:120px}
-.stat b{display:block;font-family:Oswald;font-size:22px;color:var(--red)}
+.back{background:none;color:var(--gold);padding:0;font-size:13px;border:0;box-shadow:none}
+.stat{background:var(--card2);border:1px solid var(--bord);border-radius:6px;padding:14px;text-align:center;flex:1;min-width:120px}
+.stat b{display:block;font-family:Oswald;font-size:22px;color:var(--gold)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:700px){.grid2{grid-template-columns:1fr}}
 </style>
@@ -54,7 +58,7 @@ tr.row{cursor:pointer}tr.row:hover{background:var(--card2)}
 
   <!-- LOGIN -->
   <div id="login" class="card" style="max-width:440px;margin:40px auto">
-    <h2 style="margin:0 0 4px;color:var(--red)">Connexion admin</h2>
+    <h2 style="margin:0 0 4px;color:var(--gold)">Connexion admin</h2>
     <p class="small muted" style="margin:0 0 8px">Réservé aux admins et fondateurs.</p>
     <label>Ton SteamID64</label>
     <input id="sid" placeholder="7656119..." inputmode="numeric">
@@ -189,7 +193,7 @@ async function openUser(sid){
   a.orders.forEach(o=>{
     const tr=document.createElement('tr');
     tr.innerHTML=`<td class="small">${esc(o.date)}</td><td class="small">${o.items.map(i=>esc(i.label)).join(', ')}</td>
-      <td>${o.total}</td><td><button class="ghost" style="padding:5px 10px;font-size:12px">Retirer</button></td>`;
+      <td>${o.total}</td><td><button class="danger" style="padding:5px 10px;font-size:12px">Retirer</button></td>`;
     tr.querySelector('button').onclick=()=>removeOrder(o.orderId);
     ob.appendChild(tr);
   });
