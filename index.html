@@ -40,6 +40,24 @@
   </header>
 
   <section id="top" class="hero">
+    <div class="hero-embers" aria-hidden="true">
+      <span class="ember" style="left:6%;width:4px;height:4px;animation-delay:0s;animation-duration:8s"></span>
+      <span class="ember" style="left:14%;width:3px;height:3px;animation-delay:2.4s;animation-duration:9.5s"></span>
+      <span class="ember" style="left:22%;width:5px;height:5px;animation-delay:5.1s;animation-duration:7s"></span>
+      <span class="ember" style="left:30%;width:3.5px;height:3.5px;animation-delay:1.2s;animation-duration:10.5s"></span>
+      <span class="ember" style="left:38%;width:4px;height:4px;animation-delay:6.8s;animation-duration:8.2s"></span>
+      <span class="ember" style="left:46%;width:4.5px;height:4.5px;animation-delay:3.3s;animation-duration:9s"></span>
+      <span class="ember" style="left:54%;width:3px;height:3px;animation-delay:0.6s;animation-duration:7.6s"></span>
+      <span class="ember" style="left:62%;width:5px;height:5px;animation-delay:4.7s;animation-duration:10s"></span>
+      <span class="ember" style="left:70%;width:3.5px;height:3.5px;animation-delay:2s;animation-duration:8.8s"></span>
+      <span class="ember" style="left:78%;width:4px;height:4px;animation-delay:6.2s;animation-duration:7.2s"></span>
+      <span class="ember" style="left:86%;width:4.5px;height:4.5px;animation-delay:1.6s;animation-duration:9.7s"></span>
+      <span class="ember" style="left:93%;width:3px;height:3px;animation-delay:3.9s;animation-duration:8.4s"></span>
+      <span class="ember" style="left:10%;width:3.5px;height:3.5px;animation-delay:7.5s;animation-duration:10.2s"></span>
+      <span class="ember" style="left:34%;width:4px;height:4px;animation-delay:8.6s;animation-duration:9.1s"></span>
+      <span class="ember" style="left:58%;width:4.5px;height:4.5px;animation-delay:5.7s;animation-duration:7.8s"></span>
+      <span class="ember" style="left:82%;width:3px;height:3px;animation-delay:8.1s;animation-duration:8.6s"></span>
+    </div>
     <div class="hero-grid">
       <div>
         <div class="eyebrow">
@@ -48,7 +66,7 @@
         </div>
         <div class="status-pill">
           <span class="status-dot"></span>
-          <span>Serveur en ligne · 100 joueurs max · Chernarus</span>
+          <span id="statusPillText">Serveur en ligne · 100 joueurs max · Chernarus</span>
         </div>
         <h1>
           <span class="line-1">LA BOUTIQUE</span>
@@ -627,6 +645,17 @@
     // ================================================================
     // REJOINDRE LE SERVEUR
     // ================================================================
+    // Statut serveur (hero) — "En ligne · X/100 joueurs · Chernarus"
+    (function renderServerStatus() {
+      const el = document.getElementById('statusPillText');
+      if (!el || CFG.serveur.joueurs == null) return;
+      const maxInfo = CFG.serveur.info.find((i) => /joueurs max/i.test(i.label));
+      const max = maxInfo ? maxInfo.value : 100;
+      const carteInfo = CFG.serveur.info.find((i) => /carte/i.test(i.label));
+      const carte = carteInfo ? carteInfo.value : 'Chernarus';
+      el.textContent = `En ligne · ${CFG.serveur.joueurs}/${max} joueurs · ${carte}`;
+    })();
+
     const ipValueEl = document.getElementById('ipValue');
     const ipHintEl = document.getElementById('ipHint');
     if (CFG.serveur.ip) { ipValueEl.textContent = CFG.serveur.ip; } else { ipValueEl.textContent = 'Non configurée'; ipHintEl.style.display = 'flex'; }

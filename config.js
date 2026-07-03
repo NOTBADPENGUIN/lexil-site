@@ -13,6 +13,7 @@ window.CONFIG = {
 
   serveur: {
     ip: "", // ex: "51.83.XX.XX:2402" — laisse vide pour afficher "à configurer"
+    joueurs: 68, // nombre affiché dans le hero (statut) — mets à jour ou branche un vrai compteur
     info: [
       { label: "Carte", value: "Chernarus" },
       { label: "Joueurs max", value: "100" },

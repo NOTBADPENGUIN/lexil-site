@@ -156,6 +156,7 @@ a:hover { text-decoration: underline; }
 }
 .hero-grid {
   position: relative;
+  z-index: 2;
   margin: 0 auto;
   max-width: 1200px;
   padding: 76px 24px;
@@ -201,6 +202,60 @@ a:hover { text-decoration: underline; }
 .hero-logo { position: relative; display: grid; place-items: center; min-height: 300px; min-width: 0; }
 .hero-logo-halo { position: absolute; width: min(440px, 86%); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgba(232, 187, 69, .24), rgba(232, 187, 69, .05) 45%, transparent 66%); animation: haloPulse 4.6s ease-in-out infinite; }
 .hero-logo img { position: relative; width: min(430px, 86%); max-width: 430px; filter: drop-shadow(0 24px 55px rgba(0, 0, 0, .55)) drop-shadow(0 0 34px rgba(232, 187, 69, .22)); animation: badgeFloat 6s ease-in-out infinite; }
+
+/* ============ HERO — FINITIONS (grille, braises, reflet CTA) ============ */
+/* Grille en filigrane, atténuée sur les bords par un masque radial. */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(232, 187, 69, .05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232, 187, 69, .05) 1px, transparent 1px);
+  background-size: 46px 46px;
+  -webkit-mask-image: radial-gradient(125% 95% at 72% 28%, #000 26%, transparent 78%);
+  mask-image: radial-gradient(125% 95% at 72% 28%, #000 26%, transparent 78%);
+}
+
+/* Braises dorées qui montent. Positions/délais/durées définis en inline dans le HTML. */
+.hero-embers { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
+.ember {
+  position: absolute;
+  bottom: -14px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffe6a0, var(--gold) 45%, transparent 72%);
+  box-shadow: 0 0 8px rgba(232, 187, 69, .7);
+  opacity: 0;
+  animation: emberRise linear infinite;
+}
+@keyframes emberRise {
+  0%   { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+  12%  { opacity: 1; }
+  70%  { opacity: .85; }
+  100% { transform: translateY(-88vh) translateX(24px) scale(.35); opacity: 0; }
+}
+
+/* Reflet balayant sur le CTA doré du hero uniquement. */
+.hero-cta .btn-gold { position: relative; overflow: hidden; }
+.hero-cta .btn-gold::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .55), transparent);
+  transform: skewX(-20deg);
+  animation: sweep 3.6s ease-in-out infinite;
+}
+@keyframes sweep {
+  0%        { left: -60%; }
+  45%, 100% { left: 140%; }
+}
 
 /* ============ RÉASSURANCE ============ */
 .trust-bar { border-top: 1px solid #1e2a44; border-bottom: 1px solid #1e2a44; background: #0b1327; }
