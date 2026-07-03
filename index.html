@@ -151,11 +151,13 @@
         <div id="colorPickers"></div>
         <div id="customRoleForm" style="display:none;margin-top:20px">
           <div class="footer-col-title" style="margin-bottom:10px">Rôle Discord personnalisé</div>
+          <div class="role-preview" id="rolePreview">Aperçu du rôle</div>
           <div class="form-row">
-            <input type="text" id="roleNameInput" placeholder="Nom du rôle" maxlength="40" />
+            <input type="text" id="roleNameInput" placeholder="Nom du rôle" maxlength="32" />
             <input type="color" id="roleColorInput" value="#e0a82e" />
             <button class="btn btn-gold" id="saveRoleBtn">Enregistrer</button>
           </div>
+          <div class="role-char-count" id="roleCharCount">0/32</div>
         </div>
       </div>
     </div>
@@ -248,6 +250,29 @@
     <div class="cart-foot">
       <div class="cart-total-row"><span>Total</span><span id="cartTotal">0,00 €</span></div>
       <button class="btn btn-gold" style="width:100%;justify-content:center" id="checkoutBtn">Passer commande</button>
+    </div>
+  </div>
+
+  <div class="product-modal-overlay" id="productModalOverlay"></div>
+  <div class="product-modal" id="productModal">
+    <button class="product-modal-close" id="productModalClose">&times;</button>
+    <div class="product-modal-media" id="pmMedia"></div>
+    <div class="product-modal-body">
+      <span class="card-cat" id="pmCat"></span>
+      <h2 id="pmName"></h2>
+      <p id="pmDesc"></p>
+      <div class="pm-price-row">
+        <div class="price-col">
+          <span class="price-prefix">Prix</span>
+          <span class="price" id="pmPrice"></span>
+        </div>
+        <button class="btn btn-gold" id="pmAddBtn">Ajouter au panier</button>
+      </div>
+      <div class="pm-trust">
+        <div class="pm-trust-item">Livraison auto en jeu</div>
+        <div class="pm-trust-item">100% cosmétique</div>
+        <div class="pm-trust-item">Paiement sécurisé (Stripe)</div>
+      </div>
     </div>
   </div>
 
@@ -523,7 +548,24 @@
       // Rôle Discord perso — affiché seulement si possédé.
       const hasRole = cosmetics.some((c) => c.name === 'Rôle Discord personnalisé');
       document.getElementById('customRoleForm').style.display = hasRole ? '' : 'none';
+      if (hasRole && account && account.customRole) {
+        document.getElementById('roleNameInput').value = account.customRole.name || '';
+        document.getElementById('roleColorInput').value = account.customRole.color || '#e0a82e';
+      }
+      updateRolePreview();
     }
+
+    function updateRolePreview() {
+      const name = document.getElementById('roleNameInput').value;
+      const color = document.getElementById('roleColorInput').value;
+      document.getElementById('roleCharCount').textContent = `${name.length}/32`;
+      const preview = document.getElementById('rolePreview');
+      preview.textContent = name || 'Aperçu du rôle';
+      preview.style.color = color;
+      preview.style.borderColor = color;
+    }
+    document.getElementById('roleNameInput').addEventListener('input', updateRolePreview);
+    document.getElementById('roleColorInput').addEventListener('input', updateRolePreview);
 
     document.getElementById('saveRoleBtn').addEventListener('click', async () => {
       const name = document.getElementById('roleNameInput').value.trim();
@@ -609,18 +651,25 @@
     }
 
     const kindLabel = { lifetime: 'À vie', days30: '30 jours', priority: 'Priorité', discord: 'Discord' };
+    const badgeLabel = { populaire: 'Populaire', offre: 'Meilleure offre' };
+
+    function productMediaHtml(p) {
+      const icon = CFG.catIcons[p.cat] || CFG.catIcons.Cosmétique;
+      return `
+        <svg viewBox="0 0 100 100" width="110" height="110" style="position:absolute;opacity:.13"><polygon points="50,6 89,28 89,72 50,94 11,72 11,28" fill="none" stroke="#e0a82e" stroke-width="1.5"></polygon></svg>
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#f2efe9" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="position:relative"><path d="${icon}"></path></svg>
+        ${p.badge ? `<span class="card-badge ${p.badge}">${badgeLabel[p.badge]}</span>` : ''}
+        <span class="card-kind">${kindLabel[p.kind]}</span>
+        <span class="card-cat">${p.cat}</span>`;
+    }
 
     function renderGrid() {
       const grid = document.getElementById('grid');
       const list = activeCategory === 'Tous' ? CFG.catalog : CFG.catalog.filter((p) => p.cat === activeCategory);
       grid.innerHTML = list
         .map((p) => `
-        <article class="card">
-          <div class="card-media">
-            <svg viewBox="0 0 100 100" width="110" height="110" style="position:absolute;opacity:.13"><polygon points="50,6 89,28 89,72 50,94 11,72 11,28" fill="none" stroke="#e0a82e" stroke-width="1.5"></polygon></svg>
-            <span class="card-kind">${kindLabel[p.kind]}</span>
-            <span class="card-cat">${p.cat}</span>
-          </div>
+        <article class="card" data-key="${p.key}">
+          <div class="card-media">${productMediaHtml(p)}</div>
           <div class="card-body">
             <h3>${p.name}</h3>
             <p class="desc">${p.desc}</p>
@@ -629,13 +678,38 @@
                 <span class="price-prefix">Prix</span>
                 <span class="price">${fmt(p.price)}</span>
               </div>
-              <button class="btn btn-gold" data-key="${p.key}">Ajouter</button>
+              <button class="btn btn-gold" data-key="${p.key}" data-add>Ajouter</button>
             </div>
           </div>
         </article>`)
         .join('');
-      grid.querySelectorAll('button[data-key]').forEach((btn) => btn.addEventListener('click', () => addToCart(btn.dataset.key)));
+      grid.querySelectorAll('.card').forEach((card) => card.addEventListener('click', () => openProductModal(card.dataset.key)));
+      grid.querySelectorAll('button[data-add]').forEach((btn) =>
+        btn.addEventListener('click', (e) => { e.stopPropagation(); addToCart(btn.dataset.key); })
+      );
     }
+
+    // ================================================================
+    // FICHE PRODUIT (modal)
+    // ================================================================
+    function openProductModal(key) {
+      const p = catalogItem(key);
+      if (!p) return;
+      document.getElementById('pmMedia').innerHTML = productMediaHtml(p);
+      document.getElementById('pmCat').textContent = p.cat;
+      document.getElementById('pmName').textContent = p.name;
+      document.getElementById('pmDesc').textContent = p.desc;
+      document.getElementById('pmPrice').textContent = fmt(p.price);
+      document.getElementById('pmAddBtn').onclick = () => { addToCart(p.key); closeProductModal(); };
+      document.getElementById('productModal').classList.add('open');
+      document.getElementById('productModalOverlay').classList.add('open');
+    }
+    function closeProductModal() {
+      document.getElementById('productModal').classList.remove('open');
+      document.getElementById('productModalOverlay').classList.remove('open');
+    }
+    document.getElementById('productModalClose').addEventListener('click', closeProductModal);
+    document.getElementById('productModalOverlay').addEventListener('click', closeProductModal);
 
     // ================================================================
     // PANIER

@@ -61,15 +61,25 @@ window.CONFIG = {
     },
   ],
 
+  // Icône par catégorie (présentation uniquement, aucun impact sur les prix/logique).
+  catIcons: {
+    Confort: "M12 19V5M5 12l7-7 7 7",
+    Cosmétique: "M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82Z M7 7h.01",
+    Armes: "M12 2v4M12 18v4M2 12h4M18 12h4M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z",
+    Véhicules: "M5 11l1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11M5 11h14v5a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1H8v1a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-5Z M7 14h.01M17 14h.01",
+    Couleurs: "M12 2a10 10 0 1 0 0 20c1.5 0 2-1 2-2s-.5-1.5-.5-2 .5-1 1.5-1h1a4 4 0 0 0 4-4c0-5-4-11-8-11Z M7 9h.01M11 6h.01M15 7h.01M16.5 11h.01",
+    Discord: "M19.3 5.4A17 17 0 0 0 15 4l-.3.5a13 13 0 0 1 3.8 1.9 12 12 0 0 0-11 0A13 13 0 0 1 11.3 4.5L11 4a17 17 0 0 0-4.3 1.4C3.9 9.6 3.2 13.7 3.5 17.7A17 17 0 0 0 8.7 20l.6-1.5c-.6-.2-1.1-.5-1.6-.8l.4-.3a12 12 0 0 0 10 0l.4.3c-.5.3-1 .6-1.6.8L17.5 20a17 17 0 0 0 5.2-2.3c.3-4.5-.6-8.6-3.4-12.3ZM9.5 15.2c-.9 0-1.7-.8-1.7-1.9 0-1 .8-1.9 1.7-1.9.9 0 1.7.9 1.7 1.9 0 1-.8 1.9-1.7 1.9Zm5 0c-1 0-1.7-.8-1.7-1.9 0-1 .8-1.9 1.7-1.9.9 0 1.7.9 1.7 1.9 0 1-.8 1.9-1.7 1.9Z",
+  },
+
   // Catalogue — copié de bot-exil/src/index.js (CATALOG) + account.js (cat/kind).
   // kind: 'lifetime' (à vie) | 'days30' (30 jours) | 'priority' (file prio 30j) | 'discord'
   catalog: [
-    { key: "prio", name: "File prioritaire (30 jours)", price: 15.0, cat: "Confort", kind: "priority", desc: "Rejoins le serveur en priorité, même quand il est plein." },
+    { key: "prio", name: "File prioritaire (30 jours)", price: 15.0, cat: "Confort", kind: "priority", desc: "Rejoins le serveur en priorité, même quand il est plein.", badge: "offre" },
     { key: "item", name: "Item cosmétique", price: 11.99, cat: "Cosmétique", kind: "lifetime", desc: "Une pièce cosmétique au choix." },
     { key: "item-adv", name: "Item — Retexture avancé", price: 19.99, cat: "Cosmétique", kind: "lifetime", desc: "Une pièce d'équipement avec retexture avancé." },
     { key: "tenue-s", name: "Tenue complète — Simple", price: 19.99, cat: "Cosmétique", kind: "lifetime", desc: "Tenue complète avec retexture simple." },
     { key: "tenue-s-plus", name: "Tenue simple + protections", price: 29.99, cat: "Cosmétique", kind: "lifetime", desc: "Tenue simple livrée avec armure, casque, veste et sac." },
-    { key: "tenue-a", name: "Tenue complète — Avancé", price: 34.99, cat: "Cosmétique", kind: "lifetime", desc: "Tenue complète avec retexture haut de gamme aux couleurs L'EXIL." },
+    { key: "tenue-a", name: "Tenue complète — Avancé", price: 34.99, cat: "Cosmétique", kind: "lifetime", desc: "Tenue complète avec retexture haut de gamme aux couleurs L'EXIL.", badge: "populaire" },
     { key: "tenue-a-plus", name: "Tenue avancée + protections", price: 44.99, cat: "Cosmétique", kind: "lifetime", desc: "Tenue avancée livrée avec armure, casque, veste et sac." },
     { key: "drip", name: "Drip Menu (30 jours)", price: 14.99, cat: "Confort", kind: "days30", desc: "Accès au menu Drip pendant 30 jours." },
     { key: "gun-b", name: "Retexture d'arme — Basic", price: 19.99, cat: "Armes", kind: "lifetime", desc: "Retexture de base d'arme." },
