@@ -33,7 +33,7 @@ body {
 
 a { color: var(--gold); text-decoration: none; }
 a:hover { text-decoration: underline; }
-.wrap { max-width: 1200px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+.wrap { max-width: 1440px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
 
 .btn {
   display: inline-flex;
@@ -167,7 +167,7 @@ a:hover { text-decoration: underline; }
   position: relative;
   z-index: 2;
   margin: 0 auto;
-  max-width: 1200px;
+  max-width: 1440px;
   padding: 76px 24px;
   width: 100%;
   display: grid;
@@ -273,7 +273,7 @@ a:hover { text-decoration: underline; }
 .trust-item b { color: var(--gold); font-weight: 600; }
 
 /* ============ SECTION HEADERS ============ */
-section { max-width: 1200px; margin: 0 auto; padding: 64px 24px 40px; }
+section { max-width: 1440px; margin: 0 auto; padding: 64px 24px 40px; }
 .sec-head { text-align: center; margin-bottom: 10px; }
 .sec-eyebrow { font-family: var(--font-head); font-size: 13px; letter-spacing: .3em; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; }
 .sec-head h2 { font-family: var(--font-head); font-weight: 700; font-size: clamp(30px, 4.5vw, 46px); line-height: 1; color: #f6f4ef; text-transform: uppercase; margin: 0; }
