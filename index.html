@@ -480,14 +480,15 @@
       // Highlight du rang actuel dans la section "Rôles donateur"
       document.querySelectorAll('.rank-chip').forEach((chip) => chip.classList.toggle('current', chip.dataset.name === gradeDisplay.name));
 
-      // Commandes
+      // Commandes — les objets offerts via le dashboard admin ont un orderId technique
+      // ("ADMIN-<timestamp ISO>") : on affiche un libellé lisible à la place.
       const orders = account.account.orders || [];
       document.getElementById('panelOrders').innerHTML = orders.length
         ? orders.map((o) => `
           <div class="order-row">
             <div>
               <div class="items">${o.items.map((it) => it.label).join(', ')}</div>
-              <div class="meta">${o.date} · ${o.orderId}</div>
+              <div class="meta">${o.date} · ${o.orderId.startsWith('ADMIN-') ? 'Offert par le staff' : o.orderId}</div>
             </div>
             <div>${o.total}</div>
           </div>`).join('')
