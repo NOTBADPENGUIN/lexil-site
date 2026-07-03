@@ -278,6 +278,9 @@ section { max-width: 1200px; margin: 0 auto; padding: 64px 24px 40px; }
 .product-modal-body { padding: 26px 28px 30px; }
 .product-modal-body h2 { font-family: var(--font-head); font-weight: 700; font-size: 26px; text-transform: uppercase; color: var(--txt); margin: 10px 0 0; }
 .product-modal-body p { margin-top: 12px; font-size: 14.5px; line-height: 1.6; color: var(--mut); }
+.pm-features { list-style: none; margin: 16px 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; }
+.pm-features li { font-size: 13px; color: var(--mut2); padding-left: 18px; position: relative; }
+.pm-features li::before { content: "✓"; position: absolute; left: 0; color: var(--gold); font-weight: 700; }
 .pm-price-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--bord); }
 .pm-trust { display: flex; flex-wrap: wrap; gap: 10px 20px; margin-top: 20px; }
 .pm-trust-item { font-size: 12.5px; color: var(--mut3); }

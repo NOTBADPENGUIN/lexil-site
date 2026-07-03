@@ -48,7 +48,7 @@
         </div>
         <div class="status-pill">
           <span class="status-dot"></span>
-          <span>Serveur en ligne</span>
+          <span>Serveur en ligne · 100 joueurs max · Chernarus</span>
         </div>
         <h1>
           <span class="line-1">LA BOUTIQUE</span>
@@ -261,6 +261,7 @@
       <span class="card-cat" id="pmCat"></span>
       <h2 id="pmName"></h2>
       <p id="pmDesc"></p>
+      <ul class="pm-features" id="pmFeatures"></ul>
       <div class="pm-price-row">
         <div class="price-col">
           <span class="price-prefix">Prix</span>
@@ -282,7 +283,7 @@
 
   <div class="cookie-banner" id="cookieBanner">
     <div class="cookie-text">
-      <b>Cookies &amp; stockage</b> — Ce site utilise uniquement du stockage local nécessaire à son fonctionnement (panier, session). Aucun suivi publicitaire.
+      <b>Cookies &amp; stockage</b> — L'EXIL utilise uniquement le stockage local nécessaire à ton panier et ta session. Aucun cookie de suivi ni publicité.
       <a href="legal.html">En savoir plus</a>
     </div>
     <button class="btn btn-gold" id="cookieOkBtn">J'ai compris</button>
@@ -464,16 +465,20 @@
       document.getElementById('profName').textContent = steam.name || 'Joueur';
       document.getElementById('profSid').textContent = steamId;
 
+      // Le backend renvoie le grade en anglais (Bronze/Silver/.../Ultimate) ; on l'affiche
+      // avec le nom/glyphe français du design via CFG.rankDisplay.
       const stats = account.account.stats;
-      document.getElementById('profGradeGlyph').textContent = stats.grade.glyph;
-      document.getElementById('profGradeName').textContent = stats.grade.name;
+      const gradeDisplay = CFG.rankDisplay[stats.grade.name] || stats.grade;
+      const nextGradeDisplay = stats.nextGrade ? (CFG.rankDisplay[stats.nextGrade.name] || stats.nextGrade) : null;
+      document.getElementById('profGradeGlyph').textContent = gradeDisplay.glyph;
+      document.getElementById('profGradeName').textContent = gradeDisplay.name;
       document.getElementById('profProgressFill').style.width = stats.progress + '%';
-      document.getElementById('profProgressLabel').textContent = stats.nextGrade
-        ? `${stats.totalSpent} dépensés — ${stats.nextGrade.min} pour ${stats.nextGrade.name} ${stats.nextGrade.glyph}`
+      document.getElementById('profProgressLabel').textContent = nextGradeDisplay
+        ? `${stats.totalSpent} dépensés — ${stats.nextGrade.min} pour ${nextGradeDisplay.name} ${nextGradeDisplay.glyph}`
         : `${stats.totalSpent} dépensés — rang maximum atteint`;
 
       // Highlight du rang actuel dans la section "Rôles donateur"
-      document.querySelectorAll('.rank-chip').forEach((chip) => chip.classList.toggle('current', chip.dataset.name === stats.grade.name));
+      document.querySelectorAll('.rank-chip').forEach((chip) => chip.classList.toggle('current', chip.dataset.name === gradeDisplay.name));
 
       // Commandes
       const orders = account.account.orders || [];
@@ -654,7 +659,7 @@
     const badgeLabel = { populaire: 'Populaire', offre: 'Meilleure offre' };
 
     function productMediaHtml(p) {
-      const icon = CFG.catIcons[p.cat] || CFG.catIcons.Cosmétique;
+      const icon = p.iconPath;
       return `
         <svg viewBox="0 0 100 100" width="110" height="110" style="position:absolute;opacity:.13"><polygon points="50,6 89,28 89,72 50,94 11,72 11,28" fill="none" stroke="#e0a82e" stroke-width="1.5"></polygon></svg>
         <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#f2efe9" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="position:relative"><path d="${icon}"></path></svg>
@@ -698,7 +703,8 @@
       document.getElementById('pmMedia').innerHTML = productMediaHtml(p);
       document.getElementById('pmCat').textContent = p.cat;
       document.getElementById('pmName').textContent = p.name;
-      document.getElementById('pmDesc').textContent = p.desc;
+      document.getElementById('pmDesc').textContent = p.long || p.desc;
+      document.getElementById('pmFeatures').innerHTML = (p.features || []).map((f) => `<li>${f}</li>`).join('');
       document.getElementById('pmPrice').textContent = fmt(p.price);
       document.getElementById('pmAddBtn').onclick = () => { addToCart(p.key); closeProductModal(); };
       document.getElementById('productModal').classList.add('open');
