@@ -485,12 +485,16 @@
       const orders = account.account.orders || [];
       document.getElementById('panelOrders').innerHTML = orders.length
         ? orders.map((o) => `
-          <div class="order-row">
-            <div>
-              <div class="items">${o.items.map((it) => it.label).join(', ')}</div>
-              <div class="meta">${o.date} · ${o.orderId.startsWith('ADMIN-') ? 'Offert par le staff' : o.orderId}</div>
+          <div class="order-card">
+            <div class="order-card-head">
+              <div>
+                <div class="order-id">${o.orderId.startsWith('ADMIN-') ? 'Offert par le staff' : 'Commande ' + o.orderId}</div>
+                <div class="order-date">${o.date}</div>
+              </div>
+              <span class="status-pill-sm active">${o.status || 'Livré'} ✓</span>
             </div>
-            <div>${o.total}</div>
+            ${o.items.map((it) => `<div class="order-item-row"><span>${it.label}</span><span>${it.prix || ''}</span></div>`).join('')}
+            <div class="order-total-row"><span>Total</span><span>${o.total}</span></div>
           </div>`).join('')
         : '<p style="color:var(--mut);font-size:14px">Aucune commande pour le moment.</p>';
 
