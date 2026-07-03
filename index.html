@@ -663,14 +663,27 @@
     const kindLabel = { lifetime: 'À vie', days30: '30 jours', priority: 'Priorité', discord: 'Discord' };
     const badgeLabel = { populaire: 'Populaire', offre: 'Meilleure offre' };
 
-    function productMediaHtml(p) {
-      const icon = p.iconPath;
+    function productIconHtml(p) {
       return `
         <svg viewBox="0 0 100 100" width="110" height="110" style="position:absolute;opacity:.13"><polygon points="50,6 89,28 89,72 50,94 11,72 11,28" fill="none" stroke="#e0a82e" stroke-width="1.5"></polygon></svg>
-        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#f2efe9" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="position:relative"><path d="${icon}"></path></svg>
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#f2efe9" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="position:relative"><path d="${p.iconPath}"></path></svg>`;
+    }
+
+    // Utilisée dans la grille : icône + badges catégorie/kind superposés sur la vignette.
+    function productMediaHtml(p) {
+      return `
+        ${productIconHtml(p)}
         ${p.badge ? `<span class="card-badge ${p.badge}">${badgeLabel[p.badge]}</span>` : ''}
         <span class="card-kind">${kindLabel[p.kind]}</span>
         <span class="card-cat">${p.cat}</span>`;
+    }
+
+    // Utilisée dans la fiche produit : catégorie/kind déjà affichés dans le corps du modal,
+    // donc pas de badges superposés ici (évite le chevauchement avec le bouton fermer).
+    function productModalMediaHtml(p) {
+      return `
+        ${productIconHtml(p)}
+        ${p.badge ? `<span class="card-badge ${p.badge}" style="bottom:14px;left:14px">${badgeLabel[p.badge]}</span>` : ''}`;
     }
 
     function renderGrid() {
@@ -705,8 +718,8 @@
     function openProductModal(key) {
       const p = catalogItem(key);
       if (!p) return;
-      document.getElementById('pmMedia').innerHTML = productMediaHtml(p);
-      document.getElementById('pmCat').textContent = p.cat;
+      document.getElementById('pmMedia').innerHTML = productModalMediaHtml(p);
+      document.getElementById('pmCat').textContent = `${p.cat} · ${kindLabel[p.kind]}`;
       document.getElementById('pmName').textContent = p.name;
       document.getElementById('pmDesc').textContent = p.long || p.desc;
       document.getElementById('pmFeatures').innerHTML = (p.features || []).map((f) => `<li>${f}</li>`).join('');
