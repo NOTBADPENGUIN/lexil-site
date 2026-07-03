@@ -6,7 +6,7 @@
   <title>L'EXIL — Boutique DayZ PvP FR/EU</title>
   <meta name="description" content="Boutique cosmétique officielle du serveur DayZ PvP L'EXIL. 100% cosmétique, livraison automatique, paiement sécurisé Stripe." />
   <link rel="icon" href="/img/logo.png" />
-  <link rel="stylesheet" href="/style.css?v=4" />
+  <link rel="stylesheet" href="/style.css?v=5" />
 </head>
 <body>
 
@@ -273,6 +273,11 @@
     </div>
     <div class="cart-items" id="cartItems"></div>
     <div class="cart-foot">
+      <div class="cart-steamid">
+        <label for="cartSteamId">Ton SteamID64 <span>— pour la livraison en jeu</span></label>
+        <input type="text" id="cartSteamId" inputmode="numeric" placeholder="7656119XXXXXXXXXX" maxlength="17" autocomplete="off" />
+        <div class="cart-steamid-hint">Livraison automatique à ta prochaine connexion sur ce SteamID. Introuvable ? Ouvre ton profil Steam ou colle ton lien sur steamid.io.</div>
+      </div>
       <div class="cart-total-row"><span>Total</span><span id="cartTotal">0,00 €</span></div>
       <button class="btn btn-gold" style="width:100%;justify-content:center" id="checkoutBtn">Passer commande</button>
     </div>
@@ -840,7 +845,20 @@
       }));
     }
 
-    function openCart() { renderCartDrawer(); document.getElementById('cartDrawer').classList.add('open'); document.getElementById('cartOverlay').classList.add('open'); }
+    const STEAMID_RE = /^7656119\d{10}$/;
+    function openCart() {
+      renderCartDrawer();
+      const sid = document.getElementById('cartSteamId');
+      if (sid && !sid.value) { sid.value = steamId || ''; sid.dispatchEvent(new Event('input')); }
+      document.getElementById('cartDrawer').classList.add('open');
+      document.getElementById('cartOverlay').classList.add('open');
+    }
+    document.getElementById('cartSteamId').addEventListener('input', (e) => {
+      const v = e.target.value.trim();
+      const ok = STEAMID_RE.test(v);
+      e.target.classList.toggle('valid', ok);
+      e.target.classList.toggle('invalid', v.length > 0 && !ok);
+    });
     function closeCart() { document.getElementById('cartDrawer').classList.remove('open'); document.getElementById('cartOverlay').classList.remove('open'); }
     document.getElementById('cartBtn').addEventListener('click', openCart);
     document.getElementById('cartCloseBtn').addEventListener('click', closeCart);
@@ -848,7 +866,10 @@
 
     document.getElementById('checkoutBtn').addEventListener('click', async () => {
       if (!cart.length) return toast('Ton panier est vide.', 'error');
-      if (!steamId) return toast('Connecte-toi avec Steam avant de payer.', 'error');
+      const orderSteamId = document.getElementById('cartSteamId').value.trim();
+      if (!STEAMID_RE.test(orderSteamId)) return toast('Entre un SteamID64 valide (17 chiffres) pour la livraison en jeu.', 'error');
+      localStorage.setItem('lexil_steamid', orderSteamId);
+      steamId = orderSteamId;
       const total = cart.reduce((a, c) => a + (catalogItem(c.key)?.price || 0) * c.qty, 0);
       try {
         const res = await fetch(`${AUTH}/api/order`, {

@@ -324,6 +324,14 @@ section { max-width: 1680px; margin: 0 auto; padding: 64px 24px 40px; }
 .cart-foot { padding: 18px 20px; border-top: 1px solid var(--bord); }
 .cart-total-row { display: flex; justify-content: space-between; font-family: var(--font-head); font-size: 18px; margin-bottom: 14px; }
 .cart-empty { color: var(--mut); text-align: center; padding: 40px 0; font-size: 14px; }
+.cart-steamid { margin-bottom: 16px; }
+.cart-steamid label { display: block; font-family: var(--font-head); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--mut); margin-bottom: 7px; }
+.cart-steamid label span { color: var(--mut4); letter-spacing: 0; text-transform: none; font-size: 11px; }
+.cart-steamid input { width: 100%; padding: 11px 12px; background: #0d1428; border: 1px solid var(--bord-2); border-radius: 4px; color: var(--txt); font-family: var(--font-body); font-size: 14px; letter-spacing: .02em; }
+.cart-steamid input:focus { outline: none; border-color: var(--gold); }
+.cart-steamid input.valid { border-color: var(--green); }
+.cart-steamid input.invalid { border-color: var(--red); }
+.cart-steamid-hint { font-size: 11.5px; color: var(--mut4); margin-top: 6px; line-height: 1.4; }
 
 /* ============ FICHE PRODUIT (modal) ============ */
 .product-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 62; display: none; }
