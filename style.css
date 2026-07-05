@@ -302,7 +302,7 @@ section { max-width: 1680px; margin: 0 auto; padding: 64px 24px 40px; }
 .card-body .desc { margin-top: 7px; font-size: 12.5px; line-height: 1.5; color: var(--mut2); flex: 1; }
 .card-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 15px; }
 .price-col { display: flex; flex-direction: column; line-height: 1; }
-.price-prefix { font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--mut4); }
+.price-prefix { font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--mut2); }
 .price { font-family: var(--font-head); font-weight: 700; font-size: 25px; color: #fff; margin-top: 2px; }
 
 /* ============ PANIER (drawer) ============ */
