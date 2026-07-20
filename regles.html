@@ -1,358 +1,177 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>L'EXIL — Règlement général</title>
-<meta name="description" content="Règlement général du serveur DayZ PvP L'EXIL : support, loot, groupes, triche, conduite, events, camping, raids et staff.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#0a1020;--card:#111a30;--card2:#152039;--bord:#233150;--bord-2:#2a3a5c;
-  --red:#cf3a2c;--gold:#e8bb45;--gold-2:#f4d477;--gold-3:#d19f2f;--discord:#5865f2;
-  --txt:#f2efe9;--mut:#aeb7c6;--mut2:#63708a;
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--txt);font-family:Barlow,system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
-.wrap{max-width:920px;margin:0 auto;padding:32px 20px 100px}
-a{color:var(--gold);text-decoration:none}
-a:hover{text-decoration:underline}
-
-.back{display:inline-flex;align-items:center;gap:6px;margin-bottom:24px;color:var(--gold);font-weight:600;font-size:15px}
-.hero{position:relative;border:1px solid var(--bord);border-radius:10px;padding:34px 28px;background:
-  radial-gradient(120% 140% at 100% 0%,rgba(232,187,69,.10),transparent 55%),
-  linear-gradient(180deg,#0c1428,#0a1020);overflow:hidden}
-.hero::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.012) 0 2px,transparent 2px 9px);pointer-events:none}
-.kicker{font-family:Oswald,sans-serif;letter-spacing:4px;text-transform:uppercase;color:var(--gold);font-size:13px;font-weight:600;margin:0 0 8px}
-h1{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:2px;font-weight:700;font-size:clamp(30px,6vw,48px);margin:0;color:#f6f4ef;line-height:1}
-.lead{color:var(--mut);margin:14px 0 0;max-width:64ch}
-.meta{margin-top:16px;font-size:13px;color:var(--mut2)}
-
-.tools{position:sticky;top:0;z-index:20;margin:22px 0 8px;padding:14px 0;background:linear-gradient(180deg,var(--bg) 70%,transparent)}
-.search{position:relative}
-.search input{width:100%;background:var(--card);border:1px solid var(--bord-2);border-radius:8px;color:var(--txt);
-  font:500 16px/1.4 Barlow,sans-serif;padding:14px 44px 14px 44px;outline:none;transition:border-color .15s,box-shadow .15s}
-.search input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(232,187,69,.16)}
-.search .ico{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:var(--mut);font-size:17px}
-.search .clr{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--mut);
-  font-size:20px;cursor:pointer;padding:6px;line-height:1;display:none}
-.search .clr:hover{color:var(--txt)}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-.chip{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.5px;font-size:13px;font-weight:600;
-  background:var(--card);border:1px solid var(--bord-2);color:var(--mut);padding:7px 13px;border-radius:999px;
-  cursor:pointer;transition:.15s;user-select:none}
-.chip:hover{color:var(--txt);border-color:var(--gold)}
-.chip.on{background:linear-gradient(180deg,var(--gold-2),var(--gold-3));border-color:#f6dc84;color:#12183a}
-.chip .ct{opacity:.7;margin-left:5px;font-size:11px}
-
-.count{font-size:13px;color:var(--mut2);margin:6px 2px 18px}
-
-.cat{border:1px solid var(--bord);border-radius:10px;overflow:hidden;margin-bottom:14px;background:var(--card)}
-.cat-head{display:flex;align-items:center;gap:14px;width:100%;background:none;border:0;color:inherit;cursor:pointer;
-  text-align:left;padding:18px 20px;font-family:inherit}
-.cat-head:hover{background:var(--card2)}
-.cat-ico{color:var(--gold);line-height:1;flex:none;display:grid;place-items:center}
-.cat-titles{flex:1;min-width:0}
-.cat-name{display:block;font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:1px;font-weight:700;font-size:19px;color:#f2efe9}
-.cat-sub{display:block;font-size:13px;color:var(--mut);margin-top:2px}
-.cat-arrow{color:var(--mut);font-size:14px;transition:transform .25s}
-.cat.collapsed .cat-arrow{transform:rotate(-90deg)}
-.cat-body{padding:0 20px 8px}
-.cat.collapsed .cat-body{display:none}
-
-.rule{display:flex;gap:14px;padding:16px 0;border-top:1px solid var(--bord)}
-.rule:first-child{border-top:0}
-.rule-n{flex:none;width:30px;height:30px;border-radius:8px;background:#0d1428;border:1px solid var(--bord-2);
-  display:grid;place-items:center;font-family:Oswald,sans-serif;font-weight:600;font-size:14px;color:var(--gold)}
-.rule-main{flex:1;min-width:0}
-.rule-title{font-weight:600;font-size:16px;color:#f2efe9}
-.rule-desc{color:var(--mut);font-size:14.5px;margin-top:5px}
-.rule-desc mark,.rule-title mark{background:rgba(232,187,69,.28);color:#ffe6ad;border-radius:3px;padding:0 1px}
-.rule-desc ul{margin:6px 0 0;padding-left:18px}
-.rule-desc li{margin:2px 0}
-.sev{display:inline-block;font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.5px;font-size:11px;
-  font-weight:600;padding:3px 9px;border-radius:999px;margin-top:9px;border:1px solid}
-.sev.avert{color:var(--gold);border-color:rgba(232,187,69,.5);background:rgba(232,187,69,.08)}
-.sev.kick{color:#f0902f;border-color:rgba(240,144,47,.5);background:rgba(240,144,47,.08)}
-.sev.tempo{color:#ff5a4d;border-color:rgba(255,90,77,.5);background:rgba(255,90,77,.08)}
-.sev.perma{color:#fff;border-color:var(--red);background:var(--red)}
-
-.empty{display:none;text-align:center;padding:54px 20px;color:var(--mut)}
-.empty.show{display:block}.empty .big{font-size:40px;margin-bottom:10px}.empty b{color:var(--txt)}
-
-.cta{margin-top:34px;border:1px solid var(--bord);border-radius:10px;padding:26px;text-align:center;
-  background:radial-gradient(120% 160% at 50% 0%,rgba(232,187,69,.10),transparent 60%),var(--card)}
-.cta h3{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:1px;font-size:22px;margin:0 0 6px;color:#f6f4ef}
-.cta p{color:var(--mut);margin:0 0 18px}
-.btn{display:inline-flex;align-items:center;gap:9px;font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:1px;
-  font-weight:600;font-size:15px;color:#fff;background:linear-gradient(180deg,#5865f2,#4450e0);border:1px solid #6b78ff;padding:12px 22px;border-radius:8px;transition:.15s}
-.btn:hover{filter:brightness(1.07);text-decoration:none;transform:translateY(-1px)}
-.foot{margin-top:30px;text-align:center;color:var(--mut2);font-size:13px}
-.foot small{display:block;margin-top:6px}
-
-@media(max-width:560px){
-  .wrap{padding:22px 14px 80px}.hero{padding:26px 20px}
-  .cat-head{padding:15px 15px}.cat-body{padding:0 15px 6px}
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>L'EXIL — Règlement général</title>
+  <link rel="icon" href="/img/logo.png" />
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    .page-wrap { max-width: 900px; margin: 0 auto; padding: 40px 24px 70px; }
+    .back-link { font-family: var(--font-head); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted-2); text-decoration: none; }
+    .back-link:hover { color: var(--gold); }
+    .page-head { margin: 26px 0 30px; }
+    .page-head .sec-eyebrow { margin-bottom: 10px; }
+    .page-head h1 { font-family: var(--font-head); font-size: clamp(34px, 5vw, 54px); text-transform: uppercase; margin: 0; line-height: 1; }
+    .page-head p { max-width: 70ch; font-size: 14.5px; line-height: 1.6; color: var(--muted); margin-top: 14px; }
+    .warn { color: var(--gold); font-size: 13px; }
+    .rule-search { display: flex; align-items: center; gap: 10px; padding: 11px 15px; background: var(--card); border: 1px solid var(--border-2); border-radius: 5px; margin-bottom: 14px; }
+    .rule-search input { flex: 1; background: none; border: none; outline: none; color: var(--text); font-family: var(--font-body); font-size: 14.5px; }
+    .cat-count { text-align: center; font-size: 12.5px; color: var(--muted-4); margin: 16px 0 20px; }
+    .rcat { border: 1px solid var(--border); border-radius: 6px; background: var(--card); margin-bottom: 12px; overflow: hidden; }
+    .rcat-head { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 16px 19px; background: none; border: none; cursor: pointer; color: var(--text); }
+    .rcat-head:hover { background: rgba(232, 187, 69, .05); }
+    .rcat-title { font-family: var(--font-head); font-size: 17px; letter-spacing: .04em; text-transform: uppercase; }
+    .rcat-meta { font-size: 12px; color: var(--muted-3); margin-left: 12px; }
+    .rcat-chev { color: var(--gold); transition: transform .25s; }
+    .rcat.open .rcat-chev { transform: rotate(180deg); }
+    .rcat-body { display: none; border-top: 1px solid var(--border); padding: 6px 19px 14px; }
+    .rcat.open .rcat-body { display: block; }
+    .rrule { display: flex; gap: 13px; padding: 12px 0; border-bottom: 1px solid #16233f; }
+    .rrule:last-child { border-bottom: none; }
+    .rrule-num { flex: none; width: 26px; height: 26px; display: grid; place-items: center; background: rgba(232, 187, 69, .12); border: 1px solid #3d3016; color: var(--gold); font-family: var(--font-head); font-weight: 700; font-size: 13px; border-radius: 4px; }
+    .rrule-title { font-family: var(--font-head); font-size: 15.5px; color: var(--text); }
+    .rrule-text { font-size: 13.5px; line-height: 1.55; color: var(--muted); margin-top: 4px; }
+    .rrule-ban { display: inline-block; margin-top: 7px; font-family: var(--font-head); font-size: 10.5px; letter-spacing: .14em; padding: 3px 9px; background: rgba(207, 58, 44, .14); border: 1px solid var(--red); color: #f2988d; border-radius: 3px; }
+    .rules-cta { text-align: center; margin-top: 34px; padding: 28px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; }
+    .rules-cta h3 { font-family: var(--font-head); text-transform: uppercase; margin: 0 0 8px; }
+    .rules-cta p { font-size: 13.5px; color: var(--muted-3); margin: 0 0 16px; }
+    .page-foot { text-align: center; font-size: 12px; color: var(--muted-4); margin-top: 40px; }
+    .page-foot a { color: var(--muted-2); }
+  </style>
 </head>
 <body>
-<div class="wrap">
-  <a class="back" href="/">← Retour à l'accueil</a>
-
-  <header class="hero">
-    <p class="kicker">Serveur DayZ · PvP · FR/EU</p>
-    <h1>Règlement général</h1>
-    <p class="lead">En jouant sur L'EXIL, tu acceptes l'intégralité de ce règlement. Les admins peuvent sanctionner toute infraction, même non listée ici. Pour tout signalement, une preuve vidéo ou screenshot de moins de 48h est obligatoire — passe toujours par un ticket.</p>
-    <p class="meta">L'ignorance d'une règle ne dispense pas de la sanction.</p>
-  </header>
-
-  <div class="tools">
-    <div class="search">
-      <span class="ico">🔍</span>
-      <input id="q" type="search" placeholder="Rechercher une règle (ex : loot, camping, raid)…" autocomplete="off" aria-label="Rechercher une règle">
-      <button class="clr" id="clr" aria-label="Effacer">×</button>
+  <div class="fx-vignette" aria-hidden="true"></div>
+  <div class="page-wrap">
+    <a href="/" class="back-link">← Retour à l'accueil</a>
+    <div class="page-head">
+      <div class="sec-eyebrow">Serveur DayZ · PvP · FR/EU</div>
+      <h1>Règlement général</h1>
+      <p>En jouant sur L'EXIL, tu acceptes l'intégralité de ce règlement. Les admins peuvent sanctionner toute infraction, même non listée ici. Pour tout signalement, une preuve vidéo ou screenshot de moins de 48h est obligatoire — passe toujours par un ticket.</p>
+      <p class="warn">L'ignorance d'une règle ne dispense pas de la sanction.</p>
     </div>
-    <div class="chips" id="chips"></div>
+
+    <div class="rule-search">🔍 <input id="ruleSearch" type="search" placeholder="Rechercher une règle" /></div>
+    <div class="filters" id="catFilters" style="margin:0 0 4px"></div>
+    <p class="cat-count" id="ruleCount"></p>
+    <main id="rulesMain"></main>
+
+    <div class="rules-cta">
+      <h3>Une question sur une règle ?</h3>
+      <p>Un doute, un litige, ou envie de signaler quelqu'un ? Ouvre un ticket sur le Discord — ne DM jamais le staff.</p>
+      <a class="btn btn-gold" id="discordCta" target="_blank" href="#">💬 Rejoindre le Discord</a>
+    </div>
+    <p class="page-foot">L'EXIL — Serveur DayZ PvP FR/EU · <a href="galerie.html">Galerie</a> · <a href="legal.html">Mentions légales</a><br/>Non affilié à Bohemia Interactive. « DayZ » est une marque de ses détenteurs respectifs.</p>
   </div>
 
-  <p class="count" id="count"></p>
-  <main id="list"></main>
+  <script src="/config.js"></script>
+  <script>
+    document.getElementById("discordCta").href = window.CONFIG.discordUrl;
+    const CATS = [
+      { name: "Support & signalement", rules: [
+        ["Preuve obligatoire", "Tout signalement doit être accompagné d'une preuve vidéo ou screenshot de moins de 48h. Sans preuve, aucune sanction ne sera appliquée."],
+        ["Passe par un ticket", "Ouvre toujours un ticket sur le Discord pour signaler un joueur ou régler un litige. Ne DM jamais le staff en privé."],
+        ["Fausses accusations", "Accuser volontairement un joueur sans preuve, de façon répétée, entraîne une sanction contre toi."],
+        ["Délai de traitement", "Un ticket peut prendre jusqu'à 48h à être traité. Reste courtois, le staff est bénévole."],
+      ]},
+      { name: "Loot & KOS", rules: [
+        ["KOS autorisé", "Le Kill On Sight est autorisé partout sur la map, sauf à l'intérieur des safezones. Survie brutale, zéro pitié."],
+        ["Full loot", "Voler le loot d'un joueur mort est totalement permis. C'est le cœur du PvP L'EXIL."],
+        ["Blocage de loot", "Bloquer volontairement le loot d'un event avec des véhicules ou des constructions est interdit."],
+        ["Timers de despawn", "Le loot au sol disparaît selon les timers du serveur. Ne compte pas dessus pour stocker."],
+      ]},
+      { name: "Groupes & clans", rules: [
+        ["Taille de groupe", "Un groupe est limité à 6 joueurs maximum, sauf lors d'events spéciaux annoncés par le staff."],
+        ["Teaming interdit", "S'allier avec un groupe ennemi pour dominer un event ou farmer est interdit."],
+        ["Clan tag correct", "Ton clan tag ne doit contenir aucun terme haineux, raciste ou insultant. Il est visible par tous."],
+        ["Trahison tolérée", "Les alliances temporaires sont permises. Une trahison se fait à tes risques et périls, c'est le jeu."],
+      ]},
+      { name: "Triche & exploits", rules: [
+        ["Cheat = ban définitif", "Toute triche, cheat, macro abusive ou logiciel tiers entraîne un bannissement définitif et immédiat, sans appel.", true],
+        ["Glitch & duplication", "Exploiter un glitch de map, dupliquer des objets ou passer à travers les murs est strictement interdit."],
+        ["Combat-logging", "Se déconnecter en plein combat pour éviter la mort (combat-log) est puni d'un ban temporaire ou définitif."],
+        ["Stream-sniping", "Rejoindre un stream pour traquer un joueur en direct entraîne une sanction immédiate."],
+        ["Bug non signalé", "Abuser d'un bug sans le signaler au staff est considéré comme de la triche."],
+      ]},
+      { name: "Conduite & respect", rules: [
+        ["Zéro discrimination", "Racisme, homophobie, sexisme et harcèlement sont sanctionnés par un ban, en jeu comme sur Discord."],
+        ["Toxicité excessive", "Le trash-talk fait partie du PvP, mais la toxicité excessive et répétée dans le chat vocal ou proximité est punie."],
+        ["Usurpation d'identité", "Se faire passer pour un membre du staff ou un autre joueur est interdit."],
+        ["Pas de pub", "Faire la publicité d'autres serveurs dans le chat ou sur Discord entraîne un ban."],
+      ]},
+      { name: "Events", rules: [
+        ["Annonces Discord", "Tous les events officiels sont annoncés à l'avance sur le Discord. Active les notifications pour ne rien rater."],
+        ["Consignes spécifiques", "Chaque event peut avoir ses propres règles temporaires. Lis l'annonce avant de participer."],
+        ["Loot PvP", "Le loot des events est disputé en PvP. À toi de le récupérer et de le défendre."],
+        ["Pas de sabotage", "Saboter volontairement un event communautaire (blocage, griefing gratuit) entraîne une sanction."],
+      ]},
+      { name: "Base & camping", rules: [
+        ["Raid autorisé", "Le raid de base est permis en respectant les timers de raid du serveur. Protège ta base en conséquence."],
+        ["Zones publiques", "Interdit de construire pour bloquer les traders, safezones ou points de spawn publics."],
+        ["Build spam", "Une base ne doit pas générer de lag serveur. Le build spam (constructions inutiles massives) est interdit."],
+        ["Camping toléré", "Le camping de zones chaudes est autorisé, mais le staff peut intervenir en cas d'abus manifeste sur un spawn."],
+      ]},
+      { name: "Raids", rules: [
+        ["Enregistre tes raids", "Tous les participants (raiders comme défenseurs) doivent enregistrer le raid. La vidéo doit être conservée au minimum 48h (ou plus si un accord d'enregistrement le précise) après la fin du raid, et présentée au staff sur demande pour garantir le fair-play."],
+        ["Raids actifs uniquement", "Un raid doit montrer une progression continue. Si 45 minutes s'écoulent après la dernière charge de brèche posée sans progression dans la base, le raid est considéré terminé : les raiders doivent partir et les propriétaires peuvent reconstruire."],
+        ["Redémarrage serveur", "En cas de redémarrage ou de crash serveur, le minuteur de raid est mis en pause jusqu'au retour du serveur."],
+        ["Cooldown de raid", "Une même base ne peut pas être raidée de nouveau avant 6 heures."],
+        ["Intention de raid", "Tout raid doit être mené dans le but de percer et de piller la base. Toute action visant uniquement à bloquer, harceler ou ruiner une base sans progresser dans le raid est considérée comme du griefing."],
+        ["Pas de soft siding", "Tu ne peux PAS détruire les murs ou les cadres pour raider. Les raids doivent suivre le chemin de raid désigné, par les portes, avec l'équipement de raid approuvé uniquement."],
+        ["Véhicules autorisés", "Utiliser une voiture ou un camion pour se hisser sur, dans ou par-dessus les bases est autorisé (empilement de véhicules interdit)."],
+        ["Boost de joueurs", "Le boost / empilement de joueurs est limité à 2 participants (un joueur debout sur l'autre)."],
+        ["Méthodes non listées", "Toute méthode de raid qui n'est pas clairement décrite dans les salons d'infos de raid ou de changelog est interdite."],
+        ["Aucun exploit ni glitch", "Sont strictement interdits : glitcher dans les bases ; le boost, l'empilement ou les objets flottants ; utiliser la proximité (vicinity) pour looter à travers les murs ; se tenir sur les rotors d'hélico pour entrer ; bloquer les entrées ou l'accès au toit avec des véhicules."],
+        ["Glitch de caméra", "Glitcher ta caméra pour voir à travers les objets est interdit."],
+        ["Conduite des raiders", "Les POV de raid doivent être conservés 48h. Interdits : player cycling (connexion/déconnexion de personnages pendant le raid), combat log (tu dois être mort ou avoir fait F11 avant de te déconnecter), raid meta, poser des codelocks sur la base raidée, deviner/cracker/partager/exploiter les codes, inviter de nouveaux joueurs dans le groupe si vous êtes vous-mêmes raidés, construire pendant un raid, et bloquer les chemins de raid avec des objets. Le raid meta peut entraîner un ban immédiat."],
+        ["Conduite des défenseurs", "Interdits : player cycling, combat log (mort ou F11 avant de te déconnecter), raid meta, construire pendant le raid — y compris remplacer les codelocks retirés par les raiders —, inviter des joueurs dans le groupe pendant que vous êtes raidés, et bloquer ou obstruer les chemins de raid avec des objets. Le raid meta peut entraîner un ban immédiat."],
+        ["Drapeau de base", "Les propriétaires ne peuvent pas déplacer leur mât / land claim kit pendant qu'ils sont activement raidés."],
+        ["Spawn dans une base", "Si tu spawn dans une base à cause de l'inactivité ou en tant que fresh spawn, tu ne peux pas la raider. Ouvre un ticket et un admin te téléportera à l'extérieur."],
+        ["Griefing interdit", "Le griefing est interdit : jeter intentionnellement de grandes quantités d'objets ou tenter de ruiner une base sans intention de la raider ou de l'utiliser. Jeter accidentellement de petites quantités d'objets bas de gamme peut ne pas être considéré comme du griefing, à la discrétion de l'admin."],
+      ]},
+      { name: "Staff & décisions", rules: [
+        ["Décisions finales", "Les décisions du staff sont finales. Toute contestation se fait calmement via un ticket."],
+        ["Infractions non listées", "Les admins peuvent sanctionner tout comportement nuisible, même s'il n'est pas explicitement listé dans ce règlement."],
+        ["Abus de pouvoir", "En cas d'abus supposé d'un membre du staff, ouvre un ticket adressé au fondateur avec tes preuves."],
+        ["Nul n'est censé ignorer", "L'ignorance d'une règle ne dispense pas de la sanction. En jouant, tu acceptes l'intégralité de ce règlement."],
+      ]},
+    ];
 
-  <div class="empty" id="empty">
-    <div class="big">🗿</div>
-    <p>Aucune règle ne correspond à <b id="emptyTerm"></b>.</p>
-    <p>Essaie un autre mot-clé ou demande sur le Discord.</p>
-  </div>
+    let activeCat = "Tout", query = "";
+    const total = CATS.reduce((a, c) => a + c.rules.length, 0);
 
-  <section class="cta">
-    <h3>Une question sur une règle ?</h3>
-    <p>Un doute, un litige, ou envie de signaler quelqu'un ? Ouvre un ticket sur le Discord — ne DM jamais le staff.</p>
-    <a class="btn" href="https://discord.gg/t46RE8hYs7" target="_blank" rel="noopener">💬 Rejoindre le Discord</a>
-  </section>
+    function renderFilters() {
+      const el = document.getElementById("catFilters");
+      el.innerHTML = [`<button class="filter-btn ${activeCat === "Tout" ? "active" : ""}" data-cat="Tout">Tout<span>${total}</span></button>`]
+        .concat(CATS.map((c) => `<button class="filter-btn ${activeCat === c.name ? "active" : ""}" data-cat="${c.name}">${c.name}<span>${c.rules.length}</span></button>`))
+        .join("");
+      el.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { activeCat = b.dataset.cat; render(); }));
+    }
 
-  <p class="foot">
-    L'EXIL — Serveur DayZ PvP FR/EU · <a href="/galerie.html">Galerie</a> · <a href="/legal.html">Mentions légales</a>
-    <small>Non affilié à Bohemia Interactive. « DayZ » est une marque de ses détenteurs respectifs.</small>
-  </p>
-</div>
-
-<script>
-/* ============================================================
-   RÈGLEMENT GÉNÉRAL — 9 catégories du design handoff L'EXIL.
-   Structure : { id, icon:"<path d SVG>", name, rules:[{t:"titre", d:"détail"}] }
-   ============================================================ */
-const CATEGORIES = [
-  {
-    id:"support", name:"Support & signalement",
-    icon:"M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z",
-    rules:[
-      {t:"Preuve obligatoire", d:"Tout signalement doit être accompagné d'une preuve vidéo ou screenshot de moins de 48h. Sans preuve, aucune sanction ne sera appliquée."},
-      {t:"Passe par un ticket", d:"Ouvre toujours un ticket sur le Discord pour signaler un joueur ou régler un litige. Ne DM jamais le staff en privé."},
-      {t:"Fausses accusations", d:"Accuser volontairement un joueur sans preuve, de façon répétée, entraîne une sanction contre toi."},
-      {t:"Délai de traitement", d:"Un ticket peut prendre jusqu'à 48h à être traité. Reste courtois, le staff est bénévole."},
-    ]
-  },
-  {
-    id:"loot", name:"Loot & KOS",
-    icon:"M3 6h18 M3 6l1.5 13a2 2 0 0 0 2 1.8h11a2 2 0 0 0 2-1.8L21 6 M8 6V4a4 4 0 0 1 8 0v2",
-    rules:[
-      {t:"KOS autorisé", d:"Le Kill On Sight est autorisé partout sur la map, sauf à l'intérieur des safezones. Survie brutale, zéro pitié."},
-      {t:"Full loot", d:"Voler le loot d'un joueur mort est totalement permis. C'est le cœur du PvP L'EXIL."},
-      {t:"Blocage de loot", d:"Bloquer volontairement le loot d'un event avec des véhicules ou des constructions est interdit."},
-      {t:"Timers de despawn", d:"Le loot au sol disparaît selon les timers du serveur. Ne compte pas dessus pour stocker."},
-    ]
-  },
-  {
-    id:"groupes", name:"Groupes & clans",
-    icon:"M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2 M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8 M23 21v-2a4 4 0 0 0-3-3.87 M16 3.13a4 4 0 0 1 0 7.75",
-    rules:[
-      {t:"Taille de groupe", d:"Un groupe est limité à 6 joueurs maximum, sauf lors d'events spéciaux annoncés par le staff."},
-      {t:"Teaming interdit", d:"S'allier avec un groupe ennemi pour dominer un event ou farmer est interdit."},
-      {t:"Clan tag correct", d:"Ton clan tag ne doit contenir aucun terme haineux, raciste ou insultant. Il est visible par tous."},
-      {t:"Trahison tolérée", d:"Les alliances temporaires sont permises. Une trahison se fait à tes risques et périls, c'est le jeu."},
-    ]
-  },
-  {
-    id:"triche", name:"Triche & exploits",
-    icon:"M12 2 3 5v6c0 5.5 3.8 9.3 9 11 5.2-1.7 9-5.5 9-11V5l-9-3 M9.5 12l2 2 4-4",
-    rules:[
-      {t:"Cheat = ban définitif", d:"Toute triche, cheat, macro abusive ou logiciel tiers entraîne un bannissement définitif et immédiat, sans appel.", sev:"perma"},
-      {t:"Glitch & duplication", d:"Exploiter un glitch de map, dupliquer des objets ou passer à travers les murs est strictement interdit."},
-      {t:"Combat-logging", d:"Se déconnecter en plein combat pour éviter la mort (combat-log) est puni d'un ban temporaire ou définitif."},
-      {t:"Stream-sniping", d:"Rejoindre un stream pour traquer un joueur en direct entraîne une sanction immédiate."},
-      {t:"Bug non signalé", d:"Abuser d'un bug sans le signaler au staff est considéré comme de la triche."},
-    ]
-  },
-  {
-    id:"conduite", name:"Conduite & respect",
-    icon:"M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2 M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8",
-    rules:[
-      {t:"Zéro discrimination", d:"Racisme, homophobie, sexisme et harcèlement sont sanctionnés par un ban, en jeu comme sur Discord."},
-      {t:"Toxicité excessive", d:"Le trash-talk fait partie du PvP, mais la toxicité excessive et répétée dans le chat vocal ou proximité est punie."},
-      {t:"Usurpation d'identité", d:"Se faire passer pour un membre du staff ou un autre joueur est interdit."},
-      {t:"Pas de pub", d:"Faire la publicité d'autres serveurs dans le chat ou sur Discord entraîne un ban."},
-    ]
-  },
-  {
-    id:"events", name:"Events",
-    icon:"M8 2v4 M16 2v4 M3 10h18 M5 4h14a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2 M9 15l2 2 4-4",
-    rules:[
-      {t:"Annonces Discord", d:"Tous les events officiels sont annoncés à l'avance sur le Discord. Active les notifications pour ne rien rater."},
-      {t:"Consignes spécifiques", d:"Chaque event peut avoir ses propres règles temporaires. Lis l'annonce avant de participer."},
-      {t:"Loot PvP", d:"Le loot des events est disputé en PvP. À toi de le récupérer et de le défendre."},
-      {t:"Pas de sabotage", d:"Saboter volontairement un event communautaire (blocage, griefing gratuit) entraîne une sanction."},
-    ]
-  },
-  {
-    id:"base", name:"Base & camping",
-    icon:"M3 11l9-8 9 8 M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10 M9 21v-6h6v6",
-    rules:[
-      {t:"Raid autorisé", d:"Le raid de base est permis en respectant les timers de raid du serveur. Protège ta base en conséquence."},
-      {t:"Zones publiques", d:"Interdit de construire pour bloquer les traders, safezones ou points de spawn publics."},
-      {t:"Build spam", d:"Une base ne doit pas générer de lag serveur. Le build spam (constructions inutiles massives) est interdit."},
-      {t:"Camping toléré", d:"Le camping de zones chaudes est autorisé, mais le staff peut intervenir en cas d'abus manifeste sur un spawn."},
-    ]
-  },
-  {
-    id:"raids", name:"Raids",
-    icon:"M12 2v4 M12 18v4 M2 12h4 M18 12h4 M5 5l2.5 2.5 M16.5 16.5 19 19 M19 5l-2.5 2.5 M7.5 16.5 5 19 M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z",
-    rules:[
-      {t:"Enregistre tes raids", d:"Tous les participants (raiders comme défenseurs) doivent enregistrer le raid. La vidéo doit être conservée au minimum 48h (ou plus si un accord d'enregistrement le précise) après la fin du raid, et présentée au staff sur demande pour garantir le fair-play."},
-      {t:"Raids actifs uniquement", d:"Un raid doit montrer une progression continue. Si 45 minutes s'écoulent après la dernière charge de brèche posée sans progression dans la base, le raid est considéré terminé : les raiders doivent partir et les propriétaires peuvent reconstruire."},
-      {t:"Redémarrage serveur", d:"En cas de redémarrage ou de crash serveur, le minuteur de raid est mis en pause jusqu'au retour du serveur."},
-      {t:"Cooldown de raid", d:"Une même base ne peut pas être raidée de nouveau avant 6 heures."},
-      {t:"Intention de raid", d:"Tout raid doit être mené dans le but de percer et de piller la base. Toute action visant uniquement à bloquer, harceler ou ruiner une base sans progresser dans le raid est considérée comme du griefing."},
-      {t:"Pas de soft siding", d:"Tu ne peux PAS détruire les murs ou les cadres pour raider. Les raids doivent suivre le chemin de raid désigné, par les portes, avec l'équipement de raid approuvé uniquement."},
-      {t:"Véhicules autorisés", d:"Utiliser une voiture ou un camion pour se hisser sur, dans ou par-dessus les bases est autorisé (empilement de véhicules interdit)."},
-      {t:"Boost de joueurs", d:"Le boost / empilement de joueurs est limité à 2 participants (un joueur debout sur l'autre)."},
-      {t:"Méthodes non listées", d:"Toute méthode de raid qui n'est pas clairement décrite dans les salons d'infos de raid ou de changelog est interdite."},
-      {t:"Aucun exploit ni glitch", d:"Sont strictement interdits : glitcher dans les bases ; le boost, l'empilement ou les objets flottants ; utiliser la proximité (vicinity) pour looter à travers les murs ; se tenir sur les rotors d'hélico pour entrer ; bloquer les entrées ou l'accès au toit avec des véhicules."},
-      {t:"Glitch de caméra", d:"Glitcher ta caméra pour voir à travers les objets est interdit."},
-      {t:"Conduite des raiders", d:"Les POV de raid doivent être conservés 48h. Interdits : player cycling (connexion/déconnexion de personnages pendant le raid), combat log (tu dois être mort ou avoir fait F11 avant de te déconnecter), raid meta, poser des codelocks sur la base raidée, deviner/cracker/partager/exploiter les codes, inviter de nouveaux joueurs dans le groupe si vous êtes vous-mêmes raidés, construire pendant un raid, et bloquer les chemins de raid avec des objets. Le raid meta peut entraîner un ban immédiat."},
-      {t:"Conduite des défenseurs", d:"Interdits : player cycling, combat log (mort ou F11 avant de te déconnecter), raid meta, construire pendant le raid — y compris remplacer les codelocks retirés par les raiders —, inviter des joueurs dans le groupe pendant que vous êtes raidés, et bloquer ou obstruer les chemins de raid avec des objets. Le raid meta peut entraîner un ban immédiat."},
-      {t:"Drapeau de base", d:"Les propriétaires ne peuvent pas déplacer leur mât / land claim kit pendant qu'ils sont activement raidés."},
-      {t:"Spawn dans une base", d:"Si tu spawn dans une base à cause de l'inactivité ou en tant que fresh spawn, tu ne peux pas la raider. Ouvre un ticket et un admin te téléportera à l'extérieur."},
-      {t:"Griefing interdit", d:"Le griefing est interdit : jeter intentionnellement de grandes quantités d'objets ou tenter de ruiner une base sans intention de la raider ou de l'utiliser. Jeter accidentellement de petites quantités d'objets bas de gamme peut ne pas être considéré comme du griefing, à la discrétion de l'admin."},
-    ]
-  },
-  {
-    id:"staff", name:"Staff & décisions",
-    icon:"M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21 8 14 2 9.4h7.6z",
-    rules:[
-      {t:"Décisions finales", d:"Les décisions du staff sont finales. Toute contestation se fait calmement via un ticket."},
-      {t:"Infractions non listées", d:"Les admins peuvent sanctionner tout comportement nuisible, même s'il n'est pas explicitement listé dans ce règlement."},
-      {t:"Abus de pouvoir", d:"En cas d'abus supposé d'un membre du staff, ouvre un ticket adressé au fondateur avec tes preuves."},
-      {t:"Nul n'est censé ignorer", d:"L'ignorance d'une règle ne dispense pas de la sanction. En jouant, tu acceptes l'intégralité de ce règlement."},
-    ]
-  },
-];
-
-const SEV_LABEL = { avert:"Avertissement", kick:"Kick", tempo:"Ban temporaire", perma:"Ban définitif" };
-
-const listEl=document.getElementById('list'), chipsEl=document.getElementById('chips'),
-      qEl=document.getElementById('q'), clrEl=document.getElementById('clr'),
-      countEl=document.getElementById('count'), emptyEl=document.getElementById('empty'),
-      emptyTerm=document.getElementById('emptyTerm');
-
-let activeCat="all", term="";
-const totalRules=CATEGORIES.reduce((n,c)=>n+c.rules.length,0);
-
-function makeChip(id,label,count){
-  const b=document.createElement('button');
-  b.className='chip'+(id===activeCat?' on':'');
-  b.dataset.cat=id;
-  b.innerHTML=esc(label)+' <span class="ct">'+count+'</span>';
-  b.onclick=()=>{activeCat=id;render();syncChips();};
-  return b;
-}
-function buildChips(){
-  chipsEl.innerHTML='';
-  chipsEl.appendChild(makeChip('all','Tout',totalRules));
-  CATEGORIES.forEach(c=>chipsEl.appendChild(makeChip(c.id,c.name,c.rules.length)));
-}
-function syncChips(){[...chipsEl.children].forEach(ch=>ch.classList.toggle('on',ch.dataset.cat===activeCat));}
-
-function esc(s){return s.replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
-// highlight search term; keep light inline HTML (<b>) from data intact
-function hl(text,allowHtml){
-  let out=allowHtml?text:esc(text);
-  if(term){
-    const re=new RegExp('('+term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig');
-    // avoid corrupting tags: only wrap outside of <...>
-    out=out.replace(/(<[^>]+>)|([^<]+)/g,(m,tag,txt)=> tag?tag:txt.replace(re,'<mark>$1</mark>'));
-  }
-  return out;
-}
-function matches(r){
-  if(!term) return true;
-  return ((r.t||'')+' '+(r.d||'')).toLowerCase().includes(term);
-}
-
-function catIcon(path){
-  return '<span class="cat-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" '+
-    'stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+
-    '<path d="'+path+'"></path></svg></span>';
-}
-
-function render(){
-  listEl.innerHTML='';
-  let shown=0;
-  CATEGORIES.forEach(c=>{
-    if(activeCat!=="all"&&activeCat!==c.id) return;
-    const visible=c.rules.filter(matches);
-    if(!visible.length) return;
-    shown+=visible.length;
-
-    const cat=document.createElement('section');
-    cat.className='cat';
-    const open=term!==""||activeCat===c.id;
-    if(!open) cat.classList.add('collapsed');
-
-    const head=document.createElement('button');
-    head.className='cat-head';
-    head.innerHTML=catIcon(c.icon)+
-      '<span class="cat-titles"><span class="cat-name">'+esc(c.name)+'</span>'+
-      '<span class="cat-sub">'+c.rules.length+' règle'+(c.rules.length>1?'s':'')+'</span></span><span class="cat-arrow">▼</span>';
-    head.onclick=()=>cat.classList.toggle('collapsed');
-    cat.appendChild(head);
-
-    const body=document.createElement('div');
-    body.className='cat-body';
-    let n=0;
-    c.rules.forEach(r=>{
-      if(!matches(r)) return;
-      n++;
-      const div=document.createElement('div');
-      div.className='rule';
-      let html='<div class="rule-n">'+n+'</div><div class="rule-main">'+
-        '<div class="rule-title">'+hl(r.t||'',false)+'</div>';
-      if(r.d) html+='<div class="rule-desc">'+hl(r.d,true)+'</div>';
-      if(r.sev){
-        const lab=r.sevLabel||SEV_LABEL[r.sev]||'';
-        html+='<span class="sev '+r.sev+'">'+esc(lab)+'</span>';
-      }
-      html+='</div>';
-      div.innerHTML=html;
-      body.appendChild(div);
-    });
-    cat.appendChild(body);
-    listEl.appendChild(cat);
-  });
-
-  if(shown===0){emptyEl.classList.add('show');emptyTerm.textContent=term?'« '+term+' »':'ce filtre';countEl.textContent='';}
-  else{emptyEl.classList.remove('show');
-    countEl.textContent=shown+' règle'+(shown>1?'s':'')+' affichée'+(shown>1?'s':'')+(term?(' pour « '+term+' »'):'')+'.';}
-}
-
-qEl.addEventListener('input',()=>{term=qEl.value.trim().toLowerCase();clrEl.style.display=term?'block':'none';render();});
-clrEl.onclick=()=>{qEl.value='';term='';clrEl.style.display='none';qEl.focus();render();};
-
-buildChips();
-render();
-</script>
+    function render() {
+      renderFilters();
+      const q = query.trim().toLowerCase();
+      let shown = 0;
+      document.getElementById("rulesMain").innerHTML = CATS
+        .filter((c) => activeCat === "Tout" || c.name === activeCat)
+        .map((c) => {
+          const rules = c.rules.filter(([t, x]) => !q || (t + " " + x).toLowerCase().includes(q));
+          if (!rules.length) return "";
+          shown += rules.length;
+          const open = q || activeCat !== "Tout" ? "open" : "";
+          return `
+          <div class="rcat ${open}">
+            <button class="rcat-head"><span><span class="rcat-title">${c.name}</span><span class="rcat-meta">${rules.length} règle${rules.length > 1 ? "s" : ""}</span></span><span class="rcat-chev">▼</span></button>
+            <div class="rcat-body">${rules.map(([t, x, ban], i) => `
+              <div class="rrule"><span class="rrule-num">${i + 1}</span><div><div class="rrule-title">${t}</div><div class="rrule-text">${x}</div>${ban ? `<span class="rrule-ban">Ban définitif</span>` : ""}</div></div>`).join("")}
+            </div>
+          </div>`;
+        }).join("");
+      document.getElementById("ruleCount").textContent = shown + " règle" + (shown > 1 ? "s" : "") + " affichée" + (shown > 1 ? "s" : "") + ".";
+      document.querySelectorAll(".rcat-head").forEach((h) => h.addEventListener("click", () => h.parentElement.classList.toggle("open")));
+    }
+    document.getElementById("ruleSearch").addEventListener("input", (e) => { query = e.target.value; render(); });
+    render();
+  </script>
 </body>
 </html>

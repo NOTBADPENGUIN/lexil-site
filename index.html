@@ -3,14 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>L'EXIL — Boutique DayZ PvP FR/EU</title>
-  <meta name="description" content="Boutique cosmétique officielle du serveur DayZ PvP L'EXIL. 100% cosmétique, livraison automatique, paiement sécurisé Stripe." />
+  <title>L'EXIL — Boutique DayZ</title>
   <link rel="icon" href="/img/logo.png" />
-  <link rel="stylesheet" href="/style.css?v=6" />
+  <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
 
-  <div class="toast-wrap" id="toastWrap"></div>
+  <!-- Couches d'ambiance (purement décoratives) -->
+  <canvas id="fxAsh" aria-hidden="true"></canvas>
+  <div class="fx-fog" aria-hidden="true"></div>
+  <div class="fx-vignette" aria-hidden="true"></div>
+  <div class="fx-scanlines" aria-hidden="true"></div>
+  <div class="fx-cursor" id="fxCursor" aria-hidden="true">
+    <div class="fx-cursor-ring"></div>
+    <div class="fx-cursor-dot"></div>
+  </div>
 
   <header class="site-header">
     <div class="wrap">
@@ -22,42 +29,28 @@
         </div>
       </a>
       <nav class="nav-links">
-        <a class="navlink" href="#top">Accueil</a>
-        <a class="navlink" href="#boutique">Boutique</a>
-        <a class="navlink" href="#grades">Rôles</a>
-        <a class="navlink" href="#rejoindre">Serveur</a>
-        <a class="navlink" href="regles.html">Règles</a>
-        <a class="navlink" href="galerie.html">Galerie</a>
-        <a class="navlink" id="discordNavLink" href="#" target="_blank">Discord</a>
-        <a class="btn btn-gold" id="discordJoinBtn" href="#" target="_blank">Rejoindre</a>
+        <a href="#top">Accueil</a>
+        <a href="#boutique">Boutique</a>
+        <a href="#grades">Rôles</a>
+        <a href="#rejoindre">Serveur</a>
+        <a href="regles.html">Règles</a>
+        <a href="galerie.html">Galerie</a>
+        <a href="#" id="discordNavLink" target="_blank">Discord</a>
       </nav>
-      <div id="authArea" style="position:relative"></div>
-      <button class="cart-btn" id="cartBtn">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 12.5a1.5 1.5 0 0 0 1.5 1.2h8.7a1.5 1.5 0 0 0 1.5-1.2L21 8H6"></path><circle cx="9.5" cy="20.5" r="1.3"></circle><circle cx="18" cy="20.5" r="1.3"></circle></svg>
-        <span class="cart-count" id="cartCount">0</span>
+      <div class="auth-area" id="authArea"></div>
+      <button class="cart-btn" id="cartBtn" aria-label="Panier">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 12.5a1.5 1.5 0 0 0 1.5 1.2h8.7a1.5 1.5 0 0 0 1.5-1.2L21 8H6"></path><circle cx="9.5" cy="20" r="1.3"></circle><circle cx="18" cy="20" r="1.3"></circle></svg>
+        <span id="cartCount">0</span>
       </button>
     </div>
   </header>
 
+  <!-- Bandeau défilant : messages du serveur (éditables dans config.js) -->
+  <div class="ticker">
+    <div class="ticker-track" id="tickerTrack"></div>
+  </div>
+
   <section id="top" class="hero">
-    <div class="hero-embers" aria-hidden="true">
-      <span class="ember" style="left:6%;width:4px;height:4px;animation-delay:0s;animation-duration:8s"></span>
-      <span class="ember" style="left:14%;width:3px;height:3px;animation-delay:2.4s;animation-duration:9.5s"></span>
-      <span class="ember" style="left:22%;width:5px;height:5px;animation-delay:5.1s;animation-duration:7s"></span>
-      <span class="ember" style="left:30%;width:3.5px;height:3.5px;animation-delay:1.2s;animation-duration:10.5s"></span>
-      <span class="ember" style="left:38%;width:4px;height:4px;animation-delay:6.8s;animation-duration:8.2s"></span>
-      <span class="ember" style="left:46%;width:4.5px;height:4.5px;animation-delay:3.3s;animation-duration:9s"></span>
-      <span class="ember" style="left:54%;width:3px;height:3px;animation-delay:0.6s;animation-duration:7.6s"></span>
-      <span class="ember" style="left:62%;width:5px;height:5px;animation-delay:4.7s;animation-duration:10s"></span>
-      <span class="ember" style="left:70%;width:3.5px;height:3.5px;animation-delay:2s;animation-duration:8.8s"></span>
-      <span class="ember" style="left:78%;width:4px;height:4px;animation-delay:6.2s;animation-duration:7.2s"></span>
-      <span class="ember" style="left:86%;width:4.5px;height:4.5px;animation-delay:1.6s;animation-duration:9.7s"></span>
-      <span class="ember" style="left:93%;width:3px;height:3px;animation-delay:3.9s;animation-duration:8.4s"></span>
-      <span class="ember" style="left:10%;width:3.5px;height:3.5px;animation-delay:7.5s;animation-duration:10.2s"></span>
-      <span class="ember" style="left:34%;width:4px;height:4px;animation-delay:8.6s;animation-duration:9.1s"></span>
-      <span class="ember" style="left:58%;width:4.5px;height:4.5px;animation-delay:5.7s;animation-duration:7.8s"></span>
-      <span class="ember" style="left:82%;width:3px;height:3px;animation-delay:8.1s;animation-duration:8.6s"></span>
-    </div>
     <div class="hero-grid">
       <div>
         <div class="eyebrow">
@@ -66,7 +59,9 @@
         </div>
         <div class="status-pill">
           <span class="status-dot"></span>
-          <span id="statusPillText">Serveur en ligne · 100 joueurs max · Chernarus</span>
+          <span>Serveur en ligne</span>
+          <span class="status-sep"></span>
+          <span id="playersCount">—</span>
         </div>
         <h1>
           <span class="line-1">LA BOUTIQUE</span>
@@ -75,7 +70,7 @@
         <div class="hero-sub">
           <span>Cosmétiques · Livraison auto en jeu</span>
         </div>
-        <p>Survie brutale, full loot, zéro pitié. Équipe-toi de skins exclusifs et impose ton style sur le serveur FR/EU le plus nerveux. <b style="color:var(--txt)">100% cosmétique — jamais de pay-to-win.</b></p>
+        <p>Survie brutale, full loot, zéro pitié. Équipe-toi de skins exclusifs et impose ton style sur le serveur FR/EU le plus nerveux. <b style="color:var(--text)">100% cosmétique — jamais de pay-to-win.</b></p>
         <div class="tag-row">
           <span class="tag">Skins &amp; tenues</span>
           <span class="tag">Véhicules</span>
@@ -83,7 +78,7 @@
         </div>
         <div class="hero-cta">
           <a href="#boutique" class="btn btn-gold">Voir la boutique</a>
-          <a href="#" class="link" id="heroDiscordLink" target="_blank">lexil.net</a>
+          <a href="#rejoindre" class="link">Rejoindre le serveur</a>
         </div>
       </div>
       <div class="hero-logo">
@@ -100,14 +95,39 @@
     </div>
   </div>
 
+  <!-- Stats vivantes : joueurs simulés, compteur membres, horloge Chernarus -->
+  <div class="live-strip">
+    <div class="wrap">
+      <div class="live-item">
+        <span class="live-dot"></span>
+        <div class="live-nums">
+          <span class="live-value" id="livePlayers">—</span>
+          <span class="live-label">Survivants en ligne</span>
+        </div>
+      </div>
+      <div class="live-item">
+        <div class="live-nums">
+          <span class="live-value" id="liveMembers">0</span>
+          <span class="live-label">Membres de la communauté</span>
+        </div>
+      </div>
+      <div class="live-item">
+        <div class="live-nums">
+          <span class="live-value live-clock" id="chernarusClock">--:--:--</span>
+          <span class="live-label">Heure de Chernarus · UTC+3</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <section id="boutique">
     <div class="sec-head">
       <div class="sec-eyebrow">Catalogue</div>
       <h2>La boutique</h2>
-      <p>Clique sur un produit pour le détail complet. Tous les articles sont strictement cosmétiques ou de confort.</p>
+      <p>Ajoute tes articles au panier puis passe commande — livraison automatique en jeu. Tous les articles sont strictement cosmétiques ou de confort.</p>
     </div>
     <div class="filters" id="filters"></div>
-    <div class="grid" id="grid"></div>
+    <div class="grid" id="grid">Chargement du catalogue…</div>
   </section>
 
   <section id="grades">
@@ -127,75 +147,14 @@
     <div class="features-grid" id="featuresGrid"></div>
   </section>
 
-  <section id="profil" class="account-overlay">
-    <button class="account-back" id="accountBackBtn">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>
-      Retour
-    </button>
-    <div class="sec-head">
-      <div class="sec-eyebrow">Ton compte</div>
-      <h2>Mon profil</h2>
-    </div>
-    <div class="profile-box">
-      <div class="profile-head">
-        <img id="profAvatar" src="" alt="" />
-        <div>
-          <div class="name" id="profName"></div>
-          <div class="sid" id="profSid"></div>
-        </div>
-        <div class="grade-badge">
-          <div class="glyph" id="profGradeGlyph"></div>
-          <div class="label" id="profGradeName"></div>
-        </div>
-      </div>
-      <div class="progress-track"><div class="progress-fill" id="profProgressFill" style="width:0%"></div></div>
-      <div class="progress-label" id="profProgressLabel"></div>
-
-      <div class="profile-tabs">
-        <button class="profile-tab active" data-tab="orders">Commandes</button>
-        <button class="profile-tab" data-tab="items">Cosmétiques &amp; abos</button>
-        <button class="profile-tab" data-tab="discord">Discord</button>
-        <button class="profile-tab" data-tab="perso">Personnalisation</button>
-      </div>
-
-      <div class="profile-panel active" id="panelOrders"></div>
-
-      <div class="profile-panel" id="panelItems"></div>
-
-      <div class="profile-panel" id="panelDiscord">
-        <div class="link-discord-row">
-          <span id="discordStatusText">Compte Discord non lié.</span>
-          <a class="btn btn-discord" id="linkDiscordBtn" href="#">Lier mon Discord</a>
-        </div>
-      </div>
-
-      <div class="profile-panel" id="panelPerso">
-        <div id="colorPickers"></div>
-        <div id="customRoleForm" style="display:none;margin-top:20px">
-          <div class="footer-col-title" style="margin-bottom:10px">Rôle Discord personnalisé</div>
-          <div class="role-preview" id="rolePreview">Aperçu du rôle</div>
-          <div class="form-row">
-            <input type="text" id="roleNameInput" placeholder="Nom du rôle" maxlength="32" />
-            <input type="color" id="roleColorInput" value="#e0a82e" />
-            <button class="btn btn-discord-solid" id="saveRoleBtn">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z M17 21v-8H7v8 M7 3v5h8"></path></svg>
-              Créer / modifier mon rôle
-            </button>
-          </div>
-          <div class="role-char-count" id="roleCharCount">0/32</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <section id="regles">
-    <div class="rules-box">
-      <div>
-        <div class="sec-eyebrow" style="margin-bottom:6px">À lire avant de jouer</div>
-        <h2 style="font-size:clamp(24px,3.4vw,34px);margin:0">Règles essentielles</h2>
-        <p style="margin:10px 0 0;color:var(--mut);font-size:14px">Le règlement complet est disponible sur sa propre page.</p>
+    <div class="rules-box" style="text-align:center">
+      <div class="sec-head" style="margin-bottom:14px">
+        <div class="sec-eyebrow">À lire avant de jouer</div>
+        <h2 style="font-size:clamp(28px,4vw,40px)">Règles essentielles</h2>
+        <p>Le règlement complet (49 règles : raids, KOS, clans, sanctions…) est disponible sur sa propre page.</p>
       </div>
-      <a href="regles.html" class="btn btn-gold">Voir le règlement complet →</a>
+      <a href="regles.html" class="btn btn-gold" style="margin-top:8px">Voir le règlement complet →</a>
     </div>
   </section>
 
@@ -216,7 +175,7 @@
         <span>Copier</span>
       </button>
     </div>
-    <p class="ip-hint" id="ipHint" style="display:none">IP à configurer — modifie <code>serveur.ip</code> dans <code>config.js</code>.</p>
+    <p class="ip-hint" id="ipHint" style="display:none">IP à configurer — modifie <code>serveur.ip</code> dans <code>public/config.js</code>.</p>
 
     <div class="connect-grid">
       <div class="connect-card">
@@ -246,12 +205,11 @@
       <div>
         <div class="footer-col-title">Liens</div>
         <div class="footer-links">
-          <a id="discordFooterLink" href="#" target="_blank">Discord</a>
+          <a href="#" id="discordFooterLink" target="_blank">Discord</a>
           <a href="regles.html">Règles</a>
           <a href="galerie.html">Galerie</a>
           <a href="legal.html">Mentions légales &amp; CGV</a>
           <a href="#boutique">Boutique</a>
-          <a href="admin.html" id="adminFooterLink" style="display:none">Dashboard admin</a>
         </div>
       </div>
       <div>
@@ -265,631 +223,49 @@
     <div class="footer-bottom">© 2026 L'Exil — Serveur DayZ PvP communautaire · FR/EU · Achats 100% cosmétiques</div>
   </footer>
 
+  <!-- ══ Panier ══ -->
   <div class="cart-overlay" id="cartOverlay"></div>
-  <div class="cart-drawer" id="cartDrawer">
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Panier">
     <div class="cart-head">
       <h3>Ton panier</h3>
-      <button class="cart-close" id="cartCloseBtn">&times;</button>
+      <button class="cart-close" id="cartClose" aria-label="Fermer">×</button>
     </div>
     <div class="cart-items" id="cartItems"></div>
     <div class="cart-foot">
-      <div class="cart-steamid">
-        <label for="cartSteamId">Ton SteamID64 <span>— pour la livraison en jeu</span></label>
-        <input type="text" id="cartSteamId" inputmode="numeric" placeholder="7656119XXXXXXXXXX" maxlength="17" autocomplete="off" />
-        <div class="cart-steamid-hint">Livraison automatique à ta prochaine connexion sur ce SteamID. Introuvable ? Ouvre ton profil Steam ou colle ton lien sur steamid.io.</div>
+      <label class="cart-steamid">
+        <span>Ton SteamID64 — pour la livraison en jeu</span>
+        <input id="steamIdInput" type="text" inputmode="numeric" placeholder="7656119XXXXXXXXXX" />
+        <small>Livraison automatique à ta prochaine connexion sur ce SteamID. Introuvable ? Ouvre ton profil Steam ou colle ton lien sur steamid.io.</small>
+      </label>
+      <div class="cart-total-row"><span>Total</span><b id="cartTotal">0€</b></div>
+      <button class="btn btn-gold cart-checkout" id="checkoutBtn">Passer commande</button>
+      <p class="cart-msg" id="cartMsg"></p>
+    </div>
+  </aside>
+
+  <!-- ══ Pages compte (modale) ══ -->
+  <div class="acct-modal" id="acctModal">
+    <div class="acct-box">
+      <div class="acct-head">
+        <h3 id="acctTitle"></h3>
+        <button class="cart-close" id="acctClose" aria-label="Fermer">×</button>
       </div>
-      <div class="cart-total-row"><span>Total</span><span id="cartTotal">0,00 €</span></div>
-      <button class="btn btn-gold" style="width:100%;justify-content:center" id="checkoutBtn">Passer commande</button>
+      <div class="acct-body" id="acctBody"></div>
     </div>
   </div>
 
-  <div class="product-modal-overlay" id="productModalOverlay"></div>
-  <div class="product-modal" id="productModal">
-    <button class="product-modal-close" id="productModalClose">&times;</button>
-    <div class="product-modal-media" id="pmMedia"></div>
-    <div class="product-modal-body">
-      <span class="card-cat" id="pmCat"></span>
-      <h2 id="pmName"></h2>
-      <p id="pmDesc"></p>
-      <ul class="pm-features" id="pmFeatures"></ul>
-      <div class="pm-price-row">
-        <div class="price-col">
-          <span class="price-prefix">Prix</span>
-          <span class="price" id="pmPrice"></span>
-        </div>
-        <button class="btn btn-gold" id="pmAddBtn">Ajouter au panier</button>
-      </div>
-      <div class="pm-trust">
-        <div class="pm-trust-item">Livraison auto en jeu</div>
-        <div class="pm-trust-item">100% cosmétique</div>
-        <div class="pm-trust-item">Paiement sécurisé (Stripe)</div>
-      </div>
-    </div>
-  </div>
-
-  <a href="#" id="discordFloatBtn" class="discord-float" target="_blank" title="Rejoindre le Discord">
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M19.3 5.4A17 17 0 0 0 15 4l-.3.5a13 13 0 0 1 3.8 1.9 12 12 0 0 0-11 0A13 13 0 0 1 11.3 4.5L11 4a17 17 0 0 0-4.3 1.4C3.9 9.6 3.2 13.7 3.5 17.7A17 17 0 0 0 8.7 20l.6-1.5c-.6-.2-1.1-.5-1.6-.8l.4-.3a12 12 0 0 0 10 0l.4.3c-.5.3-1 .6-1.6.8L17.5 20a17 17 0 0 0 5.2-2.3c.3-4.5-.6-8.6-3.4-12.3ZM9.5 15.2c-.9 0-1.7-.8-1.7-1.9 0-1 .8-1.9 1.7-1.9.9 0 1.7.9 1.7 1.9 0 1-.8 1.9-1.7 1.9Zm5 0c-1 0-1.7-.8-1.7-1.9 0-1 .8-1.9 1.7-1.9.9 0 1.7.9 1.7 1.9 0 1-.8 1.9-1.7 1.9Z"></path></svg>
-  </a>
-
-  <div class="cookie-banner" id="cookieBanner">
-    <div class="cookie-icon">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5z"></path>
-        <path d="M8.5 10.5h.01 M12 15h.01 M15.5 11.5h.01"></path>
-      </svg>
-    </div>
-    <div class="cookie-text">
-      <div class="cookie-title">Cookies &amp; stockage</div>
+  <!-- ══ Bannières ══ -->
+  <div class="paye-banner" id="payeBanner" style="display:none"></div>
+  <div class="cookie-bar" id="cookieBar" style="display:none">
+    <div>
+      <b>Cookies &amp; stockage</b>
       <p>L'EXIL utilise uniquement le stockage local nécessaire à ton panier et ta session. Aucun cookie de suivi ni publicité. <a href="legal.html">En savoir plus</a></p>
     </div>
-    <button class="btn btn-gold" id="cookieOkBtn">J'ai compris</button>
+    <button class="btn btn-gold" id="cookieOk">J'ai compris</button>
   </div>
 
   <script src="/config.js"></script>
-  <script>
-    const CFG = window.CONFIG;
-    const AUTH = CFG.authUrl;
-
-    // ================================================================
-    // ÉTAT
-    // ================================================================
-    let steamId = localStorage.getItem('lexil_steamid') || '';
-    let account = null; // rempli par loadAccount()
-    let cart = JSON.parse(localStorage.getItem('lexil_cart') || '[]'); // [{key, qty}]
-    let activeCategory = 'Tous';
-
-    function saveCart() { localStorage.setItem('lexil_cart', JSON.stringify(cart)); renderCartBadge(); }
-    function catalogItem(key) { return CFG.catalog.find((p) => p.key === key); }
-    function fmt(n) { return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(n); }
-
-    // ================================================================
-    // TOASTS
-    // ================================================================
-    function toast(msg, type) {
-      const el = document.createElement('div');
-      el.className = 'toast' + (type ? ' ' + type : '');
-      el.textContent = msg;
-      document.getElementById('toastWrap').appendChild(el);
-      setTimeout(() => el.remove(), 5000);
-    }
-
-    // ================================================================
-    // QUERY PARAMS (retour Steam / Discord / paiement)
-    // ================================================================
-    (function handleReturnParams() {
-      const params = new URLSearchParams(location.search);
-      if (params.get('login') === 'success' && params.get('steamId')) {
-        steamId = params.get('steamId');
-        localStorage.setItem('lexil_steamid', steamId);
-        toast('Connexion Steam réussie !', 'success');
-      }
-      if (params.get('discord') === 'linked') toast('Compte Discord lié !', 'success');
-      if (params.get('paye') === 'ok') { cart = []; saveCart(); toast('Paiement reçu, merci ! Ton cosmétique arrive à ta prochaine connexion.', 'success'); }
-      if (params.get('paye') === 'annule') toast('Paiement annulé.', 'error');
-      if (params.get('error')) {
-        const messages = {
-          steam_auth_failed: 'La connexion Steam a échoué, réessaie.',
-          steam_verify_failed: 'Vérification Steam impossible, réessaie.',
-          discord_failed: 'La liaison Discord a échoué.',
-          login_first: 'Connecte-toi avec Steam avant de lier ton Discord.',
-        };
-        toast(messages[params.get('error')] || 'Une erreur est survenue.', 'error');
-      }
-      if ([...params.keys()].length) history.replaceState({}, '', location.pathname + '#' + (location.hash.replace('#', '') || ''));
-    })();
-
-    // ================================================================
-    // BANNIÈRE COOKIES (RGPD)
-    // ================================================================
-    if (!localStorage.getItem('lexil_cookie_consent')) {
-      document.getElementById('cookieBanner').classList.add('show');
-    }
-    document.getElementById('cookieOkBtn').addEventListener('click', () => {
-      localStorage.setItem('lexil_cookie_consent', '1');
-      document.getElementById('cookieBanner').classList.remove('show');
-    });
-
-    // ================================================================
-    // LIENS DISCORD / NAV
-    // ================================================================
-    document.querySelectorAll('#discordNavLink, #discordCta, #discordFooterLink, #heroDiscordLink, #discordJoinBtn, #discordFloatBtn').forEach((el) => (el.href = CFG.discordUrl));
-
-    // ================================================================
-    // AUTH — zone connexion / menu compte
-    // ================================================================
-    let isFounder = false;
-
-    function goToProfileTab(tab) {
-      const section = document.getElementById('profil');
-      section.classList.add('open');
-      document.body.style.overflow = 'hidden';
-      const btn = document.querySelector(`.profile-tab[data-tab="${tab}"]`);
-      if (btn) btn.click();
-      document.getElementById('userMenu')?.classList.remove('open');
-      section.scrollTop = 0;
-    }
-    function closeAccount() {
-      document.getElementById('profil').classList.remove('open');
-      document.body.style.overflow = '';
-    }
-    document.getElementById('accountBackBtn').addEventListener('click', closeAccount);
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAccount(); });
-
-    function renderAuthArea() {
-      const el = document.getElementById('authArea');
-      if (!steamId) {
-        el.innerHTML = `<a class="btn btn-outline" href="${AUTH}/auth/steam">Connexion Steam</a>`;
-        return;
-      }
-      const name = (account && account.steam && account.steam.name) || 'Joueur';
-      const avatar = (account && account.steam && account.steam.avatar) || '';
-      const steamProfileUrl = (account && account.steam && account.steam.profileUrl) || `https://steamcommunity.com/profiles/${steamId}`;
-      const discordName = account && account.discord && account.discord.discordName;
-
-      el.innerHTML = `
-        <div class="user-chip" id="userChipBtn">
-          ${avatar ? `<img src="${avatar}" alt="">` : ''}
-          <span>${name}</span>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
-        </div>
-        <div class="user-menu" id="userMenu">
-          <div class="user-menu-linked">
-            <div class="linked-title">Comptes liés</div>
-            <div class="linked-row"><span>${name}</span><span class="linked-status ok">✓ Lié</span></div>
-            <div class="linked-row"><span>${discordName || 'Discord non lié'}</span><span class="linked-status ${discordName ? 'ok' : ''}">${discordName ? '✓ Lié' : ''}</span></div>
-          </div>
-          <div class="user-menu-items">
-            <button class="user-menu-item" data-tab="orders">Mon profil</button>
-            <button class="user-menu-item" data-tab="orders">Mes achats</button>
-            <button class="user-menu-item" data-tab="perso">Personnalisation</button>
-            <button class="user-menu-item" data-tab="items">Abonnements</button>
-            <button class="user-menu-item" data-tab="items">File prioritaire</button>
-            <a class="user-menu-item" href="${steamProfileUrl}" target="_blank">Profil Steam</a>
-          </div>
-          <div class="user-menu-items" id="userMenuAdmin" style="display:none">
-            <a class="user-menu-item admin" href="admin.html">Dashboard admin</a>
-          </div>
-          <div class="user-menu-items">
-            <button class="user-menu-item signout" id="signOutBtn">Se déconnecter</button>
-          </div>
-        </div>`;
-
-      document.getElementById('userChipBtn').addEventListener('click', () => document.getElementById('userMenu').classList.toggle('open'));
-      document.querySelectorAll('#userMenu button[data-tab]').forEach((btn) => btn.addEventListener('click', () => goToProfileTab(btn.dataset.tab)));
-      document.getElementById('signOutBtn').addEventListener('click', () => {
-        localStorage.removeItem('lexil_steamid');
-        location.reload();
-      });
-      document.getElementById('userMenuAdmin').style.display = isFounder ? '' : 'none';
-    }
-
-    document.addEventListener('click', (e) => {
-      const menu = document.getElementById('userMenu');
-      const chip = document.getElementById('userChipBtn');
-      if (menu && menu.classList.contains('open') && !menu.contains(e.target) && e.target !== chip && !chip?.contains(e.target)) {
-        menu.classList.remove('open');
-      }
-    });
-
-    async function loadAccount() {
-      if (!steamId) { renderAuthArea(); return; }
-      try {
-        const res = await fetch(`${AUTH}/api/account?steamId=${encodeURIComponent(steamId)}`);
-        account = await res.json();
-      } catch (e) {
-        console.error('loadAccount:', e);
-        account = null;
-      }
-      renderAuthArea();
-      renderProfile();
-      checkFounder();
-    }
-
-    async function checkFounder() {
-      if (!steamId) return;
-      try {
-        const res = await fetch(`${AUTH}/api/is-founder?steamId=${encodeURIComponent(steamId)}`);
-        const data = await res.json();
-        isFounder = !!data.founder;
-        document.getElementById('adminFooterLink').style.display = isFounder ? '' : 'none';
-        const menuAdmin = document.getElementById('userMenuAdmin');
-        if (menuAdmin) menuAdmin.style.display = isFounder ? '' : 'none';
-      } catch (e) { /* pas grave, on masque juste le lien */ }
-    }
-
-    // ================================================================
-    // PROFIL
-    // ================================================================
-    function renderProfile() {
-      const section = document.getElementById('profil');
-      if (!steamId || !account) { section.classList.remove('open'); document.body.style.overflow = ''; return; }
-
-      const steam = account.steam || {};
-      document.getElementById('profAvatar').src = steam.avatar || '';
-      document.getElementById('profName').textContent = steam.name || 'Joueur';
-      document.getElementById('profSid').textContent = steamId;
-
-      // Le backend renvoie le grade en anglais (Bronze/Silver/.../Ultimate) ; on l'affiche
-      // avec le nom/glyphe français du design via CFG.rankDisplay.
-      const stats = account.account.stats;
-      const gradeDisplay = CFG.rankDisplay[stats.grade.name] || stats.grade;
-      const nextGradeDisplay = stats.nextGrade ? (CFG.rankDisplay[stats.nextGrade.name] || stats.nextGrade) : null;
-      document.getElementById('profGradeGlyph').textContent = gradeDisplay.glyph;
-      document.getElementById('profGradeName').textContent = gradeDisplay.name;
-      document.getElementById('profProgressFill').style.width = stats.progress + '%';
-      document.getElementById('profProgressLabel').textContent = nextGradeDisplay
-        ? `${stats.totalSpent} dépensés — ${stats.nextGrade.min} pour ${nextGradeDisplay.name} ${nextGradeDisplay.glyph}`
-        : `${stats.totalSpent} dépensés — rang maximum atteint`;
-
-      // Highlight du rang actuel dans la section "Rôles donateur"
-      document.querySelectorAll('.rank-chip').forEach((chip) => chip.classList.toggle('current', chip.dataset.name === gradeDisplay.name));
-
-      // Commandes — les objets offerts via le dashboard admin ont un orderId technique
-      // ("ADMIN-<timestamp ISO>") : on affiche un libellé lisible à la place.
-      const orders = account.account.orders || [];
-      document.getElementById('panelOrders').innerHTML = orders.length
-        ? orders.map((o) => `
-          <div class="order-card">
-            <div class="order-card-head">
-              <div>
-                <div class="order-id">${o.orderId.startsWith('ADMIN-') ? 'Offert par le staff' : 'Commande ' + o.orderId}</div>
-                <div class="order-date">${o.date}</div>
-              </div>
-              <span class="status-pill-sm active">${o.status || 'Livré'} ✓</span>
-            </div>
-            ${o.items.map((it) => `<div class="order-item-row"><span>${it.label}</span><span>${it.prix || ''}</span></div>`).join('')}
-            <div class="order-total-row"><span>Total</span><span>${o.total}</span></div>
-          </div>`).join('')
-        : '<p style="color:var(--mut);font-size:14px">Aucune commande pour le moment.</p>';
-
-      // Cosmétiques + abonnements
-      const cosmetics = account.account.cosmetics || [];
-      const subscriptions = account.account.subscriptions || [];
-      let itemsHtml = '';
-      if (cosmetics.length) itemsHtml += cosmetics.map((c) => `
-        <div class="cosmetic-row"><span>${c.name}</span><span class="status-pill-sm active">${c.expiry}</span></div>`).join('');
-      if (subscriptions.length) itemsHtml += subscriptions.map((s) => `
-        <div class="sub-row"><span class="name">${s.name}</span><span class="status-pill-sm ${s.active ? 'active' : 'expired'}">${s.expiry}</span></div>`).join('');
-      document.getElementById('panelItems').innerHTML = itemsHtml || '<p style="color:var(--mut);font-size:14px">Aucun cosmétique ou abonnement actif.</p>';
-
-      // Discord
-      const discordStatus = document.getElementById('discordStatusText');
-      const linkBtn = document.getElementById('linkDiscordBtn');
-      if (account.discord) {
-        discordStatus.textContent = `Lié à ${account.discord.discordName}`;
-        linkBtn.textContent = 'Relier un autre compte';
-      } else {
-        discordStatus.textContent = 'Compte Discord non lié.';
-        linkBtn.textContent = 'Lier mon Discord';
-      }
-      linkBtn.href = `${AUTH}/auth/discord?steamId=${encodeURIComponent(steamId)}`;
-
-      renderColorPickers(cosmetics);
-    }
-
-    // Couleurs personnalisables — seulement affichées si le joueur possède le produit correspondant.
-    function renderColorPickers(cosmetics) {
-      const owns = (label) => cosmetics.some((c) => c.name === label);
-      const rows = [
-        { type: 'killfeed', label: 'Couleur de nom (Killfeed) — Lifetime', title: 'Couleur du killfeed' },
-        { type: 'chat', label: 'Couleur de chat — Lifetime', title: 'Couleur du chat' },
-        { type: 'clan', label: 'Couleur de clan tag — Lifetime', title: 'Couleur du clan tag' },
-      ];
-      const colors = (account && account.colors) || {};
-      const html = rows
-        .filter((r) => owns(r.label))
-        .map((r) => `
-          <div class="color-picker-row">
-            <span>${r.title}</span>
-            <div class="color-pick-val">
-              <span class="color-hex">${(colors[r.type] || '#e0a82e').toUpperCase()}</span>
-              <input type="color" data-type="${r.type}" value="${colors[r.type] || '#e0a82e'}" />
-            </div>
-          </div>`)
-        .join('');
-      document.getElementById('colorPickers').innerHTML = html || '<p style="color:var(--mut);font-size:14px">Achète une couleur lifetime pour la personnaliser ici.</p>';
-      document.querySelectorAll('#colorPickers input[type="color"]').forEach((input) => {
-        input.addEventListener('input', () => {
-          const hex = input.parentElement.querySelector('.color-hex');
-          if (hex) hex.textContent = input.value.toUpperCase();
-        });
-        input.addEventListener('change', async () => {
-          try {
-            const res = await fetch(`${AUTH}/api/customize/color`, {
-              method: 'POST', headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ steamId, type: input.dataset.type, color: input.value }),
-            });
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.error || 'Erreur');
-            toast('Couleur mise à jour !', 'success');
-          } catch (e) { toast(e.message, 'error'); }
-        });
-      });
-
-      // Rôle Discord perso — affiché seulement si possédé.
-      const hasRole = cosmetics.some((c) => c.name === 'Rôle Discord personnalisé');
-      document.getElementById('customRoleForm').style.display = hasRole ? '' : 'none';
-      if (hasRole && account && account.customRole) {
-        document.getElementById('roleNameInput').value = account.customRole.name || '';
-        document.getElementById('roleColorInput').value = account.customRole.color || '#e0a82e';
-      }
-      updateRolePreview();
-    }
-
-    function updateRolePreview() {
-      const name = document.getElementById('roleNameInput').value;
-      const color = document.getElementById('roleColorInput').value;
-      document.getElementById('roleCharCount').textContent = `${name.length}/32`;
-      const preview = document.getElementById('rolePreview');
-      preview.textContent = name || 'Aperçu du rôle';
-      preview.style.color = color;
-      preview.style.borderColor = color;
-    }
-    document.getElementById('roleNameInput').addEventListener('input', updateRolePreview);
-    document.getElementById('roleColorInput').addEventListener('input', updateRolePreview);
-
-    document.getElementById('saveRoleBtn').addEventListener('click', async () => {
-      const name = document.getElementById('roleNameInput').value.trim();
-      const color = document.getElementById('roleColorInput').value;
-      if (!name) return toast('Entre un nom de rôle.', 'error');
-      try {
-        const res = await fetch(`${AUTH}/api/customize/discord-role`, {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ steamId, name, color }),
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Erreur');
-        toast('Rôle Discord mis à jour !', 'success');
-      } catch (e) { toast(e.message, 'error'); }
-    });
-
-    document.querySelectorAll('.profile-tab').forEach((tab) => {
-      tab.addEventListener('click', () => {
-        document.querySelectorAll('.profile-tab').forEach((t) => t.classList.remove('active'));
-        document.querySelectorAll('.profile-panel').forEach((p) => p.classList.remove('active'));
-        tab.classList.add('active');
-        document.getElementById('panel' + tab.dataset.tab.charAt(0).toUpperCase() + tab.dataset.tab.slice(1)).classList.add('active');
-      });
-    });
-
-    // ================================================================
-    // RÔLES DONATEUR / FEATURES (statiques, depuis config.js)
-    // ================================================================
-    document.getElementById('ranksRow').innerHTML = CFG.ranks
-      .map((r) => `
-        <div class="rank-chip" data-name="${r.name}">
-          <span class="rank-glyph">${r.glyph}</span>
-          <div class="rank-name">${r.name}</div>
-          <div class="rank-amt">${r.min} €</div>
-        </div>`)
-      .join('');
-
-    document.getElementById('featuresGrid').innerHTML = CFG.features
-      .map((f) => `
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e0a82e" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="${f.iconPath}"></path></svg>
-          </div>
-          <h3>${f.title}</h3>
-          <p>${f.text}</p>
-        </div>`)
-      .join('');
-
-    // ================================================================
-    // REJOINDRE LE SERVEUR
-    // ================================================================
-    // Statut serveur (hero) — "En ligne · X/100 joueurs · Chernarus"
-    (function renderServerStatus() {
-      const el = document.getElementById('statusPillText');
-      if (!el || CFG.serveur.joueurs == null) return;
-      const maxInfo = CFG.serveur.info.find((i) => /joueurs max/i.test(i.label));
-      const max = maxInfo ? maxInfo.value : 100;
-      const carteInfo = CFG.serveur.info.find((i) => /carte/i.test(i.label));
-      const carte = carteInfo ? carteInfo.value : 'Chernarus';
-      el.textContent = `En ligne · ${CFG.serveur.joueurs}/${max} joueurs · ${carte}`;
-    })();
-
-    const ipValueEl = document.getElementById('ipValue');
-    const ipHintEl = document.getElementById('ipHint');
-    if (CFG.serveur.ip) { ipValueEl.textContent = CFG.serveur.ip; } else { ipValueEl.textContent = 'Non configurée'; ipHintEl.style.display = 'flex'; }
-    document.getElementById('copyIpBtn').addEventListener('click', async () => {
-      if (!CFG.serveur.ip) return;
-      await navigator.clipboard.writeText(CFG.serveur.ip);
-      const label = document.querySelector('#copyIpBtn span');
-      label.textContent = 'Copié !';
-      setTimeout(() => (label.textContent = 'Copier'), 1500);
-    });
-    document.getElementById('stepsList').innerHTML = CFG.connexionSteps
-      .map((s, i) => `<div class="step"><div class="step-num">${i + 1}</div><div><div class="step-title">${s.title}</div><div class="step-text">${s.text}</div></div></div>`)
-      .join('');
-    document.getElementById('serverInfoList').innerHTML = CFG.serveur.info
-      .map((i) => `<div class="server-info-row"><span class="label">${i.label}</span><span class="value">${i.value}</span></div>`)
-      .join('');
-
-    // ================================================================
-    // BOUTIQUE — catalogue statique (config.js) + filtres
-    // ================================================================
-    function renderFilters() {
-      const cats = ['Tous', ...new Set(CFG.catalog.map((p) => p.cat))];
-      document.getElementById('filters').innerHTML = cats
-        .map((c) => {
-          const count = c === 'Tous' ? CFG.catalog.length : CFG.catalog.filter((p) => p.cat === c).length;
-          return `<button class="filter-btn ${c === activeCategory ? 'active' : ''}" data-cat="${c}">${c}<span>${count}</span></button>`;
-        })
-        .join('');
-      document.querySelectorAll('.filter-btn').forEach((btn) =>
-        btn.addEventListener('click', () => { activeCategory = btn.dataset.cat; renderFilters(); renderGrid(); })
-      );
-    }
-
-    const kindLabel = { lifetime: 'À vie', days30: '30 jours', priority: 'Priorité', discord: 'Discord' };
-    const badgeLabel = { populaire: 'Populaire', offre: 'Meilleure offre' };
-
-    function productIconHtml(p) {
-      return `
-        <svg viewBox="0 0 100 100" width="110" height="110" style="position:absolute;opacity:.13"><polygon points="50,6 89,28 89,72 50,94 11,72 11,28" fill="none" stroke="#e0a82e" stroke-width="1.5"></polygon></svg>
-        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#f2efe9" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="position:relative"><path d="${p.iconPath}"></path></svg>`;
-    }
-
-    // Utilisée dans la grille : icône + badges catégorie/kind superposés sur la vignette.
-    function productMediaHtml(p) {
-      return `
-        ${productIconHtml(p)}
-        ${p.badge ? `<span class="card-badge ${p.badge}">${badgeLabel[p.badge]}</span>` : ''}
-        <span class="card-kind">${kindLabel[p.kind]}</span>
-        <span class="card-cat">${p.cat}</span>`;
-    }
-
-    // Utilisée dans la fiche produit : catégorie/kind déjà affichés dans le corps du modal,
-    // donc pas de badges superposés ici (évite le chevauchement avec le bouton fermer).
-    function productModalMediaHtml(p) {
-      return `
-        ${productIconHtml(p)}
-        ${p.badge ? `<span class="card-badge ${p.badge}" style="bottom:14px;left:14px">${badgeLabel[p.badge]}</span>` : ''}`;
-    }
-
-    function renderGrid() {
-      const grid = document.getElementById('grid');
-      const list = activeCategory === 'Tous' ? CFG.catalog : CFG.catalog.filter((p) => p.cat === activeCategory);
-      grid.innerHTML = list
-        .map((p) => `
-        <article class="card" data-key="${p.key}">
-          <div class="card-media">${productMediaHtml(p)}</div>
-          <div class="card-body">
-            <h3>${p.name}</h3>
-            <p class="desc">${p.desc}</p>
-            <div class="card-row">
-              <div class="price-col">
-                <span class="price-prefix">Prix</span>
-                <span class="price">${fmt(p.price)}</span>
-              </div>
-              <button class="btn btn-gold" data-key="${p.key}" data-add>Ajouter</button>
-            </div>
-          </div>
-        </article>`)
-        .join('');
-      grid.querySelectorAll('.card').forEach((card) => card.addEventListener('click', () => openProductModal(card.dataset.key)));
-      grid.querySelectorAll('button[data-add]').forEach((btn) =>
-        btn.addEventListener('click', (e) => { e.stopPropagation(); addToCart(btn.dataset.key); })
-      );
-    }
-
-    // ================================================================
-    // FICHE PRODUIT (modal)
-    // ================================================================
-    function openProductModal(key) {
-      const p = catalogItem(key);
-      if (!p) return;
-      document.getElementById('pmMedia').innerHTML = productModalMediaHtml(p);
-      document.getElementById('pmCat').textContent = `${p.cat} · ${kindLabel[p.kind]}`;
-      document.getElementById('pmName').textContent = p.name;
-      document.getElementById('pmDesc').textContent = p.long || p.desc;
-      document.getElementById('pmFeatures').innerHTML = (p.features || []).map((f) => `<li>${f}</li>`).join('');
-      document.getElementById('pmPrice').textContent = fmt(p.price);
-      document.getElementById('pmAddBtn').onclick = () => { addToCart(p.key); closeProductModal(); };
-      document.getElementById('productModal').classList.add('open');
-      document.getElementById('productModalOverlay').classList.add('open');
-    }
-    function closeProductModal() {
-      document.getElementById('productModal').classList.remove('open');
-      document.getElementById('productModalOverlay').classList.remove('open');
-    }
-    document.getElementById('productModalClose').addEventListener('click', closeProductModal);
-    document.getElementById('productModalOverlay').addEventListener('click', closeProductModal);
-
-    // ================================================================
-    // PANIER
-    // ================================================================
-    function addToCart(key) {
-      const existing = cart.find((c) => c.key === key);
-      if (existing) existing.qty += 1; else cart.push({ key, qty: 1 });
-      saveCart();
-      toast('Ajouté au panier !', 'success');
-    }
-    function renderCartBadge() {
-      document.getElementById('cartCount').textContent = cart.reduce((a, c) => a + c.qty, 0);
-    }
-    function renderCartDrawer() {
-      const wrap = document.getElementById('cartItems');
-      if (!cart.length) { wrap.innerHTML = '<div class="cart-empty">Ton panier est vide.</div>'; document.getElementById('cartTotal').textContent = fmt(0); return; }
-      let total = 0;
-      wrap.innerHTML = cart
-        .map((c) => {
-          const p = catalogItem(c.key);
-          if (!p) return '';
-          total += p.price * c.qty;
-          return `
-            <div class="cart-item">
-              <div class="cart-item-info">
-                <div class="name">${p.name}</div>
-                <div class="unit-price">${fmt(p.price)} / unité</div>
-                <div class="cart-item-qty">
-                  <button data-act="dec" data-key="${c.key}">−</button>
-                  <span>${c.qty}</span>
-                  <button data-act="inc" data-key="${c.key}">+</button>
-                </div>
-              </div>
-              <button class="cart-item-remove" data-act="remove" data-key="${c.key}">Retirer</button>
-            </div>`;
-        })
-        .join('');
-      document.getElementById('cartTotal').textContent = fmt(total);
-      wrap.querySelectorAll('button[data-act]').forEach((btn) => btn.addEventListener('click', () => {
-        const key = btn.dataset.key;
-        const item = cart.find((c) => c.key === key);
-        if (btn.dataset.act === 'inc') item.qty += 1;
-        if (btn.dataset.act === 'dec') { item.qty -= 1; if (item.qty <= 0) cart = cart.filter((c) => c.key !== key); }
-        if (btn.dataset.act === 'remove') cart = cart.filter((c) => c.key !== key);
-        saveCart();
-        renderCartDrawer();
-      }));
-    }
-
-    const STEAMID_RE = /^7656119\d{10}$/;
-    function openCart() {
-      renderCartDrawer();
-      const sid = document.getElementById('cartSteamId');
-      if (sid && !sid.value) { sid.value = steamId || ''; sid.dispatchEvent(new Event('input')); }
-      document.getElementById('cartDrawer').classList.add('open');
-      document.getElementById('cartOverlay').classList.add('open');
-    }
-    document.getElementById('cartSteamId').addEventListener('input', (e) => {
-      const v = e.target.value.trim();
-      const ok = STEAMID_RE.test(v);
-      e.target.classList.toggle('valid', ok);
-      e.target.classList.toggle('invalid', v.length > 0 && !ok);
-    });
-    function closeCart() { document.getElementById('cartDrawer').classList.remove('open'); document.getElementById('cartOverlay').classList.remove('open'); }
-    document.getElementById('cartBtn').addEventListener('click', openCart);
-    document.getElementById('cartCloseBtn').addEventListener('click', closeCart);
-    document.getElementById('cartOverlay').addEventListener('click', closeCart);
-
-    document.getElementById('checkoutBtn').addEventListener('click', async () => {
-      if (!cart.length) return toast('Ton panier est vide.', 'error');
-      const orderSteamId = document.getElementById('cartSteamId').value.trim();
-      if (!STEAMID_RE.test(orderSteamId)) return toast('Entre un SteamID64 valide (17 chiffres) pour la livraison en jeu.', 'error');
-      localStorage.setItem('lexil_steamid', orderSteamId);
-      steamId = orderSteamId;
-      const total = cart.reduce((a, c) => a + (catalogItem(c.key)?.price || 0) * c.qty, 0);
-      try {
-        const res = await fetch(`${AUTH}/api/order`, {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ steamId, total, items: cart.map((c) => ({ id: c.key, qty: c.qty })) }),
-        });
-        const data = await res.json();
-        if (!res.ok || !data.checkoutUrl) throw new Error(data.error || 'Erreur de paiement');
-        window.location = data.checkoutUrl;
-      } catch (e) { toast(e.message, 'error'); }
-    });
-
-    // ================================================================
-    // INIT
-    // ================================================================
-    renderFilters();
-    renderGrid();
-    renderCartBadge();
-    renderAuthArea();
-    loadAccount();
-  </script>
+  <script src="/fx.js"></script>
+  <script src="/shop.js"></script>
 </body>
 </html>
