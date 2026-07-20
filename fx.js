@@ -195,27 +195,37 @@
     }, 3500 + Math.random() * 4500);
   })();
 
-  // — Compteur "survivants" qui monte progressivement —
+  // — Compteur de membres Discord (chiffre réel, via l'API d'invitation) —
   const membersEl = document.getElementById("liveMembers");
+  const membersOnlineEl = document.getElementById("liveMembersOnline");
   if (membersEl) {
-    const target = LIVE.survivants ?? 1200;
     const fmtInt = (n) => new Intl.NumberFormat("fr-FR").format(Math.round(n));
-    if (reduceMotion || !("IntersectionObserver" in window)) {
-      membersEl.textContent = fmtInt(target);
-    } else {
-      const obs = new IntersectionObserver((es) => {
-        if (!es.some((e) => e.isIntersecting)) return;
-        obs.disconnect();
-        const t0 = performance.now(), dur = 1800;
-        const step = (t) => {
-          const k = Math.min(1, (t - t0) / dur);
-          membersEl.textContent = fmtInt(target * (1 - Math.pow(1 - k, 3)));
-          if (k < 1) requestAnimationFrame(step);
-        };
-        requestAnimationFrame(step);
-      }, { threshold: 0.4 });
-      obs.observe(membersEl);
-    }
+    const countUp = (target) => {
+      if (reduceMotion) { membersEl.textContent = fmtInt(target); return; }
+      const t0 = performance.now(), dur = 1400;
+      const step = (t) => {
+        const k = Math.min(1, (t - t0) / dur);
+        membersEl.textContent = fmtInt(target * (1 - Math.pow(1 - k, 3)));
+        if (k < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
+
+    // Le code d'invitation est déduit de discordUrl (ex. discord.gg/xxxx).
+    const invite = String(CFG.discordUrl || "").split("/").filter(Boolean).pop();
+    const fallback = () => countUp(LIVE.survivants ?? 0);
+    if (invite && /^[A-Za-z0-9-]+$/.test(invite)) {
+      fetch("https://discord.com/api/v10/invites/" + invite + "?with_counts=true")
+        .then((r) => (r.ok ? r.json() : Promise.reject()))
+        .then((d) => {
+          if (typeof d.approximate_member_count !== "number") return fallback();
+          countUp(d.approximate_member_count);
+          if (membersOnlineEl && typeof d.approximate_presence_count === "number") {
+            membersOnlineEl.textContent = d.approximate_presence_count + " en ligne";
+          }
+        })
+        .catch(fallback);
+    } else fallback();
   }
 
   // — Horloge de Chernarus (UTC+3), temps réel —

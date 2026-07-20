@@ -99,7 +99,7 @@
                 data-id="${p.id}" data-variant="${d.key}">${d.label} · ${fmt(d.prix)}</button>`).join("")}</div>`
           : "";
         return `
-        <article class="card tier-${tierOf(prix)}${window.FX_ACTIVE ? " reveal" : ""}" style="--d:${(idx % 8) * 70}ms">
+        <article class="card tier-${tierOf(prix)}${window.FX_ACTIVE ? " reveal" : ""}" data-pid="${p.id}" style="--d:${(idx % 8) * 70}ms">
           <div class="card-media">
             ${p.badge ? `<span class="card-badge ${p.badge === "Populaire" ? "badge-gold" : "badge-green"}">${p.badge}</span>` : ""}
             <span class="card-cat">${CFG.catLabels[p.cat] || p.cat}</span>
@@ -120,13 +120,57 @@
       .join("");
 
     $("grid").querySelectorAll("[data-variant]").forEach((btn) =>
-      btn.addEventListener("click", () => { selectedVariant[btn.dataset.id] = btn.dataset.variant; renderGrid(); })
+      btn.addEventListener("click", (e) => { e.stopPropagation(); selectedVariant[btn.dataset.id] = btn.dataset.variant; renderGrid(); })
     );
     $("grid").querySelectorAll("[data-add]").forEach((btn) =>
-      btn.addEventListener("click", () => addToCart(CFG.catalogue.find((p) => p.id === btn.dataset.add)))
+      btn.addEventListener("click", (e) => { e.stopPropagation(); addToCart(CFG.catalogue.find((p) => p.id === btn.dataset.add)); })
+    );
+    // Cliquer la carte (hors boutons) ouvre la fiche produit.
+    $("grid").querySelectorAll(".card").forEach((card) =>
+      card.addEventListener("click", (e) => {
+        if (e.target.closest("button")) return;
+        openProduct(card.dataset.pid);
+      })
     );
     document.dispatchEvent(new Event("grid:rendered"));
   }
+
+  /* ══════════ FICHE PRODUIT ══════════ */
+  let prodOpenId = null;
+
+  function renderProduct() {
+    const p = CFG.catalogue.find((x) => x.id === prodOpenId);
+    if (!p) return;
+    const prix = priceOf(p);
+    const duree = p.variantes
+      ? (selectedVariant[p.id] || CFG.durees[0].key) === "30j" ? "30 jours" : "À vie"
+      : p.duree;
+
+    $("prodMedia").innerHTML = iconBadge(p.id).replace('width="112" height="112"', 'width="168" height="168"');
+    $("prodTags").innerHTML =
+      `<span class="prod-tag cat">${esc(CFG.catLabels[p.cat] || p.cat)}</span>` +
+      `<span class="prod-tag duree">${esc(duree)}</span>` +
+      (p.badge ? `<span class="prod-tag badge">${esc(p.badge)}</span>` : "");
+    $("prodName").textContent = p.nom;
+    $("prodLong").textContent = p.long || p.court || "";
+    $("prodFeatures").innerHTML = (p.features || []).map((f) => `<li>${esc(f)}</li>`).join("");
+    $("prodVariants").innerHTML = p.variantes
+      ? `<div class="prod-variants-label">Durée</div><div class="variant-row">${CFG.durees.map((d) => `
+          <button class="variant-btn ${(selectedVariant[p.id] || CFG.durees[0].key) === d.key ? "active" : ""}"
+            data-pvariant="${d.key}">${d.label} · ${fmt(d.prix)}</button>`).join("")}</div>`
+      : "";
+    $("prodPrice").textContent = fmt(prix);
+    $("prodVariants").querySelectorAll("[data-pvariant]").forEach((b) =>
+      b.addEventListener("click", () => { selectedVariant[p.id] = b.dataset.pvariant; renderProduct(); renderGrid(); })
+    );
+  }
+
+  function openProduct(id) {
+    prodOpenId = id;
+    renderProduct();
+    $("prodModal").classList.add("open");
+  }
+  function closeProduct() { $("prodModal").classList.remove("open"); prodOpenId = null; }
 
   /* ══════════ PANIER (localStorage lexil_cart, format identique à l'ancien site) ══════════ */
   function saveCart() { store.set("lexil_cart", JSON.stringify(cart)); renderCart(); }
@@ -397,7 +441,8 @@
   /* ══════════ INIT ══════════ */
   document.addEventListener("DOMContentLoaded", () => {
     // Liens Discord
-    document.querySelectorAll("#discordNavLink, #discordCta, #discordFooterLink").forEach((el) => (el.href = CFG.discordUrl));
+    document.querySelectorAll("#discordNavLink, #discordCta, #discordFooterLink, #discordMembersLink")
+      .forEach((el) => (el.href = CFG.discordUrl));
 
     // Sections statiques (grades, features, connexion, infos serveur)
     $("ranksRow").innerHTML = CFG.ranks.map((r) => `
@@ -422,6 +467,21 @@
 
     // Boutique + panier — chaque bloc est isolé : un pépin n'empêche pas le reste.
     safe("boutique", () => { renderFilters(); renderGrid(); });
+    safe("fiche produit", () => {
+      $("prodClose").addEventListener("click", closeProduct);
+      $("prodModal").addEventListener("click", (e) => { if (e.target === $("prodModal")) closeProduct(); });
+      $("prodAdd").addEventListener("click", () => {
+        const p = CFG.catalogue.find((x) => x.id === prodOpenId);
+        if (p) { addToCart(p); closeProduct(); }
+      });
+    });
+    // Échap ferme la fiche, la modale compte ou le panier (jamais de blocage).
+    document.addEventListener("keydown", (e) => {
+      if (e.key !== "Escape") return;
+      closeProduct();
+      $("acctModal").classList.remove("open");
+      openCart(false);
+    });
     safe("panier", () => {
       renderCart();
       $("cartBtn").addEventListener("click", () => openCart(true));
