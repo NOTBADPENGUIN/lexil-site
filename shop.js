@@ -18,9 +18,21 @@
     del(k) { try { localStorage.removeItem(k); } catch {} },
   };
 
+  const safe = (label, fn) => { try { fn(); } catch (e) { console.warn("[shop] " + label + ":", e); } };
+
   // ── État ──
+  // Le panier de l'ancien site (mêmes clés localStorage) est repris tel quel,
+  // mais on filtre toute entrée invalide pour ne jamais planter l'affichage.
   let cart = {};
-  try { cart = JSON.parse(store.get("lexil_cart", "null")) || {}; } catch { cart = {}; }
+  try {
+    const raw = JSON.parse(store.get("lexil_cart", "null")) || {};
+    for (const k of Object.keys(raw)) {
+      const e = raw[k];
+      if (e && typeof e.prix === "number" && isFinite(e.prix) && e.qty > 0) {
+        cart[k] = { nom: String(e.nom || k), sub: String(e.sub || ""), prix: e.prix, qty: Math.round(e.qty) };
+      }
+    }
+  } catch { cart = {}; }
   let steamId = store.get("lexil_steamid", "");
   let user = null;
   try { user = JSON.parse(store.get("lexil_user", "null")); } catch {}
@@ -408,22 +420,29 @@
       setTimeout(() => (label.textContent = "Copier"), 1500);
     });
 
-    // Boutique + panier
-    renderFilters(); renderGrid(); renderCart();
-    $("cartBtn").addEventListener("click", () => openCart(true));
-    $("cartClose").addEventListener("click", () => openCart(false));
-    $("cartOverlay").addEventListener("click", () => openCart(false));
-    $("checkoutBtn").addEventListener("click", checkout);
+    // Boutique + panier — chaque bloc est isolé : un pépin n'empêche pas le reste.
+    safe("boutique", () => { renderFilters(); renderGrid(); });
+    safe("panier", () => {
+      renderCart();
+      $("cartBtn").addEventListener("click", () => openCart(true));
+      $("cartClose").addEventListener("click", () => openCart(false));
+      $("cartOverlay").addEventListener("click", () => openCart(false));
+      $("checkoutBtn").addEventListener("click", checkout);
+    });
 
     // Compte
-    renderAuth();
-    handleReturns();
-    if (steamId) loadAccount(steamId);
-    $("acctClose").addEventListener("click", () => $("acctModal").classList.remove("open"));
-    $("acctModal").addEventListener("click", (e) => { if (e.target === $("acctModal")) $("acctModal").classList.remove("open"); });
+    safe("auth", renderAuth);
+    safe("retours", handleReturns);
+    if (steamId) safe("compte", () => loadAccount(steamId));
+    safe("modale", () => {
+      $("acctClose").addEventListener("click", () => $("acctModal").classList.remove("open"));
+      $("acctModal").addEventListener("click", (e) => { if (e.target === $("acctModal")) $("acctModal").classList.remove("open"); });
+    });
 
     // Bannière cookies
-    if (!store.get("lexil_cookies_ok", "")) $("cookieBar").style.display = "flex";
-    $("cookieOk").addEventListener("click", () => { store.set("lexil_cookies_ok", "1"); $("cookieBar").style.display = "none"; });
+    safe("cookies", () => {
+      if (!store.get("lexil_cookies_ok", "")) $("cookieBar").style.display = "flex";
+      $("cookieOk").addEventListener("click", () => { store.set("lexil_cookies_ok", "1"); $("cookieBar").style.display = "none"; });
+    });
   });
 })();
