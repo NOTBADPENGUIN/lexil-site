@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>L'EXIL — Mon compte</title>
+  <link rel="icon" href="/img/logo.png" />
+  <link rel="stylesheet" href="/style.css?v=4" />
+  <style>
+    .acct-page { max-width: 1180px; margin: 0 auto; padding: 30px 24px 70px; }
+    .back-link { font-family: var(--font-head); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted-2); text-decoration: none; }
+    .back-link:hover { color: var(--gold); }
+
+    /* En-tête de compte */
+    .acct-hero {
+      display: flex; align-items: center; gap: 22px; flex-wrap: wrap;
+      margin: 24px 0 26px; padding: 26px 28px;
+      background: linear-gradient(120deg, rgba(16,24,46,.95), rgba(9,14,30,.6));
+      border: 1px solid var(--border); border-radius: 10px;
+    }
+    .acct-hero-avatar { width: 88px; height: 88px; border-radius: 8px; border: 1px solid var(--border-2); object-fit: cover; flex: none; background: #0a1226; }
+    .acct-hero-id { flex: 1; min-width: 220px; }
+    .acct-hero-id h1 { font-family: var(--font-head); font-size: clamp(26px, 3.4vw, 38px); text-transform: uppercase; margin: 0 0 8px; line-height: 1; }
+    .link-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .link-chip {
+      display: inline-flex; align-items: center; gap: 7px; padding: 5px 11px; border-radius: 4px;
+      font-family: var(--font-head); font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase;
+      border: 1px solid var(--border-2); background: #0a1226; color: var(--muted); text-decoration: none;
+    }
+    .link-chip.ok { border-color: #1f4a2e; color: #8df2ae; background: rgba(57,213,107,.08); }
+    .link-chip.todo { border-color: var(--discord); color: #c8cdff; background: rgba(88,101,242,.12); }
+    .link-chip.todo:hover { background: rgba(88,101,242,.24); }
+    .acct-hero-grade { text-align: center; flex: none; padding-left: 22px; border-left: 1px solid var(--border); }
+    .acct-hero-grade .g { font-size: 40px; line-height: 1; }
+    .acct-hero-grade .n { font-family: var(--font-head); font-size: 15px; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin-top: 6px; }
+
+    /* Layout sidebar + contenu */
+    .acct-layout { display: grid; grid-template-columns: 232px 1fr; gap: 20px; align-items: start; }
+    /* min-width:0 sinon la colonne de contenu s'élargit à la piste des grades → scroll horizontal. */
+    .acct-layout > * { min-width: 0; }
+    .acct-nav { display: flex; flex-direction: column; gap: 6px; position: sticky; top: 20px; }
+    .acct-nav a {
+      display: flex; align-items: center; gap: 12px; padding: 12px 15px; border-radius: 6px;
+      border: 1px solid transparent; color: var(--muted); text-decoration: none;
+      font-family: var(--font-head); font-size: 14.5px; letter-spacing: .04em; text-transform: uppercase;
+      transition: background .18s, color .18s, border-color .18s;
+    }
+    .acct-nav a:hover { background: rgba(232,187,69,.07); color: var(--text); }
+    .acct-nav a.active { background: rgba(232,187,69,.12); border-color: #3d3016; color: var(--gold); }
+    .acct-nav a svg { flex: none; }
+    .acct-nav .sep { height: 1px; background: var(--border); margin: 8px 0; }
+    .acct-nav a.danger { color: #e05a4e; }
+    .acct-nav a.gold { color: var(--gold); }
+
+    .acct-panel { display: none; }
+    .acct-panel.active { display: block; animation: revealUp .35s ease both; }
+    .panel-box { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 24px 26px; margin-bottom: 16px; }
+    .panel-box h2 { font-family: var(--font-head); font-size: 16px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); margin: 0 0 16px; }
+    .panel-empty { text-align: center; padding: 34px 20px; color: var(--muted-3); font-size: 14px; }
+    .panel-empty b { display: block; font-family: var(--font-head); font-size: 17px; color: var(--text); text-transform: uppercase; margin-bottom: 8px; }
+
+    /* Stats + progression */
+    .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+    .stat-box { text-align: center; padding: 20px 12px; background: #0a1226; border: 1px solid var(--border); border-radius: 7px; }
+    .stat-box b { display: block; font-family: var(--font-head); font-size: 27px; color: var(--gold); line-height: 1; }
+    .stat-box span { display: block; margin-top: 7px; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted-4); }
+    .grade-track { display: flex; gap: 7px; overflow-x: auto; padding: 4px 2px 10px; }
+    .grade-step {
+      flex: none; width: 96px; text-align: center; padding: 13px 8px; border-radius: 6px;
+      background: #0a1226; border: 1px solid var(--border); opacity: .45;
+    }
+    .grade-step.reached { opacity: 1; border-color: #3d3016; background: rgba(232,187,69,.07); }
+    .grade-step.current { opacity: 1; border-color: var(--gold); box-shadow: 0 0 18px rgba(232,187,69,.22); }
+    .grade-step .g { font-size: 21px; line-height: 1; }
+    .grade-step .n { font-family: var(--font-head); font-size: 12px; text-transform: uppercase; color: var(--text); margin-top: 5px; }
+    .grade-step .a { font-family: var(--font-head); font-size: 13px; color: var(--gold); }
+    .progress-line { margin-top: 14px; }
+    .progress-line .lbl { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--muted-3); margin-bottom: 7px; }
+    .progress-bar { height: 10px; border-radius: 6px; background: #0a1226; border: 1px solid var(--border); overflow: hidden; }
+    .progress-bar div { height: 100%; width: 0; background: linear-gradient(90deg, var(--gold-3), var(--gold-2)); transition: width 1s cubic-bezier(.2,.7,.25,1); }
+
+    /* Commandes */
+    .order { background: #0a1226; border: 1px solid var(--border); border-radius: 7px; padding: 15px 18px; margin-bottom: 11px; }
+    .order-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding-bottom: 10px; border-bottom: 1px solid #16233f; }
+    .order-date { font-family: var(--font-head); font-size: 14.5px; color: var(--text); letter-spacing: .03em; }
+    .order-id { font-size: 11px; color: var(--muted-4); }
+    .badge-ok { font-family: var(--font-head); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 4px 10px; border-radius: 3px; background: rgba(57,213,107,.12); border: 1px solid #1f4a2e; color: var(--green); }
+    .badge-ko { font-family: var(--font-head); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 4px 10px; border-radius: 3px; background: rgba(207,58,44,.1); border: 1px solid #3a1a1d; color: #f2988d; }
+    .order-line { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; font-size: 13.5px; color: var(--muted); border-bottom: 1px solid #131f38; }
+    .order-line:last-of-type { border-bottom: none; }
+    .order-total { display: flex; justify-content: space-between; margin-top: 10px; padding-top: 10px; border-top: 1px solid #16233f; font-family: var(--font-head); }
+    .order-total span { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted-3); }
+    .order-total b { font-size: 18px; color: var(--gold); }
+
+    /* Personnalisation */
+    .color-row { display: flex; align-items: center; gap: 14px; padding: 13px 0; border-bottom: 1px solid #16233f; }
+    .color-row:last-child { border-bottom: none; }
+    .color-dot { width: 30px; height: 30px; border-radius: 6px; border: 1px solid var(--border-2); flex: none; }
+    .color-name { flex: 1; font-size: 14.5px; color: var(--text); }
+    .color-val { font-family: var(--font-head); font-size: 13px; letter-spacing: .06em; color: var(--muted-2); }
+    .color-val.off { color: var(--muted-4); }
+    .cosm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 11px; }
+    .cosm-card { padding: 14px 16px; background: #0a1226; border: 1px solid var(--border); border-radius: 7px; }
+    .cosm-card .t { font-family: var(--font-head); font-size: 15px; color: var(--text); }
+    .cosm-card .s { font-size: 12px; color: var(--muted-3); margin-top: 4px; }
+
+    /* File prioritaire */
+    .prio-state { display: flex; gap: 18px; align-items: flex-start; padding: 22px; border-radius: 8px; background: #0a1226; border: 1px solid #3a1a1d; }
+    .prio-state.on { border-color: #1f4a2e; }
+    .prio-ico { font-size: 34px; line-height: 1; }
+    .prio-state b { font-family: var(--font-head); font-size: 19px; text-transform: uppercase; letter-spacing: .04em; }
+    .prio-state p { margin: 7px 0 0; font-size: 14px; line-height: 1.6; color: var(--muted-3); }
+
+    .hint { font-size: 12.5px; line-height: 1.6; color: var(--muted-4); margin: 16px 0 0; }
+    .loading { text-align: center; padding: 40px; color: var(--muted-3); font-size: 14px; }
+
+    @media (max-width: 860px) {
+      .acct-layout { grid-template-columns: 1fr; }
+      .acct-nav { position: static; flex-direction: row; overflow-x: auto; padding-bottom: 6px; }
+      .acct-nav a { white-space: nowrap; font-size: 13px; padding: 10px 13px; }
+      .acct-nav a span { display: none; }
+      .acct-nav a span.lbl { display: inline; }
+      .acct-nav .sep { display: none; }
+      .acct-hero-grade { border-left: none; padding-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="fxAsh" aria-hidden="true"></canvas>
+  <div class="fx-vignette" aria-hidden="true"></div>
+  <div class="fx-scanlines" aria-hidden="true"></div>
+
+  <div class="acct-page">
+    <a href="/" class="back-link">← Retour à la boutique</a>
+    <div id="acctRoot"><p class="loading">Chargement de ton compte…</p></div>
+  </div>
+
+  <script src="/config.js?v=4"></script>
+  <script src="/fx.js?v=4"></script>
+  <script>
+  (() => {
+    const CFG = window.CONFIG;
+    const B = (CFG.backendUrl || "").trim();
+    const $ = (id) => document.getElementById(id);
+    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const get = (k) => { try { return localStorage.getItem(k) || ""; } catch { return ""; } };
+
+    const ICONS = {
+      profil: "M12 7.2a3 3 0 1 0 0 6 3 3 0 0 0 0-6 M5 20c.4-4 3.2-5.8 7-5.8s6.6 1.8 7 5.8",
+      achats: "M3 4h2l2.4 12.5a1.5 1.5 0 0 0 1.5 1.2h8.7a1.5 1.5 0 0 0 1.5-1.2L21 8H6 M9.5 20.5a1.3 1.3 0 1 0 0-2.6 1.3 1.3 0 0 0 0 2.6 M18 20.5a1.3 1.3 0 1 0 0-2.6 1.3 1.3 0 0 0 0 2.6",
+      perso: "M12 20h9 M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z",
+      abonnements: "M21 16V8a2 2 0 0 0-1-1.73L13 2.27a2 2 0 0 0-2 0L4 6.27A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z",
+      fileprio: "M7 21V9 M3 13l4-4 4 4 M15 21V4 M11 9l4-5 4 5",
+      steam: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z M12 6a3 3 0 1 0 0 6 3 3 0 0 0 0-6z",
+      admin: "M12 2 4 5v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V5l-8-3Z M9 12l2 2 4-4",
+      out: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4 M16 17l5-5-5-5 M21 12H9",
+    };
+    const ico = (k) => `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="${ICONS[k]}"></path></svg>`;
+
+    const SECTIONS = [
+      { key: "profil", label: "Mon profil" },
+      { key: "achats", label: "Mes achats" },
+      { key: "perso", label: "Personnalisation" },
+      { key: "abonnements", label: "Abonnements" },
+      { key: "fileprio", label: "File prioritaire" },
+    ];
+
+    let data = null, isFounder = false;
+    const steamId = new URLSearchParams(location.search).get("steamId") || get("lexil_steamid");
+
+    /* ── Non connecté ── */
+    function renderLoggedOut() {
+      $("acctRoot").innerHTML = `
+        <div class="panel-box" style="max-width:520px;margin:40px auto;text-align:center">
+          <h2 style="justify-content:center">Connexion requise</h2>
+          <p style="font-size:14.5px;line-height:1.6;color:var(--muted);margin:0 0 20px">
+            Connecte-toi avec Steam pour accéder à ton profil, tes achats, tes cosmétiques et ta file prioritaire.
+          </p>
+          <a class="btn btn-gold" href="${B}/auth/steam">Connexion Steam</a>
+        </div>`;
+    }
+
+    /* ── Sections ── */
+    function panelProfil() {
+      const A = (data.account) || {};
+      const s = A.stats || {};
+      const g = s.grade || { glyph: "—", name: "Aucun" };
+      const n = s.nextGrade;
+      const ranks = CFG.ranks || [];
+      const curIdx = ranks.findIndex((r) => r.name.toLowerCase() === String(g.name || "").toLowerCase());
+      const spentNum = s.totalSpentNum || 0;
+      return `
+        <div class="panel-box">
+          <h2>Vue d'ensemble</h2>
+          <div class="stat-row">
+            <div class="stat-box"><b>${esc(s.totalSpent || "0€")}</b><span>Total dépensé</span></div>
+            <div class="stat-box"><b>${s.orderCount || 0}</b><span>Commande${(s.orderCount || 0) > 1 ? "s" : ""}</span></div>
+            <div class="stat-box"><b>${(A.subscriptions || []).filter((x) => x.active).length}</b><span>Abonnements actifs</span></div>
+            <div class="stat-box"><b>${g.glyph || "—"}</b><span>Grade ${esc(g.name || "aucun")}</span></div>
+          </div>
+        </div>
+        <div class="panel-box">
+          <h2>Progression des grades</h2>
+          <div class="grade-track">
+            ${ranks.map((r, i) => {
+              const amt = parseFloat(String(r.amt).replace(/[^\d.]/g, "")) || 0;
+              const reached = spentNum >= amt;
+              return `<div class="grade-step ${reached ? "reached" : ""} ${i === curIdx ? "current" : ""}">
+                <div class="g">${r.glyph}</div><div class="n">${esc(r.name)}</div><div class="a">${esc(r.amt)}</div></div>`;
+            }).join("")}
+          </div>
+          <div class="progress-line">
+            <div class="lbl">
+              <span>${n ? "Prochain grade : " + esc(n.glyph || "") + " " + esc(n.name) : "Grade maximum atteint 🌟"}</span>
+              <span>${n && n.min ? esc(String(n.min)) : ""}</span>
+            </div>
+            <div class="progress-bar"><div id="progFill"></div></div>
+          </div>
+          <p class="hint">Les grades sont cumulatifs et attribués automatiquement selon le total dépensé. Le rôle Discord correspondant t'est donné à chaque achat si ton compte Discord est lié.</p>
+        </div>`;
+    }
+
+    function panelAchats() {
+      const orders = (data.account && data.account.orders) || [];
+      if (!orders.length) return `<div class="panel-box"><div class="panel-empty"><b>Aucun achat</b>Tes commandes apparaîtront ici dès ton premier achat.<br/><br/><a class="btn btn-gold" href="/#boutique">Voir la boutique</a></div></div>`;
+      return `<div class="panel-box"><h2>${orders.length} commande${orders.length > 1 ? "s" : ""}</h2>` +
+        orders.map((o) => `
+          <div class="order">
+            <div class="order-head">
+              <div><div class="order-date">${esc(o.date || "")}</div><div class="order-id">${esc(String(o.orderId || "").slice(0, 28))}</div></div>
+              <span class="badge-ok">${esc(o.status || "Livré")} ✓</span>
+            </div>
+            ${(o.items || []).map((it) => `<div class="order-line"><span>${esc(it.label)}</span><span>${esc(it.prix || "")}</span></div>`).join("")}
+            <div class="order-total"><span>Total</span><b>${esc(o.total || "")}</b></div>
+          </div>`).join("") + `</div>`;
+    }
+
+    function panelPerso() {
+      const c = data.colors || {};
+      const role = data.customRole;
+      const cosm = (data.account && data.account.cosmetics) || [];
+      const row = (label, v) => `
+        <div class="color-row">
+          <span class="color-dot" style="background:${v ? esc(v) : "#1a2540"}"></span>
+          <span class="color-name">${label}</span>
+          <span class="color-val ${v ? "" : "off"}">${v ? esc(v) : "Non activée"}</span>
+        </div>`;
+      return `
+        <div class="panel-box">
+          <h2>Mes couleurs</h2>
+          ${row("Couleur de nom (killfeed)", c.killfeed)}
+          ${row("Couleur de chat", c.chat)}
+          ${row("Couleur de clan tag", c.clan)}
+          <div class="color-row">
+            <span class="color-dot" style="background:${role && role.color ? esc(role.color) : "#1a2540"}"></span>
+            <span class="color-name">Rôle Discord personnalisé</span>
+            <span class="color-val ${role ? "" : "off"}">${role ? esc(role.name) : "Non activé"}</span>
+          </div>
+          <p class="hint">Les couleurs sont appliquées par le staff après achat. Pour changer une teinte, ouvre un ticket sur le Discord avec le code hexadécimal souhaité.</p>
+        </div>
+        <div class="panel-box">
+          <h2>Mes cosmétiques</h2>
+          ${cosm.length
+            ? `<div class="cosm-grid">${cosm.map((x) => `
+                <div class="cosm-card">
+                  <div class="t">${esc(x.name)}</div>
+                  <div class="s">${esc(x.type || "")}${x.expiry ? " · expire le " + esc(x.expiry) : ""}</div>
+                  <div style="margin-top:9px"><span class="${x.status === "Actif" ? "badge-ok" : "badge-ko"}">${esc(x.status || "")}</span></div>
+                </div>`).join("")}</div>`
+            : `<div class="panel-empty"><b>Aucun cosmétique</b>Tes tenues, retextures et reskins achetés s'afficheront ici.</div>`}
+        </div>`;
+    }
+
+    function panelAbonnements() {
+      const subs = (data.account && data.account.subscriptions) || [];
+      if (!subs.length) return `<div class="panel-box"><div class="panel-empty"><b>Aucun abonnement</b>Les produits « 30 jours » (Drip Menu, couleurs, file prioritaire) apparaîtront ici avec leur date d'expiration.<br/><br/><a class="btn btn-gold" href="/#boutique">Voir la boutique</a></div></div>`;
+      return `<div class="panel-box"><h2>${subs.length} abonnement${subs.length > 1 ? "s" : ""}</h2>` +
+        subs.map((s) => `
+          <div class="order">
+            <div class="order-head">
+              <div><div class="order-date">${esc(s.name)}</div><div class="order-id">${esc(s.cat || "")}</div></div>
+              <span class="${s.active ? "badge-ok" : "badge-ko"}">${esc(s.status || (s.active ? "Actif" : "Expiré"))}</span>
+            </div>
+            ${s.expiry ? `<div class="order-line"><span>Expiration</span><span>${esc(s.expiry)}</span></div>` : ""}
+          </div>`).join("") + `</div>`;
+    }
+
+    function panelFilePrio() {
+      const p = (data.account && data.account.priority) || { active: false, daysLeft: 0 };
+      return `
+        <div class="panel-box">
+          <h2>État de ta file prioritaire</h2>
+          <div class="prio-state ${p.active ? "on" : ""}">
+            <div class="prio-ico">${p.active ? "🟢" : "🔴"}</div>
+            <div>
+              <b>File prioritaire ${p.active ? "active" : "inactive"}</b>
+              <p>${p.active
+                ? `Tu passes devant la file d'attente pendant encore <b style="color:var(--gold)">${p.daysLeft} jour(s)</b>, même serveur plein.`
+                : `Tu rejoins le serveur dans la file normale. Avec la file prioritaire, tu passes devant tout le monde pendant 30 jours, même aux heures de pointe.`}</p>
+              ${!p.active ? `<p style="margin-top:14px"><a class="btn btn-gold" href="/#boutique">Obtenir la file prioritaire</a></p>` : ""}
+            </div>
+          </div>
+        </div>`;
+    }
+
+    const PANELS = { profil: panelProfil, achats: panelAchats, perso: panelPerso, abonnements: panelAbonnements, fileprio: panelFilePrio };
+
+    /* ── Rendu complet ── */
+    function render() {
+      const steam = data.steam || {};
+      const discord = data.discord;
+      const g = ((data.account || {}).stats || {}).grade || { glyph: "—", name: "Aucun" };
+
+      $("acctRoot").innerHTML = `
+        <div class="acct-hero">
+          ${steam.avatar ? `<img class="acct-hero-avatar" src="${esc(steam.avatar)}" alt=""/>` : `<div class="acct-hero-avatar"></div>`}
+          <div class="acct-hero-id">
+            <h1>${esc(steam.name || data.steamId || "Survivant")}</h1>
+            <div class="link-chips">
+              <span class="link-chip ok">✓ Steam · ${esc(String(data.steamId || "").slice(-8))}</span>
+              ${discord && discord.discordName
+                ? `<span class="link-chip ok">✓ Discord · ${esc(discord.discordName)}</span>`
+                : `<a class="link-chip todo" href="${B}/auth/discord?steamId=${encodeURIComponent(data.steamId)}">Lier mon Discord</a>`}
+              ${steam.profileUrl ? `<a class="link-chip" href="${esc(steam.profileUrl)}" target="_blank">Profil Steam ↗</a>` : ""}
+            </div>
+          </div>
+          <div class="acct-hero-grade">
+            <div class="g">${g.glyph || "—"}</div>
+            <div class="n">${esc(g.name || "Aucun grade")}</div>
+          </div>
+        </div>
+
+        <div class="acct-layout">
+          <nav class="acct-nav" id="acctNav">
+            ${SECTIONS.map((s) => `<a href="#${s.key}" data-sec="${s.key}">${ico(s.key)}<span class="lbl">${s.label}</span></a>`).join("")}
+            <div class="sep"></div>
+            ${steam.profileUrl ? `<a href="${esc(steam.profileUrl)}" target="_blank">${ico("steam")}<span class="lbl">Profil Steam</span></a>` : ""}
+            ${isFounder ? `<a class="gold" href="admin.html">${ico("admin")}<span class="lbl">Dashboard admin</span></a>` : ""}
+            <a class="danger" href="#" id="signOut">${ico("out")}<span class="lbl">Se déconnecter</span></a>
+          </nav>
+          <div>
+            ${SECTIONS.map((s) => `<section class="acct-panel" id="panel-${s.key}">${PANELS[s.key]()}</section>`).join("")}
+          </div>
+        </div>`;
+
+      $("acctNav").querySelectorAll("[data-sec]").forEach((a) =>
+        a.addEventListener("click", () => setTimeout(() => show(a.dataset.sec), 0))
+      );
+      $("signOut").addEventListener("click", (e) => {
+        e.preventDefault();
+        const done = () => { try { localStorage.removeItem("lexil_user"); localStorage.removeItem("lexil_steamid"); } catch {} location.href = "/"; };
+        if (B) fetch(B + "/api/logout", { method: "POST", credentials: "include" }).catch(() => {}).finally(done); else done();
+      });
+      show((location.hash || "#profil").slice(1));
+    }
+
+    function show(key) {
+      if (!PANELS[key]) key = "profil";
+      document.querySelectorAll(".acct-panel").forEach((p) => p.classList.toggle("active", p.id === "panel-" + key));
+      document.querySelectorAll("#acctNav [data-sec]").forEach((a) => a.classList.toggle("active", a.dataset.sec === key));
+      const fill = $("progFill");
+      if (fill) {
+        const prog = ((data.account || {}).stats || {}).progress || 0;
+        requestAnimationFrame(() => (fill.style.width = Math.min(100, prog) + "%"));
+      }
+      document.title = "L'EXIL — " + (SECTIONS.find((s) => s.key === key) || {}).label;
+    }
+    window.addEventListener("hashchange", () => show((location.hash || "#profil").slice(1)));
+
+    /* ── Chargement ── */
+    if (!steamId || !/^7656\d{13}$/.test(steamId) || !B) { renderLoggedOut(); return; }
+    try { localStorage.setItem("lexil_steamid", steamId); } catch {}
+    if (location.search.includes("steamId=")) history.replaceState({}, "", location.pathname + location.hash);
+
+    fetch(B + "/api/account?steamId=" + encodeURIComponent(steamId))
+      .then((r) => r.json())
+      .then((d) => {
+        data = d || {};
+        data.steamId = data.steamId || steamId;
+        render();
+        return fetch(B + "/api/is-founder?steamId=" + encodeURIComponent(steamId)).then((r) => r.json());
+      })
+      .then((f) => { if (f && f.founder) { isFounder = true; render(); } })
+      .catch(() => {
+        $("acctRoot").innerHTML = `<div class="panel-box"><div class="panel-empty"><b>Compte indisponible</b>Impossible de contacter le serveur. Réessaie dans un instant.</div></div>`;
+      });
+  })();
+  </script>
+</body>
+</html>

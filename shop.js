@@ -276,18 +276,17 @@
           ? `<div class="user-menu-linked"><span>${esc(user.discordName)}</span><b class="ok">✓ Lié</b></div>`
           : `<a class="user-menu-item" href="${B}/auth/discord?steamId=${encodeURIComponent(user.steamId)}">Lier Discord</a>`}
         <div class="user-menu-sep"></div>
-        <button class="user-menu-item" data-page="profil">Mon profil</button>
-        <button class="user-menu-item" data-page="achats">Mes achats</button>
-        <button class="user-menu-item" data-page="perso">Personnalisation</button>
-        <button class="user-menu-item" data-page="abonnements">Abonnements</button>
-        <button class="user-menu-item" data-page="fileprio">File prioritaire</button>
+        <a class="user-menu-item" href="compte.html#profil">Mon profil</a>
+        <a class="user-menu-item" href="compte.html#achats">Mes achats</a>
+        <a class="user-menu-item" href="compte.html#perso">Personnalisation</a>
+        <a class="user-menu-item" href="compte.html#abonnements">Abonnements</a>
+        <a class="user-menu-item" href="compte.html#fileprio">File prioritaire</a>
         <a class="user-menu-item" href="https://steamcommunity.com/profiles/${encodeURIComponent(user.steamId)}" target="_blank">Profil Steam</a>
         ${isFounder ? `<div class="user-menu-sep"></div><a class="user-menu-item gold" href="admin.html">Dashboard admin</a>` : ""}
         <div class="user-menu-sep"></div>
         <button class="user-menu-item danger" id="signOutBtn">Se déconnecter</button>
       </div>`;
     $("userChip").addEventListener("click", (e) => { e.stopPropagation(); $("userMenu").classList.toggle("open"); });
-    area.querySelectorAll("[data-page]").forEach((b) => b.addEventListener("click", () => openPage(b.dataset.page)));
     $("signOutBtn").addEventListener("click", signOut);
   }
   document.addEventListener("click", (e) => {
@@ -325,85 +324,6 @@
       const f = await fetch(B + "/api/is-founder?steamId=" + encodeURIComponent(sid)).then((r) => r.json());
       if (f && f.founder) { isFounder = true; renderAuth(); }
     } catch {}
-  }
-
-  /* ══════════ PAGES COMPTE (modale) ══════════ */
-  const PAGE_TITLES = { profil: "Mon profil", achats: "Mes achats", perso: "Personnalisation", abonnements: "Abonnements", fileprio: "File prioritaire" };
-
-  function pageContent(page) {
-    const A = (account && account.account) || {};
-    if (page === "profil") {
-      const s = A.stats || { totalSpent: "0€", orderCount: 0, grade: { glyph: "—", name: "Aucun" }, progress: 0 };
-      const g = s.grade || { glyph: "—", name: "Aucun" };
-      const n = s.nextGrade;
-      return `
-        <div class="acct-profil">
-          ${user.avatar ? `<img class="acct-avatar" src="${esc(user.avatar)}" alt=""/>` : ""}
-          <div class="acct-name">${esc(user.name)}</div>
-          <div class="acct-sub">${user.discordName ? "Discord : " + esc(user.discordName) : "Discord non lié"}</div>
-        </div>
-        <div class="acct-stats">
-          <div><b>${esc(s.totalSpent)}</b><span>Total dépensé</span></div>
-          <div><b>${s.orderCount || 0}</b><span>Commandes</span></div>
-          <div><b>${g.glyph}</b><span>Grade ${esc(g.name)}</span></div>
-        </div>
-        ${n ? `
-        <div class="acct-progress">
-          <div class="acct-progress-label">Prochain grade : ${n.glyph || ""} ${esc(n.name)} (${esc(String(n.min || ""))})</div>
-          <div class="acct-bar"><div style="width:${Math.min(100, s.progress || 0)}%"></div></div>
-        </div>` : `<div class="acct-progress-label">Grade maximum atteint 🌟</div>`}`;
-    }
-    if (page === "achats") {
-      const orders = A.orders || [];
-      if (!orders.length) return `<p class="acct-empty">Aucun achat pour le moment. Ta première commande apparaîtra ici.</p>`;
-      return orders.map((o) => `
-        <div class="acct-order">
-          <div class="acct-order-head"><span>${esc(o.date || "")}</span><b class="ok">${esc(o.status || "Livré")} ✓</b></div>
-          ${(o.items || []).map((it) => `<div class="acct-order-line">${esc(it.label)}</div>`).join("")}
-          <div class="acct-order-total">Total : ${esc(o.total || "")}</div>
-        </div>`).join("");
-    }
-    if (page === "perso") {
-      const c = (account && account.colors) || {};
-      const role = account && account.customRole;
-      const sw = (label, v) => `
-        <div class="acct-color"><span class="swatch" style="background:${esc(v || "#2a3a5c")}"></span>
-        <span>${label}</span><b>${v ? esc(v) : "Non activée"}</b></div>`;
-      return `
-        ${sw("Couleur killfeed", c.killfeed)}${sw("Couleur chat", c.chat)}${sw("Couleur clan tag", c.clan)}
-        <div class="acct-color"><span class="swatch" style="background:${esc((role && role.color) || "#2a3a5c")}"></span>
-        <span>Rôle Discord</span><b>${role ? esc(role.name) : "Non activé"}</b></div>
-        <p class="acct-hint">Les couleurs sont activées par le staff après achat — ouvre un ticket Discord pour choisir tes teintes.</p>`;
-    }
-    if (page === "abonnements") {
-      const subs = A.subscriptions || [];
-      if (!subs.length) return `<p class="acct-empty">Aucun abonnement actif. Les produits « 30 jours » apparaîtront ici.</p>`;
-      return subs.map((s) => `
-        <div class="acct-order">
-          <div class="acct-order-head"><span>${esc(s.name)}</span><b class="${s.active ? "ok" : "ko"}">${esc(s.status || (s.active ? "Actif" : "Expiré"))}</b></div>
-          <div class="acct-order-line">${esc(s.cat || "")}${s.expiry ? " · expire : " + esc(s.expiry) : ""}</div>
-        </div>`).join("");
-    }
-    if (page === "fileprio") {
-      const p = A.priority || { active: false, daysLeft: 0 };
-      return `
-        <div class="acct-prio ${p.active ? "on" : ""}">
-          <div class="acct-prio-icon">${p.active ? "🟢" : "🔴"}</div>
-          <div>
-            <b>File prioritaire ${p.active ? "active" : "inactive"}</b>
-            <p>${p.active ? `Tu passes devant la file encore ${p.daysLeft} jour(s).` : "Achète la file prioritaire dans la boutique pour passer devant tout le monde pendant 30 jours."}</p>
-          </div>
-        </div>`;
-    }
-    return "";
-  }
-
-  function openPage(page) {
-    $("userMenu") && $("userMenu").classList.remove("open");
-    $("acctTitle").textContent = PAGE_TITLES[page] || "";
-    $("acctBody").innerHTML = pageContent(page);
-    $("acctModal").classList.add("open");
-    if (steamId) loadAccount(steamId).then(() => { if ($("acctModal").classList.contains("open")) $("acctBody").innerHTML = pageContent(page); });
   }
 
   /* ══════════ RETOUR PAIEMENT (?paye=ok|annule) + LOGIN (?steamId / ?login=success) ══════════ */
@@ -475,11 +395,10 @@
         if (p) { addToCart(p); closeProduct(); }
       });
     });
-    // Échap ferme la fiche, la modale compte ou le panier (jamais de blocage).
+    // Échap ferme la fiche produit ou le panier (jamais de blocage).
     document.addEventListener("keydown", (e) => {
       if (e.key !== "Escape") return;
       closeProduct();
-      $("acctModal").classList.remove("open");
       openCart(false);
     });
     safe("panier", () => {
@@ -494,10 +413,6 @@
     safe("auth", renderAuth);
     safe("retours", handleReturns);
     if (steamId) safe("compte", () => loadAccount(steamId));
-    safe("modale", () => {
-      $("acctClose").addEventListener("click", () => $("acctModal").classList.remove("open"));
-      $("acctModal").addEventListener("click", (e) => { if (e.target === $("acctModal")) $("acctModal").classList.remove("open"); });
-    });
 
     // Bannière cookies
     safe("cookies", () => {
