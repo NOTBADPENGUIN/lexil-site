@@ -672,13 +672,24 @@ body.fx-cursor-on, body.fx-cursor-on a, body.fx-cursor-on button { cursor: none;
 .cart-checkout { width: 100%; justify-content: center; padding: 14px; font-size: 16px; }
 .cart-msg { min-height: 18px; margin: 10px 0 0; font-size: 12.5px; color: #e05a4e; }
 
-/* ── Icônes produits (badge hexagonal argenté) ── */
-.card-icon {
-  color: #dfe5ee;
-  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, .55)) drop-shadow(0 0 10px rgba(223, 229, 238, .12));
-  transition: color .25s, transform .25s;
+/* ── Icônes produits officielles (badges hexagonaux, PNG transparents) ── */
+/* Sélecteur qualifié : `.card-media img` (plus spécifique) forcerait sinon
+   width/height 100% + object-fit:cover et rognerait le badge. */
+.card-media img.card-icon, .prod-media img.card-icon {
+  height: 116px; width: auto; display: block; object-fit: contain;
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, .55));
+  transition: transform .25s, filter .25s;
 }
-.card:hover .card-icon { color: var(--gold-2); transform: scale(1.05); }
+/* Teinte dorée au survol (les PNG sont argentés → sepia + saturation). */
+.card:hover .card-icon {
+  transform: scale(1.06);
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, .6)) sepia(.55) saturate(2.6) hue-rotate(354deg) brightness(1.04);
+}
+.prod-media img.card-icon { height: 178px; }
+
+/* Pictogramme dans les boutons de filtre */
+.filter-ico { height: 17px; width: auto; margin-right: 8px; vertical-align: -3px; opacity: .85; }
+.filter-btn.active .filter-ico { filter: brightness(0) saturate(100%); opacity: .8; }
 
 /* ── Variantes de durée + chip durée sur les cartes ── */
 .variant-row { display: flex; gap: 7px; margin-top: 11px; }

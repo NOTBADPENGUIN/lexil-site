@@ -42,34 +42,20 @@
   let activeCategory = "tous";
 
   /* ══════════ CATALOGUE ══════════ */
-  // Icônes monoline par produit (badge hexagonal argenté, style lexil.net).
-  const ICON = {
-    prio: "M7 21V9 M3 13l4-4 4 4 M15 21V4 M11 9l4-5 4 5",
-    item: "M3.5 12.5 12 4h6.5v6.5L10 19zM15.5 7.5h.01",
-    "item-adv": "M3.5 12.5 12 4h5v5L9.5 16.5zM14.5 6.5h.01 M18 13l1 2.2 2.2 1-2.2 1L18 20.4l-1-2.2-2.2-1 2.2-1z",
-    "tenue-s": "M8.5 4 4 7l2 3.2 2.2-1.2V20h7.6V9l2.2 1.2 2-3.2L17.5 4 15 6.3h-4z",
-    "tenue-s-plus": "M8.5 4 4 7l2 3.2 2.2-1.2V20h6V9l2.2 1.2 2-3.2L17.5 4 15 6.3h-4z M17.5 12.5l3.5 1.2v3.3c0 2.3-1.7 3.4-3.5 4-1.8-.6-3.5-1.7-3.5-4v-3.3z",
-    "tenue-a": "M8.5 4 4 7l2 3.2 2.2-1.2V20h7.6V9l2.2 1.2 2-3.2L17.5 4 15 6.3h-4z M12 11l.9 2 2 .9-2 .9L12 17l-.9-2-2-.9 2-.9z",
-    "tenue-a-plus": "M8 4 4.5 7l1.6 3 1.9-1V19h5.5V9l1.9 1 1.6-3L15.5 4 13.5 6h-3.5z M16.5 11.5l3.5 1.2v3.3c0 2.3-1.7 3.4-3.5 4-1.8-.6-3.5-1.7-3.5-4v-3.3z",
-    drip: "M12 4a2 2 0 0 1 1.2 3.6L12 8.5V10 M4 17l8-5 8 5-1 3.5H5z",
-    "gun-b": "M3 10h11l2 2.2h5v3h-3.2l-1.2-1.2H13V18 M6 12.2v3 M14 10V7.5",
-    "gun-a": "M3 11h9l1.7 2H18v2.6h-2.8l-1-1H12V17 M6 13v2.5 M19 5l.9 2 2 .9-2 .9L19 12l-.9-2-2-.9 2-.9z",
-    "heli-b": "M3 6h18 M12 6v3.5 M6 12.5h9.5l2 3.2H8z M11 15.7v3 M8 18.7h7 M16 9.5l4-2.2",
-    "heli-a": "M3 6h13 M10 6v3.2 M5 12h8l1.7 2.8H6.6z M9.6 14.8v2.8 M7 17.6h6 M19 4.5l.9 2 2 .9-2 .9L19 11.2l-.9-2-2-.9 2-.9z",
-    "col-kf": "M12 3v3.2 M12 17.8V21 M3 12h3.2 M17.8 12H21 M12 8.2a3.8 3.8 0 1 0 0 7.6 3.8 3.8 0 0 0 0-7.6 M12 11.7v.01",
-    "col-chat": "M4 5.5h16v9.5H9.5L5.5 19v-4H4z M8 9.5h8 M8 12.3h5",
-    "col-clan": "M6 3.5v17 M6 4.5h11.5l-2.2 3.4 2.2 3.4H6",
-    role: "M9 9.2c-1.5 0-2.6 1.3-2.6 3s1.1 3 2.6 3 M15 9.2c1.5 0 2.6 1.3 2.6 3s-1.1 3-2.6 3 M7.2 17.3c1.4.9 3 1.4 4.8 1.4s3.4-.5 4.8-1.4 M8.8 6.2a10 10 0 0 1 6.4 0",
-  };
-  const iconBadge = (id) => `
-    <svg class="card-icon" viewBox="0 0 100 100" width="112" height="112" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <polygon points="50,6 88,27 88,73 50,94 12,73 12,27" stroke-width="2.4"></polygon>
-      <svg x="27" y="27" width="46" height="46" viewBox="0 0 24 24" stroke-width="1.7">
-        <path d="${ICON[id] || ICON.item}"></path>
-      </svg>
-    </svg>`;
+  // Icônes officielles L'EXIL (badges hexagonaux, /img/icons/<fichier>.png).
+  // Pour les couleurs, l'icône suit la durée choisie (30 jours / Lifetime).
+  const iconFileFor = (p) => (p.variantes ? p.id + "-" + (selectedVariant[p.id] || CFG.durees[0].key) : p.id);
+  const iconBadge = (p) =>
+    `<img class="card-icon" src="/img/icons/${iconFileFor(p)}.png" alt="" loading="lazy" decoding="async" />`;
+
   const tierOf = (prix) => (prix >= 50 ? "legendary" : prix >= 30 ? "rare" : "common");
   const priceOf = (p) => (p.variantes ? CFG.durees.find((d) => d.key === (selectedVariant[p.id] || CFG.durees[0].key)).prix : p.prix);
+
+  // Pictogrammes du bandeau de catégories de la planche officielle.
+  const CAT_ICON = {
+    confort: "cat-confort", cosmetique: "cat-cosmetique", armes: "cat-armes",
+    vehicules: "cat-vehicules", couleurs: "cat-killfeed", discord: "cat-discord",
+  };
 
   function renderFilters() {
     const cats = ["tous", ...new Set(CFG.catalogue.map((p) => p.cat))];
@@ -77,7 +63,8 @@
       .map((c) => {
         const label = c === "tous" ? "Tous" : CFG.catLabels[c] || c;
         const count = c === "tous" ? CFG.catalogue.length : CFG.catalogue.filter((p) => p.cat === c).length;
-        return `<button class="filter-btn ${c === activeCategory ? "active" : ""}" data-cat="${c}">${label}<span>${count}</span></button>`;
+        const ico = CAT_ICON[c] ? `<img class="filter-ico" src="/img/icons/${CAT_ICON[c]}.png" alt="" loading="lazy" />` : "";
+        return `<button class="filter-btn ${c === activeCategory ? "active" : ""}" data-cat="${c}">${ico}${label}<span>${count}</span></button>`;
       })
       .join("");
     $("filters").querySelectorAll(".filter-btn").forEach((btn) =>
@@ -103,7 +90,7 @@
           <div class="card-media">
             ${p.badge ? `<span class="card-badge ${p.badge === "Populaire" ? "badge-gold" : "badge-green"}">${p.badge}</span>` : ""}
             <span class="card-cat">${CFG.catLabels[p.cat] || p.cat}</span>
-            ${iconBadge(p.id)}
+            ${iconBadge(p)}
             <span class="card-duree">${dureeChip}</span>
           </div>
           <div class="card-body">
@@ -146,7 +133,7 @@
       ? (selectedVariant[p.id] || CFG.durees[0].key) === "30j" ? "30 jours" : "À vie"
       : p.duree;
 
-    $("prodMedia").innerHTML = iconBadge(p.id).replace('width="112" height="112"', 'width="168" height="168"');
+    $("prodMedia").innerHTML = iconBadge(p);
     $("prodTags").innerHTML =
       `<span class="prod-tag cat">${esc(CFG.catLabels[p.cat] || p.cat)}</span>` +
       `<span class="prod-tag duree">${esc(duree)}</span>` +
