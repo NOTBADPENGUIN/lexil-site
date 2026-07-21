@@ -26,17 +26,19 @@ window.CONFIG = {
     { title: "Connecte-toi & survis", text: "Rejoins le serveur et prépare-toi : ici, tout le monde peut te tuer." },
   ],
 
-  // Grades donateur — mêmes paliers que lexil.net / les rôles Discord.
+  // Grades donateur. `key` = nom exact du grade côté backend (= clé de GRADE_ROLES
+  // et nom du rôle Discord attribué automatiquement). Ne pas le modifier sans
+  // renommer aussi les rôles Discord, sinon l'attribution auto ne matche plus.
   ranks: [
-    { glyph: "🥉", name: "Bronze", amt: "5 €" },
-    { glyph: "🥈", name: "Argent", amt: "15 €" },
-    { glyph: "🥇", name: "Or", amt: "30 €" },
-    { glyph: "💎", name: "Diamant", amt: "50 €" },
-    { glyph: "💠", name: "Saphir", amt: "100 €" },
-    { glyph: "🔥", name: "Élite", amt: "150 €" },
-    { glyph: "👑", name: "Royal", amt: "200 €" },
-    { glyph: "⭐", name: "Prestige", amt: "250 €" },
-    { glyph: "🌟", name: "Légende", amt: "300 €" },
+    { glyph: "🥉", name: "Bronze", key: "Bronze", amt: "5 €" },
+    { glyph: "🥈", name: "Argent", key: "Silver", amt: "15 €" },
+    { glyph: "🥇", name: "Or", key: "Gold", amt: "30 €" },
+    { glyph: "💠", name: "Platine", key: "Platinum", amt: "50 €" },
+    { glyph: "💎", name: "Diamant", key: "Diamond", amt: "100 €" },
+    { glyph: "🔥", name: "Maître", key: "Master", amt: "150 €" },
+    { glyph: "👑", name: "Élite", key: "Elite", amt: "200 €" },
+    { glyph: "⭐", name: "Légendaire", key: "Legendary", amt: "250 €" },
+    { glyph: "🌟", name: "Ultime", key: "Ultimate", amt: "300 €" },
   ],
 
   features: [

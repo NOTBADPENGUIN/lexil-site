@@ -221,7 +221,13 @@ $('creditBtn').onclick = async () => {
 $('giveBtn').onclick = async () => {
   const key=$('giveSel').value;
   const r=await api('/api/admin/give',{method:'POST',body:JSON.stringify({steamId:CURRENT,productKey:key})});
-  if(r.ok){ msg('giveMsg','Donné ✓',0); openUser(CURRENT); } else msg('giveMsg','Erreur',1);
+  if(r.ok){
+    // Le prix du produit est crédité au profil → on affiche le nouveau total et le grade.
+    let d={}; try{ d=await r.json(); }catch(e){}
+    const st=d.account&&d.account.stats;
+    msg('giveMsg', st ? ('Donné ✓ — total : '+st.totalSpent+' · grade '+st.grade.name) : 'Donné ✓', 0);
+    openUser(CURRENT);
+  } else msg('giveMsg','Erreur',1);
 };
 
 async function removeOrder(orderId){

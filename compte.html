@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>L'EXIL — Mon compte</title>
   <link rel="icon" href="/img/logo.png" />
-  <link rel="stylesheet" href="/style.css?v=5" />
+  <link rel="stylesheet" href="/style.css?v=6" />
   <style>
     .acct-page { max-width: 1180px; margin: 0 auto; padding: 30px 24px 70px; }
     .back-link { font-family: var(--font-head); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted-2); text-decoration: none; }
@@ -186,8 +186,8 @@
     <div id="acctRoot"><p class="loading">Chargement de ton compte…</p></div>
   </div>
 
-  <script src="/config.js?v=5"></script>
-  <script src="/fx.js?v=5"></script>
+  <script src="/config.js?v=6"></script>
+  <script src="/fx.js?v=6"></script>
   <script>
   (() => {
     const CFG = window.CONFIG;
@@ -195,6 +195,11 @@
     const $ = (id) => document.getElementById(id);
     const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
     const get = (k) => { try { return localStorage.getItem(k) || ""; } catch { return ""; } };
+    // Le backend nomme les grades en interne (Silver, Platinum…) ; on affiche le libellé FR.
+    const gradeFr = (n) => {
+      const r = (CFG.ranks || []).find((x) => (x.key || x.name).toLowerCase() === String(n || "").toLowerCase());
+      return r ? r.name : (n || "Aucun");
+    };
 
     const ICONS = {
       profil: "M12 7.2a3 3 0 1 0 0 6 3 3 0 0 0 0-6 M5 20c.4-4 3.2-5.8 7-5.8s6.6 1.8 7 5.8",
@@ -238,7 +243,8 @@
       const g = s.grade || { glyph: "—", name: "Aucun" };
       const n = s.nextGrade;
       const ranks = CFG.ranks || [];
-      const curIdx = ranks.findIndex((r) => r.name.toLowerCase() === String(g.name || "").toLowerCase());
+      // Le backend renvoie le nom interne du grade (= `key`) ; on retrouve la ligne FR.
+      const curIdx = ranks.findIndex((r) => (r.key || r.name).toLowerCase() === String(g.name || "").toLowerCase());
       const spentNum = s.totalSpentNum || 0;
       return `
         <div class="panel-box">
@@ -247,7 +253,7 @@
             <div class="stat-box"><b>${esc(s.totalSpent || "0€")}</b><span>Total dépensé</span></div>
             <div class="stat-box"><b>${s.orderCount || 0}</b><span>Commande${(s.orderCount || 0) > 1 ? "s" : ""}</span></div>
             <div class="stat-box"><b>${(A.subscriptions || []).filter((x) => x.active).length}</b><span>Abonnements actifs</span></div>
-            <div class="stat-box"><b>${g.glyph || "—"}</b><span>Grade ${esc(g.name || "aucun")}</span></div>
+            <div class="stat-box"><b>${g.glyph || "—"}</b><span>Grade ${esc(gradeFr(g.name))}</span></div>
           </div>
         </div>
         <div class="panel-box">
@@ -262,7 +268,7 @@
           </div>
           <div class="progress-line">
             <div class="lbl">
-              <span>${n ? "Prochain grade : " + esc(n.glyph || "") + " " + esc(n.name) : "Grade maximum atteint 🌟"}</span>
+              <span>${n ? "Prochain grade : " + esc(n.glyph || "") + " " + esc(gradeFr(n.name)) : "Grade maximum atteint 🌟"}</span>
               <span>${n && n.min ? esc(String(n.min)) : ""}</span>
             </div>
             <div class="progress-bar"><div id="progFill"></div></div>
@@ -432,7 +438,7 @@
           </div>
           <div class="acct-hero-grade">
             <div class="g">${g.glyph || "—"}</div>
-            <div class="n">${esc(g.name || "Aucun grade")}</div>
+            <div class="n">${esc(g.name ? gradeFr(g.name) : "Aucun grade")}</div>
           </div>
         </div>
 
