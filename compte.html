@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>L'EXIL — Mon compte</title>
   <link rel="icon" href="/img/logo.png" />
-  <link rel="stylesheet" href="/style.css?v=4" />
+  <link rel="stylesheet" href="/style.css?v=5" />
   <style>
     .acct-page { max-width: 1180px; margin: 0 auto; padding: 30px 24px 70px; }
     .back-link { font-family: var(--font-head); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted-2); text-decoration: none; }
@@ -99,6 +99,57 @@
     .color-name { flex: 1; font-size: 14.5px; color: var(--text); }
     .color-val { font-family: var(--font-head); font-size: 13px; letter-spacing: .06em; color: var(--muted-2); }
     .color-val.off { color: var(--muted-4); }
+    .color-row.locked .color-name { color: var(--muted-3); }
+
+    /* Sélecteur de couleur natif stylé en pastille */
+    .color-pick {
+      -webkit-appearance: none; appearance: none; flex: none;
+      width: 34px; height: 34px; padding: 0; cursor: pointer;
+      border: 1px solid var(--border-2); border-radius: 7px; background: #0a1226;
+      transition: border-color .18s, transform .18s;
+    }
+    .color-pick:hover { border-color: var(--gold); transform: scale(1.06); }
+    .color-pick::-webkit-color-swatch-wrapper { padding: 3px; }
+    .color-pick::-webkit-color-swatch { border: none; border-radius: 4px; }
+    .color-pick::-moz-color-swatch { border: none; border-radius: 4px; }
+
+    .hex-input {
+      width: 108px; flex: none; padding: 8px 11px; border-radius: 5px;
+      background: #0a1226; border: 1px solid var(--border-2); color: var(--text);
+      font-family: var(--font-head); font-size: 13.5px; letter-spacing: .06em;
+    }
+    .hex-input.wide { width: 190px; letter-spacing: .02em; }
+    .hex-input:focus { outline: none; border-color: var(--gold); }
+    .hex-input::placeholder { color: var(--muted-4); }
+
+    .btn-save {
+      flex: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;
+      font-family: var(--font-head); font-size: 12px; letter-spacing: .08em; text-transform: uppercase;
+      background: linear-gradient(180deg, var(--gold-2), var(--gold-3)); border: 1px solid #f6dc84; color: #12183a;
+      transition: filter .18s;
+    }
+    .btn-save:hover { filter: brightness(1.08); }
+    .btn-save:disabled { opacity: .55; cursor: default; }
+
+    .unlock-link {
+      margin-left: auto; font-family: var(--font-head); font-size: 12px; letter-spacing: .06em;
+      text-transform: uppercase; color: var(--muted-3); text-decoration: none;
+      padding: 7px 12px; border: 1px solid var(--border-2); border-radius: 5px; transition: border-color .18s, color .18s;
+    }
+    .unlock-link:hover { border-color: var(--gold); color: var(--gold); }
+    .unlock-link.discord { color: #c8cdff; border-color: var(--discord); }
+    .unlock-link.discord:hover { background: rgba(88,101,242,.18); color: #fff; }
+
+    .save-msg { min-height: 18px; margin: 14px 0 0; font-size: 13px; }
+    .save-msg.ok { color: var(--green); }
+    .save-msg.ko { color: #e05a4e; }
+    .hint code { background: #0a1226; padding: 2px 6px; border-radius: 3px; color: var(--gold-2); font-size: 12px; }
+
+    @media (max-width: 560px) {
+      .color-row { flex-wrap: wrap; }
+      .color-name { flex: 1 1 100%; order: -1; }
+      .hex-input { flex: 1; width: auto; }
+    }
     .cosm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 11px; }
     .cosm-card { padding: 14px 16px; background: #0a1226; border: 1px solid var(--border); border-radius: 7px; }
     .cosm-card .t { font-family: var(--font-head); font-size: 15px; color: var(--text); }
@@ -135,8 +186,8 @@
     <div id="acctRoot"><p class="loading">Chargement de ton compte…</p></div>
   </div>
 
-  <script src="/config.js?v=4"></script>
-  <script src="/fx.js?v=4"></script>
+  <script src="/config.js?v=5"></script>
+  <script src="/fx.js?v=5"></script>
   <script>
   (() => {
     const CFG = window.CONFIG;
@@ -235,28 +286,83 @@
           </div>`).join("") + `</div>`;
     }
 
+    /* Possessions déduites exactement comme le serveur : achat "life" dans les
+       commandes, ou abonnement ":30j" encore actif. */
+    function ownedKeys() {
+      const A = data.account || {};
+      const keys = new Set();
+      (A.orders || []).forEach((o) => (o.items || []).forEach((it) => it.key && keys.add(it.key)));
+      const activeSubs = new Set((A.subscriptions || []).filter((s) => s.active).map((s) => s.key));
+      return {
+        color: (t) => {
+          const base = { killfeed: "col-kf", chat: "col-chat", clan: "col-clan" }[t];
+          return keys.has(base + ":life") || activeSubs.has(base + ":30j");
+        },
+        role: () => keys.has("role"),
+      };
+    }
+
     function panelPerso() {
       const c = data.colors || {};
       const role = data.customRole;
       const cosm = (data.account && data.account.cosmetics) || [];
-      const row = (label, v) => `
-        <div class="color-row">
-          <span class="color-dot" style="background:${v ? esc(v) : "#1a2540"}"></span>
-          <span class="color-name">${label}</span>
-          <span class="color-val ${v ? "" : "off"}">${v ? esc(v) : "Non activée"}</span>
-        </div>`;
+      const own = ownedKeys();
+      const COLORS = [
+        { type: "killfeed", label: "Couleur de nom (killfeed)", buy: "col-kf" },
+        { type: "chat", label: "Couleur de chat", buy: "col-chat" },
+        { type: "clan", label: "Couleur de clan tag", buy: "col-clan" },
+      ];
+
+      const row = (cfg) => {
+        const v = c[cfg.type] || "";
+        if (!own.color(cfg.type)) {
+          return `
+            <div class="color-row locked">
+              <span class="color-dot" style="background:#1a2540"></span>
+              <span class="color-name">${cfg.label}</span>
+              <a class="unlock-link" href="/#boutique">🔒 Non débloqué — l'obtenir</a>
+            </div>`;
+        }
+        return `
+          <div class="color-row">
+            <input type="color" class="color-pick" data-color="${cfg.type}" value="${v || "#e8bb45"}" aria-label="${cfg.label}" />
+            <span class="color-name">${cfg.label}</span>
+            <input type="text" class="hex-input" data-hex="${cfg.type}" value="${esc(v)}" placeholder="#e8bb45" maxlength="7" spellcheck="false" />
+            <button class="btn-save" data-save-color="${cfg.type}">Enregistrer</button>
+          </div>`;
+      };
+
+      // — Rôle Discord perso —
+      let roleBlock;
+      if (!own.role()) {
+        roleBlock = `<div class="color-row locked">
+            <span class="color-dot" style="background:#1a2540"></span>
+            <span class="color-name">Rôle Discord personnalisé</span>
+            <a class="unlock-link" href="/#boutique">🔒 Non débloqué — l'obtenir</a>
+          </div>`;
+      } else if (!(data.discord && data.discord.discordName)) {
+        roleBlock = `<div class="color-row locked">
+            <span class="color-dot" style="background:#1a2540"></span>
+            <span class="color-name">Rôle Discord personnalisé</span>
+            <a class="unlock-link discord" href="${B}/auth/discord?steamId=${encodeURIComponent(data.steamId)}">Lie ton Discord pour l'activer</a>
+          </div>`;
+      } else {
+        roleBlock = `
+          <div class="color-row">
+            <input type="color" class="color-pick" data-role-color value="${(role && role.color) || "#e11d2a"}" aria-label="Couleur du rôle" />
+            <span class="color-name">Rôle Discord personnalisé</span>
+            <input type="text" class="hex-input wide" id="roleName" value="${esc((role && role.name) || "")}" placeholder="Nom de ton rôle" maxlength="40" />
+            <button class="btn-save" id="saveRole">Enregistrer</button>
+          </div>`;
+      }
+
       return `
         <div class="panel-box">
           <h2>Mes couleurs</h2>
-          ${row("Couleur de nom (killfeed)", c.killfeed)}
-          ${row("Couleur de chat", c.chat)}
-          ${row("Couleur de clan tag", c.clan)}
-          <div class="color-row">
-            <span class="color-dot" style="background:${role && role.color ? esc(role.color) : "#1a2540"}"></span>
-            <span class="color-name">Rôle Discord personnalisé</span>
-            <span class="color-val ${role ? "" : "off"}">${role ? esc(role.name) : "Non activé"}</span>
-          </div>
-          <p class="hint">Les couleurs sont appliquées par le staff après achat. Pour changer une teinte, ouvre un ticket sur le Discord avec le code hexadécimal souhaité.</p>
+          ${COLORS.map(row).join("")}
+          ${roleBlock}
+          <p class="save-msg" id="persoMsg"></p>
+          <p class="hint">Choisis ta teinte avec la pastille ou saisis un code hexadécimal (ex. <code>#e8bb45</code>), puis enregistre. Les couleurs sont lues par le serveur DayZ et s'appliquent à ta prochaine connexion. Le rôle Discord est créé/renommé instantanément sur le Discord.</p>
         </div>
         <div class="panel-box">
           <h2>Mes cosmétiques</h2>
@@ -351,7 +457,67 @@
         const done = () => { try { localStorage.removeItem("lexil_user"); localStorage.removeItem("lexil_steamid"); } catch {} location.href = "/"; };
         if (B) fetch(B + "/api/logout", { method: "POST", credentials: "include" }).catch(() => {}).finally(done); else done();
       });
+      bindPerso();
       show((location.hash || "#profil").slice(1));
+    }
+
+    /* ── Édition des couleurs / du rôle Discord ── */
+    function bindPerso() {
+      const msg = (txt, ok) => {
+        const el = $("persoMsg");
+        if (!el) return;
+        el.textContent = txt;
+        el.className = "save-msg " + (ok ? "ok" : "ko");
+      };
+      const isHex = (v) => /^#[0-9a-fA-F]{6}$/.test(v);
+
+      // Pastille ↔ champ texte synchronisés.
+      document.querySelectorAll("[data-color]").forEach((pick) => {
+        const type = pick.dataset.color;
+        const hex = document.querySelector(`[data-hex="${type}"]`);
+        pick.addEventListener("input", () => { hex.value = pick.value; });
+        hex.addEventListener("input", () => { if (isHex(hex.value)) pick.value = hex.value; });
+      });
+      const rolePick = document.querySelector("[data-role-color]");
+
+      document.querySelectorAll("[data-save-color]").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const type = btn.dataset.saveColor;
+          const color = (document.querySelector(`[data-hex="${type}"]`).value || "").trim().toLowerCase();
+          if (!isHex(color)) return msg("Code couleur invalide — format attendu : #rrggbb (ex. #e8bb45).", false);
+          btn.disabled = true; btn.textContent = "…";
+          try {
+            const r = await fetch(B + "/api/customize/color", {
+              method: "POST", headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ steamId: data.steamId, type, color }),
+            });
+            const d = await r.json();
+            if (d.ok) { data.colors = d.colors || data.colors; msg("Couleur enregistrée ✓ — active à ta prochaine connexion en jeu.", true); }
+            else msg(d.error || "Enregistrement impossible.", false);
+          } catch { msg("Serveur injoignable — réessaie dans un instant.", false); }
+          btn.disabled = false; btn.textContent = "Enregistrer";
+        });
+      });
+
+      const saveRole = $("saveRole");
+      if (saveRole) {
+        saveRole.addEventListener("click", async () => {
+          const name = ($("roleName").value || "").trim();
+          const color = (rolePick.value || "").toLowerCase();
+          if (!name) return msg("Donne un nom à ton rôle Discord.", false);
+          saveRole.disabled = true; saveRole.textContent = "…";
+          try {
+            const r = await fetch(B + "/api/customize/discord-role", {
+              method: "POST", headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ steamId: data.steamId, name, color }),
+            });
+            const d = await r.json();
+            if (d.ok) { data.customRole = d.customRole; msg("Rôle Discord mis à jour ✓ — vérifie sur le Discord.", true); }
+            else msg(d.error || "Mise à jour impossible.", false);
+          } catch { msg("Serveur injoignable — réessaie dans un instant.", false); }
+          saveRole.disabled = false; saveRole.textContent = "Enregistrer";
+        });
+      }
     }
 
     function show(key) {
