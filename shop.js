@@ -325,7 +325,10 @@
     }
     const sid = params.get("steamId");
     if (sid && /^7656\d{13}$/.test(sid)) { steamId = sid; store.set("lexil_steamid", sid); }
-    if (paye || sid || params.get("login")) history.replaceState({}, "", location.pathname);
+    // Jeton d'identité signé émis par le backend → prouve l'auth Steam sans cookie.
+    const tok = params.get("t");
+    if (sid && /^7656\d{13}$/.test(sid) && /^[a-f0-9]{64}$/.test(tok || "")) store.set("lexil_token", tok);
+    if (paye || sid || params.get("login") || params.get("t")) history.replaceState({}, "", location.pathname);
     if (params.get("login") === "success" && B) {
       fetch(B + "/api/me", { credentials: "include" }).then((r) => r.json()).then((d) => {
         if (d.loggedIn && d.user) {

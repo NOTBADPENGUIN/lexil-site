@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>L'EXIL — Mon compte</title>
   <link rel="icon" href="/img/logo.png" />
-  <link rel="stylesheet" href="/style.css?v=7" />
+  <link rel="stylesheet" href="/style.css?v=8" />
   <style>
     .acct-page { max-width: 1180px; margin: 0 auto; padding: 30px 24px 70px; }
     .back-link { font-family: var(--font-head); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted-2); text-decoration: none; }
@@ -186,8 +186,8 @@
     <div id="acctRoot"><p class="loading">Chargement de ton compte…</p></div>
   </div>
 
-  <script src="/config.js?v=7"></script>
-  <script src="/fx.js?v=7"></script>
+  <script src="/config.js?v=8"></script>
+  <script src="/fx.js?v=8"></script>
   <script>
   (() => {
     const CFG = window.CONFIG;
@@ -222,7 +222,13 @@
     ];
 
     let data = null, isFounder = false;
-    const steamId = new URLSearchParams(location.search).get("steamId") || get("lexil_steamid");
+    const qs = new URLSearchParams(location.search);
+    const steamId = qs.get("steamId") || get("lexil_steamid");
+    // Jeton d'identité signé (émis à la connexion Steam) → nécessaire pour modifier
+    // couleurs/rôle sans dépendre d'un cookie tiers. Capturé depuis l'URL ou le stockage.
+    const urlTok = qs.get("t");
+    if (/^[a-f0-9]{64}$/.test(urlTok || "")) { try { localStorage.setItem("lexil_token", urlTok); } catch {} }
+    const authToken = () => get("lexil_token");
 
     /* ── Non connecté ── */
     function renderLoggedOut() {
@@ -494,8 +500,8 @@
           btn.disabled = true; btn.textContent = "…";
           try {
             const r = await fetch(B + "/api/customize/color", {
-              method: "POST", headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ steamId: data.steamId, type, color }),
+              method: "POST", credentials: "include", headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ steamId: data.steamId, token: authToken(), type, color }),
             });
             const d = await r.json();
             if (d.ok) { data.colors = d.colors || data.colors; msg("Couleur enregistrée ✓ — active à ta prochaine connexion en jeu.", true); }
@@ -514,8 +520,8 @@
           saveRole.disabled = true; saveRole.textContent = "…";
           try {
             const r = await fetch(B + "/api/customize/discord-role", {
-              method: "POST", headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ steamId: data.steamId, name, color }),
+              method: "POST", credentials: "include", headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ steamId: data.steamId, token: authToken(), name, color }),
             });
             const d = await r.json();
             if (d.ok) { data.customRole = d.customRole; msg("Rôle Discord mis à jour ✓ — vérifie sur le Discord.", true); }
