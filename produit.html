@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>L'EXIL — Produit</title>
   <link rel="icon" href="/img/logo.png" />
-  <link rel="stylesheet" href="/style.css?v=11" />
+  <link rel="stylesheet" href="/style.css?v=12" />
   <style>
     .pp-bar { max-width: 1180px; margin: 0 auto; padding: 22px 24px 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
     .pp-bar a.back { font-family: var(--font-head); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted-2); text-decoration: none; }
@@ -46,9 +46,8 @@
     .pp-variant:hover { border-color: var(--gold); }
     .pp-variant.active { background: rgba(232,187,69,.13); border-color: var(--gold); color: var(--gold-2); }
 
-    .pp-styles-link { display: block; margin: 6px 0 18px; padding: 13px 15px; border-radius: 7px; text-align: center; text-decoration: none;
-      font-family: var(--font-head); font-size: 14px; letter-spacing: .04em; color: var(--gold-2); background: rgba(232,187,69,.09); border: 1px solid #3d3016; transition: background .18s, border-color .18s; }
-    .pp-styles-link:hover { background: rgba(232,187,69,.16); border-color: var(--gold); }
+    .pp-kf-title { font-family: var(--font-head); font-size: 15px; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin: 22px 0 12px; }
+    #ppKf { margin-bottom: 6px; }
 
     .pp-buy { display: flex; align-items: center; gap: 16px; margin-top: 20px; }
     .pp-add { flex: 1; justify-content: center; padding: 16px; font-size: 17px; }
@@ -81,8 +80,9 @@
   <div class="pp-wrap"><div id="ppRoot"><p class="loading">Chargement du produit…</p></div></div>
   <div class="pp-msg" id="ppMsg"></div>
 
-  <script src="/config.js?v=11"></script>
-  <script src="/fx.js?v=11"></script>
+  <script src="/config.js?v=12"></script>
+  <script src="/fx.js?v=12"></script>
+  <script src="/kf-chooser.js?v=12"></script>
   <script>
   (() => {
     const CFG = window.CONFIG;
@@ -143,7 +143,9 @@
                 </div>
               </div>` : ""}
 
-            ${p.id === "col-kf" ? `<a class="pp-styles-link" href="killfeed.html">🎯 Voir &amp; choisir les styles (couleur · slot · animation) →</a>` : ""}
+            ${p.id === "col-kf" ? `
+              <div class="pp-kf-title">🎯 Personnalise ton style</div>
+              <div id="ppKf"><p class="loading" style="padding:20px">Chargement des styles…</p></div>` : ""}
 
             <div class="pp-buy">
               <button class="btn btn-gold pp-add" id="ppAdd">Ajouter au panier</button>
@@ -156,6 +158,8 @@
         b.addEventListener("click", () => { variant = b.dataset.v; render(); })
       );
       $("ppAdd").addEventListener("click", addToCart);
+      // Killfeed : monte les 3 listes de styles directement sur la fiche produit.
+      if (p.id === "col-kf" && window.LEXIL_KF) window.LEXIL_KF.mount($("ppKf"));
     }
 
     function addToCart() {

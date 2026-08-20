@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>L'EXIL — Style Killfeed</title>
   <link rel="icon" href="/img/logo.png" />
-  <link rel="stylesheet" href="/style.css?v=11" />
+  <link rel="stylesheet" href="/style.css?v=12" />
   <style>
     .kf-page { max-width: 760px; margin: 0 auto; padding: 30px 24px 90px; }
     .back-link { font-family: var(--font-head); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted-2); text-decoration: none; }
@@ -13,83 +13,7 @@
     .kf-head { margin: 24px 0 22px; }
     .kf-head h1 { font-family: var(--font-head); font-size: clamp(30px, 4.4vw, 46px); text-transform: uppercase; margin: 0; line-height: 1; }
     .kf-head p { font-size: 14.5px; line-height: 1.6; color: var(--muted); margin-top: 12px; }
-
-    /* Aperçu en direct */
-    .kf-preview { margin-bottom: 26px; border: 1px solid var(--border-2); border-radius: 10px; overflow: hidden; background: linear-gradient(135deg, #0c1428, #080d1c); }
-    .kf-preview-label { font-family: var(--font-head); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted-4); padding: 12px 18px 0; }
-    .kf-feed { padding: 16px 18px 20px; }
-    .kf-line { position: relative; overflow: hidden; align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; max-width: 100%;
-      padding: 9px 16px; border-radius: 5px; background: #0d1526; border: 1px solid #1c2947; font-family: var(--font-head); font-size: 18px; letter-spacing: .03em; }
-    .kf-line .kf-victim { color: var(--muted-3); }
-    .kf-line .kf-skull { opacity: .6; }
-    .kf-name { font-weight: 700; background-image: var(--kf-grad, linear-gradient(90deg,#f2efe9,#f2efe9)); -webkit-background-clip: text; background-clip: text; color: transparent; background-size: 200% auto; }
-    .kf-slot-chromatic { border-image: linear-gradient(90deg,#ff2bd6,#22e0ff,#ffe017,#ff2bd6) 1; animation: kfChroma 4s linear infinite; }
-    .kf-slot-symbiote { background: linear-gradient(135deg,#1a1030,#3a1550,#0a0512); }
-    .kf-slot-shockwave::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 0% 50%, rgba(34,224,255,.5), transparent 60%); animation: kfShock 2.2s ease-out infinite; }
-    .kf-slot-sweep::after { content: ""; position: absolute; top: 0; bottom: 0; width: 40%; background: linear-gradient(110deg, transparent, rgba(232,187,69,.5), transparent); animation: kfSweep 2.4s linear infinite; }
-    .kf-slot-embers { background: linear-gradient(0deg,#2a0d06,#0d1526); }
-    .kf-slot-embers::after { content: ""; position: absolute; inset: 0; background: radial-gradient(2px 2px at 20% 90%, #ff6a00, transparent), radial-gradient(2px 2px at 60% 90%, #ffb03d, transparent), radial-gradient(2px 2px at 80% 90%, #d40000, transparent); animation: kfEmbers 1.8s linear infinite; }
-    @keyframes kfChroma { to { filter: hue-rotate(360deg); } }
-    @keyframes kfShock { 0% { opacity: .8; transform: scale(.6); } 100% { opacity: 0; transform: scale(1.6); } }
-    @keyframes kfSweep { 0% { left: -45%; } 100% { left: 105%; } }
-    @keyframes kfEmbers { 0% { transform: translateY(0); opacity: .9; } 100% { transform: translateY(-14px); opacity: 0; } }
-    .kf-motion-wave .kf-name { animation: kfWave 1.6s ease-in-out infinite; }
-    .kf-motion-breathing .kf-name { animation: kfBreath 2.4s ease-in-out infinite; }
-    .kf-motion-marquee .kf-name { animation: kfMarquee 3s linear infinite; }
-    .kf-motion-static .kf-name { animation: kfStatic .18s steps(2) infinite; }
-    .kf-motion-beat .kf-name { animation: kfBeat 1s ease-in-out infinite; }
-    .kf-motion-fade .kf-name { animation: kfFade 2.2s ease-in-out infinite; }
-    @keyframes kfWave { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
-    @keyframes kfBreath { 0%,100% { filter: brightness(.7); } 50% { filter: brightness(1.35); } }
-    @keyframes kfMarquee { to { background-position: 200% 0; } }
-    @keyframes kfStatic { 0% { opacity: 1; transform: translateX(0); } 50% { opacity: .82; transform: translateX(.5px); } 100% { opacity: 1; transform: translateX(-.5px); } }
-    @keyframes kfBeat { 0%,100% { transform: scale(1); } 20% { transform: scale(1.12); } 40% { transform: scale(1); } }
-    @keyframes kfFade { 0%,100% { opacity: .25; } 50% { opacity: 1; } }
-
-    /* Listes déroulantes (une par catégorie) */
-    .kf-select { margin-bottom: 16px; }
-    .kf-select > label { display: block; font-family: var(--font-head); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
-    .kf-select-wrap { position: relative; }
-    .kf-select-btn { width: 100%; display: flex; align-items: center; gap: 13px; padding: 13px 15px; cursor: pointer;
-      background: var(--card); border: 1px solid var(--border-2); border-radius: 8px; color: var(--text); text-align: left; transition: border-color .18s; }
-    .kf-select-btn:hover, .kf-select-btn[aria-expanded="true"] { border-color: var(--gold); }
-    .kf-thumb { flex: none; width: 42px; height: 30px; border-radius: 5px; border: 1px solid var(--border-2); overflow: hidden; position: relative; }
-    .kf-thumb video, .kf-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .kf-thumb .sw { position: absolute; inset: 0; }
-    .kf-thumb .demo { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--font-head); font-weight: 700; font-size: 11px;
-      background-image: var(--sw); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .kf-select-cur { flex: 1; min-width: 0; }
-    .kf-select-cur .t { font-family: var(--font-head); font-size: 16px; letter-spacing: .02em; }
-    .kf-select-cur .d { font-size: 12px; color: var(--muted-3); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .kf-chev { flex: none; color: var(--muted-3); transition: transform .2s; }
-    .kf-select-btn[aria-expanded="true"] .kf-chev { transform: rotate(180deg); color: var(--gold); }
-
-    .kf-panel { position: absolute; z-index: 20; left: 0; right: 0; top: calc(100% + 6px); max-height: 340px; overflow-y: auto;
-      background: #101a31; border: 1px solid var(--border-2); border-radius: 8px; box-shadow: 0 20px 50px rgba(0,0,0,.55); padding: 6px; }
-    .kf-panel[hidden] { display: none; }
-    .kf-opt { width: 100%; display: flex; align-items: center; gap: 12px; padding: 9px 10px; cursor: pointer; border: none; border-radius: 6px; background: none; color: var(--text); text-align: left; }
-    .kf-opt:hover { background: rgba(232,187,69,.08); }
-    .kf-opt.on { background: rgba(232,187,69,.12); }
-    .kf-opt .t { font-family: var(--font-head); font-size: 15px; letter-spacing: .02em; }
-    .kf-opt .d { font-size: 11.5px; color: var(--muted-3); margin-top: 1px; }
-    .kf-opt .info { flex: 1; min-width: 0; }
-    .kf-opt-check { flex: none; color: var(--green); font-weight: 700; opacity: 0; }
-    .kf-opt.on .kf-opt-check { opacity: 1; }
-
-    .kf-locked { text-align: center; padding: 40px 24px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; }
-    .kf-locked b { display: block; font-family: var(--font-head); font-size: 19px; text-transform: uppercase; color: var(--text); margin-bottom: 8px; }
-    .kf-locked p { font-size: 14px; color: var(--muted-3); max-width: 52ch; margin: 0 auto 18px; line-height: 1.6; }
-    .kf-msg { position: fixed; left: 50%; transform: translateX(-50%); bottom: 22px; z-index: 40; max-width: 90vw; padding: 12px 20px; border-radius: 6px;
-      font-family: var(--font-head); font-size: 14px; box-shadow: 0 14px 40px rgba(0,0,0,.5); opacity: 0; pointer-events: none; transition: opacity .25s; }
-    .kf-msg.show { opacity: 1; }
-    .kf-msg.ok { background: #0e2a1a; border: 1px solid var(--green); color: #a8f2c0; }
-    .kf-msg.ko { background: #2a120e; border: 1px solid #e05a4e; color: #f2b4ab; }
-    .kf-banner { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; justify-content: space-between;
-      padding: 14px 18px; margin-bottom: 18px; border-radius: 8px; background: rgba(232,187,69,.08); border: 1px solid #3d3016; }
-    .kf-banner p { margin: 0; font-size: 13.5px; color: #e7d9b0; line-height: 1.5; }
-    .kf-banner .btn { flex: none; }
     .loading { text-align: center; padding: 40px; color: var(--muted-3); }
-    @media (prefers-reduced-motion: reduce) { .kf-name, .kf-slot-shockwave::after, .kf-slot-sweep::after, .kf-slot-embers::after, .kf-slot-chromatic { animation: none !important; } }
   </style>
 </head>
 <body>
@@ -98,7 +22,7 @@
   <div class="fx-scanlines" aria-hidden="true"></div>
 
   <div class="kf-page">
-    <a href="compte.html#perso" class="back-link">← Retour à la personnalisation</a>
+    <a href="produit.html?id=col-kf" class="back-link">← Retour au produit</a>
     <div class="kf-head">
       <div class="sec-eyebrow">Couleur de nom · Killfeed</div>
       <h1>Ton style dans le killfeed</h1>
@@ -106,194 +30,10 @@
     </div>
     <div id="kfRoot"><p class="loading">Chargement…</p></div>
   </div>
-  <div class="kf-msg" id="kfMsg"></div>
 
-  <script src="/config.js?v=11"></script>
-  <script src="/fx.js?v=11"></script>
-  <script>
-  (() => {
-    const CFG = window.CONFIG;
-    const KF = CFG.killfeed;
-    const B = (CFG.backendUrl || "").trim();
-    const $ = (id) => document.getElementById(id);
-    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-    const get = (k) => { try { return localStorage.getItem(k) || ""; } catch { return ""; } };
-
-    const qs = new URLSearchParams(location.search);
-    const steamId = qs.get("steamId") || get("lexil_steamid");
-    const urlTok = qs.get("t");
-    if (/^[a-f0-9]{64}$/.test(urlTok || "")) { try { localStorage.setItem("lexil_token", urlTok); } catch {} }
-    if (qs.get("steamId") || qs.get("t")) history.replaceState({}, "", location.pathname + location.hash);
-    const authToken = () => get("lexil_token");
-
-    let data = null;
-    let canSave = false;   // true seulement si connecté ET possède la couleur killfeed
-    const sel = { color: "", slot: "off", motion: "flat" };
-    const byKey = (arr, k) => (arr || []).find((o) => o.key === k) || null;
-    const isColorField = (f) => f === "color";
-
-    function ownsKillfeed() {
-      const A = (data && data.account) || {};
-      const keys = new Set();
-      (A.orders || []).forEach((o) => (o.items || []).forEach((it) => it.key && keys.add(it.key)));
-      const activeSubs = new Set((A.subscriptions || []).filter((s) => s.active).map((s) => s.key));
-      return keys.has("col-kf:life") || activeSubs.has("col-kf:30j");
-    }
-
-    function toast(txt, ok) {
-      const m = $("kfMsg"); m.textContent = txt; m.className = "kf-msg show " + (ok ? "ok" : "ko");
-      clearTimeout(toast._t); toast._t = setTimeout(() => (m.className = "kf-msg"), 3000);
-    }
-
-    // Vignette d'une option : vidéo/photo si `media`, sinon dégradé (+ "Ab" stylé pour les couleurs).
-    function thumb(o, field) {
-      if (o.media) {
-        return /\.(mp4|webm)$/i.test(o.media)
-          ? `<span class="kf-thumb"><video src="${esc(o.media)}" autoplay muted loop playsinline></video></span>`
-          : `<span class="kf-thumb"><img src="${esc(o.media)}" alt="" loading="lazy"/></span>`;
-      }
-      return isColorField(field)
-        ? `<span class="kf-thumb"><span class="sw" style="background:${o.preview};opacity:.2"></span><span class="demo" style="--sw:${o.preview}">Ab</span></span>`
-        : `<span class="kf-thumb"><span class="sw" style="background:${o.preview}"></span></span>`;
-    }
-
-    function updatePreview() {
-      const line = $("kfLine"), name = $("kfName");
-      if (!line) return;
-      const col = byKey(KF.colors, sel.color);
-      name.style.setProperty("--kf-grad", col ? col.preview : "linear-gradient(90deg,#f2efe9,#f2efe9)");
-      line.className = "kf-line" + (sel.slot && sel.slot !== "off" ? " kf-slot-" + sel.slot : "") + (sel.motion ? " kf-motion-" + sel.motion : "");
-    }
-
-    async function save(field, key) {
-      const prev = sel[field];
-      if (prev === key) return;
-      sel[field] = key; syncField(field); updatePreview();
-      // Mode aperçu (visiteur non connecté ou ne possédant pas la couleur) : on
-      // met à jour l'aperçu localement mais on n'enregistre pas.
-      if (!canSave) { toast("Aperçu — débloque la couleur killfeed pour enregistrer.", false); return; }
-      try {
-        const r = await fetch(B + "/api/customize/killfeed", {
-          method: "POST", credentials: "include", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ steamId: data.steamId, token: authToken(), [field]: key }),
-        });
-        const d = await r.json();
-        if (d.ok) { data.killfeed = d.killfeed || data.killfeed; toast("Style enregistré ✓", true); }
-        else { sel[field] = prev; syncField(field); updatePreview(); toast(d.error || "Enregistrement impossible.", false); }
-      } catch { sel[field] = prev; syncField(field); updatePreview(); toast("Serveur injoignable — réessaie.", false); }
-    }
-
-    const OPTS = { color: KF.colors, slot: KF.slots, motion: KF.motions };
-
-    // Met à jour le bouton (option courante) + les coches du panneau d'un champ.
-    function syncField(field) {
-      const wrap = document.querySelector(`.kf-select[data-field="${field}"]`);
-      if (!wrap) return;
-      const o = byKey(OPTS[field], sel[field]) || OPTS[field][0];
-      wrap.querySelector(".kf-select-cur").innerHTML = `<div class="t">${esc(o.label)}</div><div class="d">${esc(o.desc)}</div>`;
-      const btnThumb = wrap.querySelector(".kf-btn-thumb");
-      if (btnThumb) btnThumb.outerHTML = thumb(o, field).replace('class="kf-thumb"', 'class="kf-thumb kf-btn-thumb"');
-      wrap.querySelectorAll(".kf-opt").forEach((op) => op.classList.toggle("on", op.dataset.key === sel[field]));
-    }
-
-    function dropdown(title, field) {
-      const opts = OPTS[field];
-      const cur = byKey(opts, sel[field]) || opts[0];
-      return `
-        <div class="kf-select" data-field="${field}">
-          <label>${title} <span style="color:var(--muted-4);font-size:11px">· ${opts.length} options</span></label>
-          <div class="kf-select-wrap">
-            <button class="kf-select-btn" type="button" aria-expanded="false">
-              ${thumb(cur, field).replace('class="kf-thumb"', 'class="kf-thumb kf-btn-thumb"')}
-              <span class="kf-select-cur"><div class="t">${esc(cur.label)}</div><div class="d">${esc(cur.desc)}</div></span>
-              <span class="kf-chev">▾</span>
-            </button>
-            <div class="kf-panel" hidden>
-              ${opts.map((o) => `
-                <button class="kf-opt ${o.key === sel[field] ? "on" : ""}" type="button" data-key="${o.key}">
-                  ${thumb(o, field)}
-                  <span class="info"><div class="t">${esc(o.label)}</div><div class="d">${esc(o.desc)}</div></span>
-                  <span class="kf-opt-check">✓</span>
-                </button>`).join("")}
-            </div>
-          </div>
-        </div>`;
-    }
-
-    function closeAll(except) {
-      document.querySelectorAll(".kf-select-btn").forEach((b) => {
-        if (b === except) return;
-        b.setAttribute("aria-expanded", "false");
-        b.parentElement.querySelector(".kf-panel").hidden = true;
-      });
-    }
-
-    function renderChooser(banner) {
-      $("kfRoot").innerHTML = `
-        ${banner || ""}
-        <div class="kf-preview">
-          <div class="kf-preview-label">Aperçu en direct</div>
-          <div class="kf-feed">
-            <div class="kf-line" id="kfLine">
-              <span class="kf-name" id="kfName">${esc((data.steam && data.steam.name) || "Ton pseudo")}</span>
-              <span class="kf-skull">☠</span>
-              <span class="kf-victim">Victime_42</span>
-            </div>
-          </div>
-        </div>
-        ${dropdown("Couleur du nom", "color")}
-        ${dropdown("Slot style", "slot")}
-        ${dropdown("Name motion", "motion")}`;
-
-      document.querySelectorAll(".kf-select").forEach((wrap) => {
-        const field = wrap.dataset.field;
-        const btn = wrap.querySelector(".kf-select-btn");
-        const panel = wrap.querySelector(".kf-panel");
-        btn.addEventListener("click", (e) => {
-          e.stopPropagation();
-          const open = btn.getAttribute("aria-expanded") === "true";
-          closeAll(open ? null : btn);
-          btn.setAttribute("aria-expanded", String(!open));
-          panel.hidden = open;
-        });
-        panel.querySelectorAll(".kf-opt").forEach((op) =>
-          op.addEventListener("click", (e) => {
-            e.stopPropagation();
-            save(field, op.dataset.key);
-            btn.setAttribute("aria-expanded", "false"); panel.hidden = true;
-          })
-        );
-      });
-      updatePreview();
-    }
-
-    document.addEventListener("click", () => closeAll(null));
-    document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeAll(null); });
-
-    // Bannières selon l'état (le chooser reste toujours affiché = mode aperçu).
-    const bannerGuest = `<div class="kf-banner"><p>👀 <b>Mode aperçu</b> — connecte-toi avec Steam et débloque la couleur killfeed pour enregistrer ton style.</p><a class="btn btn-gold" href="${B}/auth/steam">Connexion Steam</a></div>`;
-    const bannerLocked = `<div class="kf-banner"><p>👀 <b>Mode aperçu</b> — tu ne possèdes pas encore la couleur killfeed. Débloque-la pour enregistrer ton style en jeu.</p><a class="btn btn-gold" href="/#boutique">Débloquer</a></div>`;
-
-    // Visiteur non connecté → aperçu libre (parcours des styles depuis la boutique).
-    if (!B || !steamId || !/^7656\d{13}$/.test(steamId)) {
-      data = { steamId: "", steam: null, account: {}, killfeed: {} };
-      canSave = false;
-      renderChooser(B ? bannerGuest : "");
-      return;
-    }
-    fetch(B + "/api/account?steamId=" + encodeURIComponent(steamId))
-      .then((r) => r.json())
-      .then((d) => {
-        data = d || {}; data.steamId = data.steamId || steamId;
-        const kf = data.killfeed || {};
-        if (kf.color) sel.color = kf.color;
-        if (kf.slot) sel.slot = kf.slot;
-        if (kf.motion) sel.motion = kf.motion;
-        canSave = ownsKillfeed();
-        renderChooser(canSave ? "" : bannerLocked);
-      })
-      .catch(() => { $("kfRoot").innerHTML = '<div class="kf-locked"><b>Compte indisponible</b><p>Impossible de contacter le serveur. Réessaie.</p></div>'; });
-  })();
-  </script>
+  <script src="/config.js?v=12"></script>
+  <script src="/fx.js?v=12"></script>
+  <script src="/kf-chooser.js?v=12"></script>
+  <script>window.LEXIL_KF.mount(document.getElementById("kfRoot"));</script>
 </body>
 </html>
