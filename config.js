@@ -110,6 +110,7 @@ window.CONFIG = {
       features: ["Reskin d'1 hélicoptère", "Design avancé & détaillé", "Logos / motifs sur mesure", "Top du style aérien"] },
     { id: "col-kf", cat: "couleurs", nom: "Couleur de nom — Killfeed", court: "Ton pseudo coloré dans le killfeed.", variantes: true, badge: "Populaire",
       long: "Ton pseudo s'affiche dans la couleur de ton choix à chaque kill dans le killfeed. Visible par tous les joueurs.",
+      video: "/video/killfeed-presentation.mp4",
       features: ["Couleur de pseudo au killfeed", "Couleur au choix", "Visible par tous", "30 jours ou à vie"] },
     { id: "col-chat", cat: "couleurs", nom: "Couleur de chat", court: "Écris en couleur dans le chat.", variantes: true,
       long: "Écris dans le chat du serveur avec une couleur personnalisée et démarque-toi à chaque message.",
