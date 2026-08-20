@@ -112,13 +112,14 @@
     $("grid").querySelectorAll("[data-add]").forEach((btn) =>
       btn.addEventListener("click", (e) => { e.stopPropagation(); addToCart(CFG.catalogue.find((p) => p.id === btn.dataset.add)); })
     );
-    // Cliquer la carte (hors boutons) ouvre la fiche produit.
-    $("grid").querySelectorAll(".card").forEach((card) =>
+    // Cliquer la carte (hors boutons) ouvre la page produit dédiée.
+    $("grid").querySelectorAll(".card").forEach((card) => {
+      card.style.cursor = "pointer";
       card.addEventListener("click", (e) => {
         if (e.target.closest("button")) return;
-        openProduct(card.dataset.pid);
-      })
-    );
+        location.href = "produit.html?id=" + encodeURIComponent(card.dataset.pid);
+      });
+    });
     document.dispatchEvent(new Event("grid:rendered"));
   }
 
@@ -381,13 +382,10 @@
 
     // Boutique + panier — chaque bloc est isolé : un pépin n'empêche pas le reste.
     safe("boutique", () => { renderFilters(); renderGrid(); });
-    // Deep-link : /?produit=<id> ouvre directement la fiche produit (ex. depuis le compte).
+    // Deep-link : /?produit=<id> → page produit dédiée (ex. depuis le compte).
     safe("deeplink", () => {
       const pid = new URLSearchParams(location.search).get("produit");
-      if (pid && CFG.catalogue.some((p) => p.id === pid)) {
-        openProduct(pid);
-        history.replaceState({}, "", location.pathname + (location.hash || "#boutique"));
-      }
+      if (pid && CFG.catalogue.some((p) => p.id === pid)) location.href = "produit.html?id=" + encodeURIComponent(pid);
     });
     safe("fiche produit", () => {
       $("prodClose").addEventListener("click", closeProduct);
@@ -409,6 +407,11 @@
       $("cartClose").addEventListener("click", () => openCart(false));
       $("cartOverlay").addEventListener("click", () => openCart(false));
       $("checkoutBtn").addEventListener("click", checkout);
+      // /?cart=1 (ex. depuis la page produit « Voir le panier ») → ouvre le tiroir.
+      if (new URLSearchParams(location.search).get("cart")) {
+        openCart(true);
+        history.replaceState({}, "", location.pathname + (location.hash || "#boutique"));
+      }
     });
 
     // Compte

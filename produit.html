@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>L'EXIL — Produit</title>
+  <link rel="icon" href="/img/logo.png" />
+  <link rel="stylesheet" href="/style.css?v=11" />
+  <style>
+    .pp-bar { max-width: 1180px; margin: 0 auto; padding: 22px 24px 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .pp-bar a.back { font-family: var(--font-head); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted-2); text-decoration: none; }
+    .pp-bar a.back:hover { color: var(--gold); }
+    .pp-cart { display: flex; align-items: center; gap: 8px; padding: 9px 13px; background: #152039; border: 1px solid var(--border-2); border-radius: 4px; color: var(--text); cursor: pointer; text-decoration: none; }
+    .pp-cart:hover { border-color: var(--gold); }
+    .pp-cart span { min-width: 20px; padding: 1px 6px; border-radius: 3px; text-align: center; background: linear-gradient(180deg, var(--gold-2), var(--gold-3)); color: #12183a; font-family: var(--font-head); font-weight: 700; font-size: 12.5px; }
+
+    .pp-wrap { max-width: 1180px; margin: 0 auto; padding: 26px 24px 90px; }
+    .pp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+    .pp-media {
+      border: 1px solid var(--border-2); border-radius: 12px; min-height: 440px; display: grid; place-items: center;
+      background: radial-gradient(240px 200px at 50% 42%, rgba(232,187,69,.14), transparent 70%), linear-gradient(135deg, #0c1428, #080d1c);
+      position: relative; overflow: hidden;
+    }
+    .pp-media img { width: min(320px, 70%); height: auto; filter: drop-shadow(0 14px 34px rgba(0,0,0,.6)); }
+    .pp-media video { width: 100%; height: 100%; object-fit: cover; }
+
+    .pp-tag { display: inline-block; font-family: var(--font-head); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted-2);
+      border: 1px solid var(--border-2); background: #0a1226; padding: 5px 11px; border-radius: 4px; }
+    .pp-badge { display: inline-block; margin-left: 8px; font-family: var(--font-head); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700;
+      padding: 5px 11px; border-radius: 4px; background: linear-gradient(180deg, var(--gold-2), var(--gold-3)); color: #12183a; }
+    .pp-title { font-family: var(--font-head); font-weight: 700; font-size: clamp(30px, 4.2vw, 46px); line-height: 1.02; text-transform: uppercase; margin: 16px 0 10px; }
+    .pp-price { font-family: var(--font-head); font-weight: 700; font-size: 34px; color: var(--gold); }
+    .pp-desc { font-size: 15px; line-height: 1.65; color: var(--muted); margin: 18px 0 6px; border-top: 1px solid var(--border); padding-top: 18px; }
+
+    .pp-feat-title { font-family: var(--font-head); font-size: 15px; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin: 20px 0 12px; }
+    .pp-features { list-style: none; margin: 0 0 8px; padding: 0; display: grid; gap: 10px; }
+    .pp-features li { position: relative; padding-left: 28px; font-size: 14.5px; color: #c9d2e0; line-height: 1.5; }
+    .pp-features li::before { content: "✓"; position: absolute; left: 0; top: 0; width: 19px; height: 19px; display: grid; place-items: center; border-radius: 3px;
+      background: rgba(57,213,107,.12); border: 1px solid #1f4a2e; color: var(--green); font-size: 12px; }
+
+    .pp-variants { margin: 22px 0 8px; }
+    .pp-variants-label { font-family: var(--font-head); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted-3); margin-bottom: 8px; }
+    .pp-variant-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .pp-variant { padding: 10px 16px; border-radius: 6px; background: #0d1730; border: 1px solid var(--border-2); color: var(--muted);
+      font-family: var(--font-head); font-size: 13px; letter-spacing: .04em; text-transform: uppercase; cursor: pointer; }
+    .pp-variant:hover { border-color: var(--gold); }
+    .pp-variant.active { background: rgba(232,187,69,.13); border-color: var(--gold); color: var(--gold-2); }
+
+    .pp-styles-link { display: block; margin: 6px 0 18px; padding: 13px 15px; border-radius: 7px; text-align: center; text-decoration: none;
+      font-family: var(--font-head); font-size: 14px; letter-spacing: .04em; color: var(--gold-2); background: rgba(232,187,69,.09); border: 1px solid #3d3016; transition: background .18s, border-color .18s; }
+    .pp-styles-link:hover { background: rgba(232,187,69,.16); border-color: var(--gold); }
+
+    .pp-buy { display: flex; align-items: center; gap: 16px; margin-top: 20px; }
+    .pp-add { flex: 1; justify-content: center; padding: 16px; font-size: 17px; }
+    .pp-note { font-size: 12px; color: var(--muted-4); margin: 14px 0 0; line-height: 1.5; }
+
+    .pp-msg { position: fixed; left: 50%; transform: translateX(-50%); bottom: 22px; z-index: 40; display: flex; align-items: center; gap: 14px; max-width: 92vw;
+      padding: 13px 20px; border-radius: 8px; background: #0e2a1a; border: 1px solid var(--green); box-shadow: 0 14px 40px rgba(0,0,0,.5);
+      opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; }
+    .pp-msg.show { opacity: 1; pointer-events: auto; }
+    .pp-msg span { font-family: var(--font-head); font-size: 14.5px; color: #a8f2c0; }
+    .pp-msg a { font-family: var(--font-head); font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: #12183a; background: linear-gradient(180deg, var(--gold-2), var(--gold-3)); padding: 8px 14px; border-radius: 5px; text-decoration: none; white-space: nowrap; }
+    .loading { text-align: center; padding: 60px; color: var(--muted-3); }
+
+    @media (max-width: 780px) { .pp-grid { grid-template-columns: 1fr; gap: 22px; } .pp-media { min-height: 300px; } }
+  </style>
+</head>
+<body>
+  <canvas id="fxAsh" aria-hidden="true"></canvas>
+  <div class="fx-vignette" aria-hidden="true"></div>
+  <div class="fx-scanlines" aria-hidden="true"></div>
+
+  <div class="pp-bar">
+    <a href="/#boutique" class="back">← Retour à la boutique</a>
+    <a href="/?cart=1#boutique" class="pp-cart" aria-label="Panier">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 12.5a1.5 1.5 0 0 0 1.5 1.2h8.7a1.5 1.5 0 0 0 1.5-1.2L21 8H6"></path><circle cx="9.5" cy="20" r="1.3"></circle><circle cx="18" cy="20" r="1.3"></circle></svg>
+      <span id="ppCartCount">0</span>
+    </a>
+  </div>
+
+  <div class="pp-wrap"><div id="ppRoot"><p class="loading">Chargement du produit…</p></div></div>
+  <div class="pp-msg" id="ppMsg"></div>
+
+  <script src="/config.js?v=11"></script>
+  <script src="/fx.js?v=11"></script>
+  <script>
+  (() => {
+    const CFG = window.CONFIG;
+    const $ = (id) => document.getElementById(id);
+    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const fmt = (n) => n.toFixed(2).replace(".", ",").replace(",00", "") + "€";
+    const store = {
+      get(k, fb) { try { const v = localStorage.getItem(k); return v === null ? fb : v; } catch { return fb; } },
+      set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+    };
+
+    const id = new URLSearchParams(location.search).get("id");
+    const p = (CFG.catalogue || []).find((x) => x.id === id);
+    let variant = p && p.variantes ? CFG.durees[0].key : null;
+
+    // Panier (même format/clé que la boutique).
+    let cart = {}; try { cart = JSON.parse(store.get("lexil_cart", "null")) || {}; } catch { cart = {}; }
+    const cartCount = () => Object.keys(cart).reduce((a, k) => a + (cart[k].qty || 0), 0);
+    const refreshCount = () => ($("ppCartCount").textContent = cartCount());
+    refreshCount();
+
+    const iconFile = () => (p.variantes ? p.id + "-" + variant : p.id);
+    const priceOf = () => (p.variantes ? CFG.durees.find((d) => d.key === variant).prix : p.prix);
+    const dureeLabel = () => (p.variantes ? (variant === "30j" ? "30 jours" : "À vie") : p.duree);
+
+    if (!p) {
+      $("ppRoot").innerHTML = `<div class="loading"><b style="font-family:var(--font-head);font-size:20px;color:var(--text)">Produit introuvable</b><br><br><a class="btn btn-gold" href="/#boutique">Retour à la boutique</a></div>`;
+      return;
+    }
+    document.title = "L'EXIL — " + p.nom;
+
+    function render() {
+      const prix = priceOf();
+      $("ppRoot").innerHTML = `
+        <div class="pp-grid">
+          <div class="pp-media">
+            <img src="/img/icons/${iconFile()}.png" alt="${esc(p.nom)}" onerror="this.onerror=null;this.src='/img/logo.png'"/>
+          </div>
+          <div class="pp-info">
+            <div>
+              <span class="pp-tag">${esc(CFG.catLabels[p.cat] || p.cat)}</span>
+              <span class="pp-tag">${esc(dureeLabel())}</span>
+              ${p.badge ? `<span class="pp-badge">${esc(p.badge)}</span>` : ""}
+            </div>
+            <h1 class="pp-title">${esc(p.nom)}</h1>
+            <div class="pp-price" id="ppPrice">${fmt(prix)}</div>
+            <p class="pp-desc">${esc(p.long || p.court || "")}</p>
+
+            ${(p.features && p.features.length) ? `
+              <div class="pp-feat-title">Caractéristiques</div>
+              <ul class="pp-features">${p.features.map((f) => `<li>${esc(f)}</li>`).join("")}</ul>` : ""}
+
+            ${p.variantes ? `
+              <div class="pp-variants">
+                <div class="pp-variants-label">Durée</div>
+                <div class="pp-variant-row">
+                  ${CFG.durees.map((d) => `<button class="pp-variant ${d.key === variant ? "active" : ""}" data-v="${d.key}">${d.label} · ${fmt(d.prix)}</button>`).join("")}
+                </div>
+              </div>` : ""}
+
+            ${p.id === "col-kf" ? `<a class="pp-styles-link" href="killfeed.html">🎯 Voir &amp; choisir les styles (couleur · slot · animation) →</a>` : ""}
+
+            <div class="pp-buy">
+              <button class="btn btn-gold pp-add" id="ppAdd">Ajouter au panier</button>
+            </div>
+            <p class="pp-note">100% cosmétique — aucun avantage de jeu. Livraison automatique en jeu après paiement.</p>
+          </div>
+        </div>`;
+
+      $("ppRoot").querySelectorAll("[data-v]").forEach((b) =>
+        b.addEventListener("click", () => { variant = b.dataset.v; render(); })
+      );
+      $("ppAdd").addEventListener("click", addToCart);
+    }
+
+    function addToCart() {
+      let prix = p.prix, sub = CFG.catLabels[p.cat], lineKey = p.id;
+      if (p.variantes) {
+        const v = CFG.durees.find((x) => x.key === variant);
+        prix = v.prix; sub = "Couleur — " + v.label; lineKey = p.id + ":" + variant;
+      }
+      cart[lineKey] = { nom: p.nom, sub, prix, qty: (cart[lineKey] ? cart[lineKey].qty : 0) + 1 };
+      store.set("lexil_cart", JSON.stringify(cart));
+      refreshCount();
+      const m = $("ppMsg");
+      m.innerHTML = `<span>✅ Ajouté au panier</span><a href="/?cart=1#boutique">Voir le panier →</a>`;
+      m.classList.add("show");
+      clearTimeout(addToCart._t); addToCart._t = setTimeout(() => m.classList.remove("show"), 5000);
+    }
+
+    render();
+  })();
+  </script>
+</body>
+</html>
