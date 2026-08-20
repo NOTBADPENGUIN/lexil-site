@@ -122,6 +122,44 @@ window.CONFIG = {
       features: ["Rôle Discord sur-mesure", "Nom & couleur au choix", "Visible sur le Discord", "Affiche ton soutien"] },
   ],
 
+  // ── Styles KILLFEED (page dédiée killfeed.html) ──────────────────
+  //  `key` = identifiant stable envoyé au backend / lu par le mod DayZ.
+  //  `preview` = aperçu CSS provisoire ; `media` = photo/vidéo (à remplir plus tard,
+  //  ex. "img/killfeed/feu.mp4" ou ".png" — laissé vide pour l'instant).
+  killfeed: {
+    colors: [
+      { key: "rainbow", label: "Arc-en-ciel", desc: "Dégradé multicolore qui défile", preview: "linear-gradient(90deg,#ff004c,#ff8a00,#ffe017,#39d56b,#22c3ff,#7a2bff)", media: "" },
+      { key: "fire", label: "Feu", desc: "Braises orange et rouge ardent", preview: "linear-gradient(90deg,#ffd200,#ff6a00,#d40000)", media: "" },
+      { key: "toxic", label: "Toxique", desc: "Vert radioactif lumineux", preview: "linear-gradient(90deg,#b6ff00,#39d56b,#0aa15a)", media: "" },
+      { key: "ice", label: "Glace", desc: "Bleu glacé cristallin", preview: "linear-gradient(90deg,#eafbff,#7fd6ff,#2aa5e0)", media: "" },
+      { key: "neon", label: "Néon", desc: "Magenta et cyan électriques", preview: "linear-gradient(90deg,#ff2bd6,#7a2bff,#22e0ff)", media: "" },
+      { key: "ocean", label: "Océan", desc: "Dégradé de bleus profonds", preview: "linear-gradient(90deg,#22c3ff,#0a5fd4,#083b8f)", media: "" },
+      { key: "sunset", label: "Coucher de soleil", desc: "Orangé, rose et violet", preview: "linear-gradient(90deg,#ffcf40,#ff6a3d,#c73bd6)", media: "" },
+      { key: "matrix", label: "Matrix", desc: "Vert digital sur fond sombre", preview: "linear-gradient(90deg,#0aff6a,#0a7a3a,#031f10)", media: "" },
+      { key: "candy", label: "Bonbon", desc: "Pastel rose et bleu bonbon", preview: "linear-gradient(90deg,#ff8ad8,#a98bff,#8ad0ff)", media: "" },
+      { key: "ember", label: "Braise", desc: "Rouge chauffé à blanc", preview: "linear-gradient(90deg,#ffb03d,#d43a1a,#5a0f0a)", media: "" },
+      { key: "blood", label: "Sang", desc: "Rouge sang sombre", preview: "linear-gradient(90deg,#e11d2a,#8f0f14,#3a0608)", media: "" },
+      { key: "void", label: "Néant", desc: "Noir violacé du néant", preview: "linear-gradient(90deg,#6a3bd6,#2b0a4a,#050308)", media: "" },
+    ],
+    slots: [
+      { key: "off", label: "Désactivé", desc: "Aucun effet de fond", preview: "linear-gradient(135deg,#141d34,#0d1526)", media: "" },
+      { key: "chromatic", label: "Chromatique", desc: "Bordure chromatique changeante", preview: "linear-gradient(90deg,#ff2bd6,#22e0ff,#ffe017,#ff2bd6)", media: "" },
+      { key: "symbiote", label: "Symbiote", desc: "Coulures organiques animées", preview: "linear-gradient(135deg,#1a1030,#3a1550,#0a0512)", media: "" },
+      { key: "shockwave", label: "Onde de choc", desc: "Onde diffusée à chaque kill", preview: "radial-gradient(circle at 30% 50%,#22e0ff,#0a5fd4 60%,#081226)", media: "" },
+      { key: "sweep", label: "Ligne de balayage", desc: "Faisceau lumineux qui balaie", preview: "linear-gradient(110deg,#0d1526 40%,#e8bb45 50%,#0d1526 60%)", media: "" },
+      { key: "embers", label: "Braises", desc: "Braises qui montent du slot", preview: "linear-gradient(0deg,#ff6a00,#d40000 50%,#1a0806)", media: "" },
+    ],
+    motions: [
+      { key: "flat", label: "Plat", desc: "Texte fixe, sans animation", preview: "linear-gradient(135deg,#141d34,#0d1526)", media: "" },
+      { key: "wave", label: "Vague", desc: "Ondulation façon vague", preview: "linear-gradient(135deg,#0a5fd4,#22c3ff)", media: "" },
+      { key: "breathing", label: "Respiration", desc: "Pulsation douce de luminosité", preview: "radial-gradient(circle,#e8bb45,#7a5a12)", media: "" },
+      { key: "marquee", label: "Enseigne", desc: "Défilement type enseigne", preview: "linear-gradient(90deg,#ffcf40,#ff6a3d,#ffcf40)", media: "" },
+      { key: "static", label: "Statique", desc: "Grésillement électrique", preview: "linear-gradient(135deg,#2a2f3a,#0d1526)", media: "" },
+      { key: "beat", label: "Battement", desc: "Battement rythmé", preview: "radial-gradient(circle,#e11d2a,#5a0810)", media: "" },
+      { key: "fade", label: "Fondu", desc: "Fondu entrée / sortie", preview: "linear-gradient(90deg,#0d1526,#8593ac,#0d1526)", media: "" },
+    ],
+  },
+
   // ── Ambiance "site vivant" (purement visuel, éditable librement) ──
   live: {
     customCursor: true,

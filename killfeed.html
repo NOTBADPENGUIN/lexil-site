@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>L'EXIL — Style Killfeed</title>
+  <link rel="icon" href="/img/logo.png" />
+  <link rel="stylesheet" href="/style.css?v=9" />
+  <style>
+    .kf-page { max-width: 1180px; margin: 0 auto; padding: 30px 24px 80px; }
+    .back-link { font-family: var(--font-head); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted-2); text-decoration: none; }
+    .back-link:hover { color: var(--gold); }
+    .kf-head { margin: 24px 0 22px; }
+    .kf-head h1 { font-family: var(--font-head); font-size: clamp(30px, 4.4vw, 46px); text-transform: uppercase; margin: 0; line-height: 1; }
+    .kf-head p { max-width: 72ch; font-size: 14.5px; line-height: 1.6; color: var(--muted); margin-top: 12px; }
+
+    /* Aperçu en direct */
+    .kf-preview {
+      position: sticky; top: 12px; z-index: 5; margin-bottom: 26px;
+      border: 1px solid var(--border-2); border-radius: 10px; overflow: hidden;
+      background: linear-gradient(135deg, #0c1428, #080d1c);
+    }
+    .kf-preview-label { font-family: var(--font-head); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted-4); padding: 12px 18px 0; }
+    .kf-feed { padding: 16px 18px 20px; display: flex; flex-direction: column; gap: 8px; }
+    .kf-line {
+      position: relative; overflow: hidden; align-self: flex-start;
+      display: inline-flex; align-items: center; gap: 10px; max-width: 100%;
+      padding: 9px 16px; border-radius: 5px; background: #0d1526; border: 1px solid #1c2947;
+      font-family: var(--font-head); font-size: 18px; letter-spacing: .03em;
+    }
+    .kf-line .kf-victim { color: var(--muted-3); }
+    .kf-line .kf-skull { opacity: .6; }
+    .kf-name {
+      font-weight: 700;
+      background-image: var(--kf-grad, linear-gradient(90deg,#f2efe9,#f2efe9));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      background-size: 200% auto;
+    }
+    /* Slots (fond du slot killfeed) */
+    .kf-slot-chromatic { border-image: linear-gradient(90deg,#ff2bd6,#22e0ff,#ffe017,#ff2bd6) 1; animation: kfChroma 4s linear infinite; }
+    .kf-slot-symbiote { background: linear-gradient(135deg,#1a1030,#3a1550,#0a0512); }
+    .kf-slot-shockwave::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 0% 50%, rgba(34,224,255,.5), transparent 60%); animation: kfShock 2.2s ease-out infinite; }
+    .kf-slot-sweep::after { content: ""; position: absolute; top: 0; bottom: 0; width: 40%; background: linear-gradient(110deg, transparent, rgba(232,187,69,.5), transparent); animation: kfSweep 2.4s linear infinite; }
+    .kf-slot-embers { background: linear-gradient(0deg,#2a0d06,#0d1526); }
+    .kf-slot-embers::after { content: ""; position: absolute; inset: 0; background: radial-gradient(2px 2px at 20% 90%, #ff6a00, transparent), radial-gradient(2px 2px at 60% 90%, #ffb03d, transparent), radial-gradient(2px 2px at 80% 90%, #d40000, transparent); animation: kfEmbers 1.8s linear infinite; }
+    @keyframes kfChroma { to { filter: hue-rotate(360deg); } }
+    @keyframes kfShock { 0% { opacity: .8; transform: scale(.6); } 100% { opacity: 0; transform: scale(1.6); } }
+    @keyframes kfSweep { 0% { left: -45%; } 100% { left: 105%; } }
+    @keyframes kfEmbers { 0% { transform: translateY(0); opacity: .9; } 100% { transform: translateY(-14px); opacity: 0; } }
+    /* Motions (animation du nom) */
+    .kf-motion-wave .kf-name { animation: kfWave 1.6s ease-in-out infinite; }
+    .kf-motion-breathing .kf-name { animation: kfBreath 2.4s ease-in-out infinite; }
+    .kf-motion-marquee .kf-name { background-position: 0 0; animation: kfMarquee 3s linear infinite; }
+    .kf-motion-static .kf-name { animation: kfStatic .18s steps(2) infinite; }
+    .kf-motion-beat .kf-name { animation: kfBeat 1s ease-in-out infinite; }
+    .kf-motion-fade .kf-name { animation: kfFade 2.2s ease-in-out infinite; }
+    @keyframes kfWave { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+    @keyframes kfBreath { 0%,100% { filter: brightness(.7); } 50% { filter: brightness(1.35); } }
+    @keyframes kfMarquee { to { background-position: 200% 0; } }
+    @keyframes kfStatic { 0% { opacity: 1; transform: translateX(0); } 50% { opacity: .82; transform: translateX(.5px); } 100% { opacity: 1; transform: translateX(-.5px); } }
+    @keyframes kfBeat { 0%,100% { transform: scale(1); } 20% { transform: scale(1.12); } 40% { transform: scale(1); } }
+    @keyframes kfFade { 0%,100% { opacity: .25; } 50% { opacity: 1; } }
+
+    /* Sections + cartes d'option */
+    .kf-section { margin-bottom: 30px; }
+    .kf-section-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; }
+    .kf-section-head h2 { font-family: var(--font-head); font-size: 17px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); margin: 0; }
+    .kf-section-head span { font-size: 12px; color: var(--muted-4); }
+    .kf-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+    .kf-card {
+      position: relative; cursor: pointer; border: 1px solid var(--border); border-radius: 8px;
+      background: var(--card); overflow: hidden; transition: border-color .18s, transform .18s, box-shadow .18s;
+    }
+    .kf-card:hover { border-color: var(--gold); transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,.4); }
+    .kf-card.selected { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold), 0 0 20px rgba(232,187,69,.22); }
+    .kf-card-media {
+      position: relative; height: 92px; display: grid; place-items: center; overflow: hidden;
+      border-bottom: 1px solid var(--border);
+    }
+    .kf-card-media video, .kf-card-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .kf-card-swatch { position: absolute; inset: 0; }
+    .kf-card-demo { position: relative; font-family: var(--font-head); font-weight: 700; font-size: 19px; letter-spacing: .04em;
+      background-image: var(--sw); -webkit-background-clip: text; background-clip: text; color: transparent;
+      text-shadow: 0 2px 10px rgba(0,0,0,.5); background-size: 200% auto; }
+    .kf-card-body { padding: 11px 13px 13px; }
+    .kf-card-body .t { font-family: var(--font-head); font-size: 15px; color: var(--text); letter-spacing: .02em; }
+    .kf-card-body .d { font-size: 11.5px; color: var(--muted-3); margin-top: 3px; line-height: 1.4; }
+    .kf-used {
+      position: absolute; top: 9px; right: 9px; z-index: 2;
+      font-family: var(--font-head); font-size: 9.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+      padding: 3px 8px; border-radius: 3px; background: linear-gradient(180deg, var(--gold-2), var(--gold-3)); color: #12183a;
+    }
+
+    .kf-locked { text-align: center; padding: 40px 24px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; }
+    .kf-locked b { display: block; font-family: var(--font-head); font-size: 19px; text-transform: uppercase; color: var(--text); margin-bottom: 8px; }
+    .kf-locked p { font-size: 14px; color: var(--muted-3); max-width: 52ch; margin: 0 auto 18px; line-height: 1.6; }
+    .kf-msg { position: fixed; left: 50%; transform: translateX(-50%); bottom: 22px; z-index: 40; max-width: 90vw;
+      padding: 12px 20px; border-radius: 6px; font-family: var(--font-head); font-size: 14px; box-shadow: 0 14px 40px rgba(0,0,0,.5);
+      opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; }
+    .kf-msg.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .kf-msg.ok { background: #0e2a1a; border: 1px solid var(--green); color: #a8f2c0; }
+    .kf-msg.ko { background: #2a120e; border: 1px solid #e05a4e; color: #f2b4ab; }
+    .loading { text-align: center; padding: 40px; color: var(--muted-3); }
+    @media (prefers-reduced-motion: reduce) { .kf-name, .kf-slot-shockwave::after, .kf-slot-sweep::after, .kf-slot-embers::after, .kf-slot-chromatic { animation: none !important; } }
+  </style>
+</head>
+<body>
+  <canvas id="fxAsh" aria-hidden="true"></canvas>
+  <div class="fx-vignette" aria-hidden="true"></div>
+  <div class="fx-scanlines" aria-hidden="true"></div>
+
+  <div class="kf-page">
+    <a href="compte.html#perso" class="back-link">← Retour à la personnalisation</a>
+    <div class="kf-head">
+      <div class="sec-eyebrow">Couleur de nom · Killfeed</div>
+      <h1>Ton style dans le killfeed</h1>
+      <p>Compose ton apparence à chaque élimination : une couleur de nom, un style de slot et une animation. Ton choix est enregistré et s'appliquera en jeu. Aperçu en direct ci-dessous.</p>
+    </div>
+    <div id="kfRoot"><p class="loading">Chargement…</p></div>
+  </div>
+  <div class="kf-msg" id="kfMsg"></div>
+
+  <script src="/config.js?v=9"></script>
+  <script src="/fx.js?v=9"></script>
+  <script>
+  (() => {
+    const CFG = window.CONFIG;
+    const KF = CFG.killfeed;
+    const B = (CFG.backendUrl || "").trim();
+    const $ = (id) => document.getElementById(id);
+    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const get = (k) => { try { return localStorage.getItem(k) || ""; } catch { return ""; } };
+
+    const qs = new URLSearchParams(location.search);
+    const steamId = qs.get("steamId") || get("lexil_steamid");
+    const urlTok = qs.get("t");
+    if (/^[a-f0-9]{64}$/.test(urlTok || "")) { try { localStorage.setItem("lexil_token", urlTok); } catch {} }
+    if (qs.get("steamId") || qs.get("t")) history.replaceState({}, "", location.pathname + location.hash);
+    const authToken = () => get("lexil_token");
+
+    let data = null;
+    // Sélection courante (clés) — défauts si rien de choisi.
+    const sel = { color: "", slot: "off", motion: "flat" };
+
+    const byKey = (arr, k) => arr.find((o) => o.key === k) || null;
+
+    function ownsKillfeed() {
+      const A = (data && data.account) || {};
+      const keys = new Set();
+      (A.orders || []).forEach((o) => (o.items || []).forEach((it) => it.key && keys.add(it.key)));
+      const activeSubs = new Set((A.subscriptions || []).filter((s) => s.active).map((s) => s.key));
+      return keys.has("col-kf:life") || activeSubs.has("col-kf:30j");
+    }
+
+    function toast(txt, ok) {
+      const m = $("kfMsg");
+      m.textContent = txt; m.className = "kf-msg show " + (ok ? "ok" : "ko");
+      clearTimeout(toast._t); toast._t = setTimeout(() => (m.className = "kf-msg"), 3200);
+    }
+
+    /* Aperçu en direct */
+    function updatePreview() {
+      const line = $("kfLine"), name = $("kfName");
+      if (!line) return;
+      const col = byKey(KF.colors, sel.color);
+      name.style.setProperty("--kf-grad", col ? col.preview : "linear-gradient(90deg,#f2efe9,#f2efe9)");
+      line.className = "kf-line" +
+        (sel.slot && sel.slot !== "off" ? " kf-slot-" + sel.slot : "") +
+        (sel.motion ? " kf-motion-" + sel.motion : "");
+    }
+
+    /* Enregistre un champ (color|slot|motion) */
+    async function save(field, key) {
+      const prev = sel[field];
+      sel[field] = key; markSelected(field); updatePreview();
+      try {
+        const r = await fetch(B + "/api/customize/killfeed", {
+          method: "POST", credentials: "include", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ steamId: data.steamId, token: authToken(), [field]: key }),
+        });
+        const d = await r.json();
+        if (d.ok) { data.killfeed = d.killfeed || data.killfeed; toast("Style enregistré ✓", true); }
+        else { sel[field] = prev; markSelected(field); updatePreview(); toast(d.error || "Enregistrement impossible.", false); }
+      } catch { sel[field] = prev; markSelected(field); updatePreview(); toast("Serveur injoignable — réessaie.", false); }
+    }
+
+    function markSelected(field) {
+      document.querySelectorAll(`[data-field="${field}"] .kf-card`).forEach((c) => {
+        const on = c.dataset.key === sel[field];
+        c.classList.toggle("selected", on);
+        const used = c.querySelector(".kf-used");
+        if (on && !used) c.insertAdjacentHTML("afterbegin", '<span class="kf-used">Utilisé</span>');
+        if (!on && used) used.remove();
+      });
+    }
+
+    function cardMedia(o, isColor) {
+      if (o.media) {
+        return /\.(mp4|webm)$/i.test(o.media)
+          ? `<video src="${esc(o.media)}" autoplay muted loop playsinline></video>`
+          : `<img src="${esc(o.media)}" alt="" loading="lazy"/>`;
+      }
+      // Placeholder provisoire : dégradé + libellé stylé (remplacé par la photo/vidéo plus tard).
+      return `<span class="kf-card-swatch" style="background:${o.preview};opacity:${isColor ? .18 : .5}"></span>` +
+             (isColor ? `<span class="kf-card-demo" style="--sw:${o.preview}">Pseudo</span>` : "");
+    }
+
+    function section(title, field, opts, isColor) {
+      return `
+        <div class="kf-section" data-field="${field}">
+          <div class="kf-section-head"><h2>${title}</h2><span>${opts.length} options</span></div>
+          <div class="kf-grid">
+            ${opts.map((o) => `
+              <div class="kf-card ${sel[field] === o.key ? "selected" : ""}" data-key="${o.key}">
+                ${sel[field] === o.key ? '<span class="kf-used">Utilisé</span>' : ""}
+                <div class="kf-card-media">${cardMedia(o, isColor)}</div>
+                <div class="kf-card-body"><div class="t">${esc(o.label)}</div><div class="d">${esc(o.desc)}</div></div>
+              </div>`).join("")}
+          </div>
+        </div>`;
+    }
+
+    function renderChooser() {
+      $("kfRoot").innerHTML = `
+        <div class="kf-preview">
+          <div class="kf-preview-label">Aperçu en direct</div>
+          <div class="kf-feed">
+            <div class="kf-line" id="kfLine">
+              <span class="kf-name" id="kfName">${esc((data.steam && data.steam.name) || "Ton pseudo")}</span>
+              <span class="kf-skull">☠</span>
+              <span class="kf-victim">Victime_42</span>
+            </div>
+          </div>
+        </div>
+        ${section("Couleur du nom", "color", KF.colors, true)}
+        ${section("Slot style", "slot", KF.slots, false)}
+        ${section("Name motion", "motion", KF.motions, false)}`;
+
+      document.querySelectorAll(".kf-section").forEach((secEl) => {
+        const field = secEl.dataset.field;
+        secEl.querySelectorAll(".kf-card").forEach((c) =>
+          c.addEventListener("click", () => save(field, c.dataset.key))
+        );
+      });
+      updatePreview();
+    }
+
+    function renderLocked() {
+      $("kfRoot").innerHTML = `
+        <div class="kf-locked">
+          <b>🔒 Style killfeed verrouillé</b>
+          <p>Ces styles nécessitent le produit <b>Couleur de nom — Killfeed</b>. Débloque-le pour composer ton apparence à chaque élimination.</p>
+          <a class="btn btn-gold" href="/#boutique">Voir la boutique</a>
+        </div>`;
+    }
+
+    function renderLoggedOut() {
+      $("kfRoot").innerHTML = `
+        <div class="kf-locked">
+          <b>Connexion requise</b>
+          <p>Connecte-toi avec Steam pour choisir et enregistrer ton style de killfeed.</p>
+          <a class="btn btn-gold" href="${B}/auth/steam">Connexion Steam</a>
+        </div>`;
+    }
+
+    /* Chargement */
+    if (!steamId || !/^7656\d{13}$/.test(steamId) || !B) { renderLoggedOut(); return; }
+    fetch(B + "/api/account?steamId=" + encodeURIComponent(steamId))
+      .then((r) => r.json())
+      .then((d) => {
+        data = d || {}; data.steamId = data.steamId || steamId;
+        const kf = data.killfeed || {};
+        if (kf.color) sel.color = kf.color;
+        if (kf.slot) sel.slot = kf.slot;
+        if (kf.motion) sel.motion = kf.motion;
+        if (!ownsKillfeed()) return renderLocked();
+        renderChooser();
+      })
+      .catch(() => { $("kfRoot").innerHTML = '<div class="kf-locked"><b>Compte indisponible</b><p>Impossible de contacter le serveur. Réessaie dans un instant.</p></div>'; });
+  })();
+  </script>
+</body>
+</html>
