@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>L'EXIL — Style Killfeed</title>
   <link rel="icon" href="/img/logo.png" />
-  <link rel="stylesheet" href="/style.css?v=9" />
+  <link rel="stylesheet" href="/style.css?v=10" />
   <style>
     .kf-page { max-width: 760px; margin: 0 auto; padding: 30px 24px 90px; }
     .back-link { font-family: var(--font-head); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted-2); text-decoration: none; }
@@ -84,6 +84,10 @@
     .kf-msg.show { opacity: 1; }
     .kf-msg.ok { background: #0e2a1a; border: 1px solid var(--green); color: #a8f2c0; }
     .kf-msg.ko { background: #2a120e; border: 1px solid #e05a4e; color: #f2b4ab; }
+    .kf-banner { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; justify-content: space-between;
+      padding: 14px 18px; margin-bottom: 18px; border-radius: 8px; background: rgba(232,187,69,.08); border: 1px solid #3d3016; }
+    .kf-banner p { margin: 0; font-size: 13.5px; color: #e7d9b0; line-height: 1.5; }
+    .kf-banner .btn { flex: none; }
     .loading { text-align: center; padding: 40px; color: var(--muted-3); }
     @media (prefers-reduced-motion: reduce) { .kf-name, .kf-slot-shockwave::after, .kf-slot-sweep::after, .kf-slot-embers::after, .kf-slot-chromatic { animation: none !important; } }
   </style>
@@ -104,8 +108,8 @@
   </div>
   <div class="kf-msg" id="kfMsg"></div>
 
-  <script src="/config.js?v=9"></script>
-  <script src="/fx.js?v=9"></script>
+  <script src="/config.js?v=10"></script>
+  <script src="/fx.js?v=10"></script>
   <script>
   (() => {
     const CFG = window.CONFIG;
@@ -123,6 +127,7 @@
     const authToken = () => get("lexil_token");
 
     let data = null;
+    let canSave = false;   // true seulement si connecté ET possède la couleur killfeed
     const sel = { color: "", slot: "off", motion: "flat" };
     const byKey = (arr, k) => (arr || []).find((o) => o.key === k) || null;
     const isColorField = (f) => f === "color";
@@ -164,6 +169,9 @@
       const prev = sel[field];
       if (prev === key) return;
       sel[field] = key; syncField(field); updatePreview();
+      // Mode aperçu (visiteur non connecté ou ne possédant pas la couleur) : on
+      // met à jour l'aperçu localement mais on n'enregistre pas.
+      if (!canSave) { toast("Aperçu — débloque la couleur killfeed pour enregistrer.", false); return; }
       try {
         const r = await fetch(B + "/api/customize/killfeed", {
           method: "POST", credentials: "include", headers: { "Content-Type": "application/json" },
@@ -220,8 +228,9 @@
       });
     }
 
-    function renderChooser() {
+    function renderChooser(banner) {
       $("kfRoot").innerHTML = `
+        ${banner || ""}
         <div class="kf-preview">
           <div class="kf-preview-label">Aperçu en direct</div>
           <div class="kf-feed">
@@ -261,20 +270,17 @@
     document.addEventListener("click", () => closeAll(null));
     document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeAll(null); });
 
-    function renderLocked() {
-      $("kfRoot").innerHTML = `
-        <div class="kf-locked"><b>🔒 Style killfeed verrouillé</b>
-          <p>Ces styles nécessitent le produit <b>Couleur de nom — Killfeed</b>. Débloque-le pour composer ton apparence à chaque élimination.</p>
-          <a class="btn btn-gold" href="/#boutique">Voir la boutique</a></div>`;
-    }
-    function renderLoggedOut() {
-      $("kfRoot").innerHTML = `
-        <div class="kf-locked"><b>Connexion requise</b>
-          <p>Connecte-toi avec Steam pour choisir et enregistrer ton style de killfeed.</p>
-          <a class="btn btn-gold" href="${B}/auth/steam">Connexion Steam</a></div>`;
-    }
+    // Bannières selon l'état (le chooser reste toujours affiché = mode aperçu).
+    const bannerGuest = `<div class="kf-banner"><p>👀 <b>Mode aperçu</b> — connecte-toi avec Steam et débloque la couleur killfeed pour enregistrer ton style.</p><a class="btn btn-gold" href="${B}/auth/steam">Connexion Steam</a></div>`;
+    const bannerLocked = `<div class="kf-banner"><p>👀 <b>Mode aperçu</b> — tu ne possèdes pas encore la couleur killfeed. Débloque-la pour enregistrer ton style en jeu.</p><a class="btn btn-gold" href="/#boutique">Débloquer</a></div>`;
 
-    if (!steamId || !/^7656\d{13}$/.test(steamId) || !B) { renderLoggedOut(); return; }
+    // Visiteur non connecté → aperçu libre (parcours des styles depuis la boutique).
+    if (!B || !steamId || !/^7656\d{13}$/.test(steamId)) {
+      data = { steamId: "", steam: null, account: {}, killfeed: {} };
+      canSave = false;
+      renderChooser(B ? bannerGuest : "");
+      return;
+    }
     fetch(B + "/api/account?steamId=" + encodeURIComponent(steamId))
       .then((r) => r.json())
       .then((d) => {
@@ -283,8 +289,8 @@
         if (kf.color) sel.color = kf.color;
         if (kf.slot) sel.slot = kf.slot;
         if (kf.motion) sel.motion = kf.motion;
-        if (!ownsKillfeed()) return renderLocked();
-        renderChooser();
+        canSave = ownsKillfeed();
+        renderChooser(canSave ? "" : bannerLocked);
       })
       .catch(() => { $("kfRoot").innerHTML = '<div class="kf-locked"><b>Compte indisponible</b><p>Impossible de contacter le serveur. Réessaie.</p></div>'; });
   })();

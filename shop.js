@@ -147,6 +147,10 @@
             data-pvariant="${d.key}">${d.label} · ${fmt(d.prix)}</button>`).join("")}</div>`
       : "";
     $("prodPrice").textContent = fmt(prix);
+    // Le killfeed a des styles à composer → accès direct depuis la fiche produit.
+    $("prodExtra").innerHTML = p.id === "col-kf"
+      ? `<a class="prod-styles-link" href="killfeed.html">🎯 Voir &amp; choisir les styles (couleur · slot · animation) →</a>`
+      : "";
     $("prodVariants").querySelectorAll("[data-pvariant]").forEach((b) =>
       b.addEventListener("click", () => { selectedVariant[p.id] = b.dataset.pvariant; renderProduct(); renderGrid(); })
     );
@@ -377,6 +381,14 @@
 
     // Boutique + panier — chaque bloc est isolé : un pépin n'empêche pas le reste.
     safe("boutique", () => { renderFilters(); renderGrid(); });
+    // Deep-link : /?produit=<id> ouvre directement la fiche produit (ex. depuis le compte).
+    safe("deeplink", () => {
+      const pid = new URLSearchParams(location.search).get("produit");
+      if (pid && CFG.catalogue.some((p) => p.id === pid)) {
+        openProduct(pid);
+        history.replaceState({}, "", location.pathname + (location.hash || "#boutique"));
+      }
+    });
     safe("fiche produit", () => {
       $("prodClose").addEventListener("click", closeProduct);
       $("prodModal").addEventListener("click", (e) => { if (e.target === $("prodModal")) closeProduct(); });

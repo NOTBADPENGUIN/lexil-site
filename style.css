@@ -791,6 +791,13 @@ body.fx-cursor-on, body.fx-cursor-on a, body.fx-cursor-on button { cursor: none;
 .prod-buy .price { font-size: 30px; }
 .prod-buy .btn { padding: 13px 22px; font-size: 15px; }
 .prod-note { font-size: 11.5px; color: var(--muted-4); margin: 12px 0 0; line-height: 1.5; }
+.prod-styles-link {
+  display: block; margin: 4px 0 16px; padding: 12px 15px; border-radius: 6px; text-align: center;
+  font-family: var(--font-head); font-size: 13.5px; letter-spacing: .04em; text-decoration: none;
+  color: var(--gold-2); background: rgba(232, 187, 69, .09); border: 1px solid #3d3016;
+  transition: background .18s, border-color .18s;
+}
+.prod-styles-link:hover { background: rgba(232, 187, 69, .16); border-color: var(--gold); }
 @media (max-width: 640px) {
   .prod-box { grid-template-columns: 1fr; }
   .prod-media { border-right: none; border-bottom: 1px solid var(--border); padding: 22px; }
