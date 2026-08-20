@@ -42,11 +42,15 @@
     if (/^[a-f0-9]{64}$/.test(urlTok || "")) { try { localStorage.setItem("lexil_token", urlTok); } catch {} }
     const steamId = qs.get("steamId") || get("lexil_steamid");
     const authToken = () => get("lexil_token");
+    const hasToken = () => /^[a-f0-9]{64}$/.test(authToken());
+    // Reconnexion Steam qui revient sur la page courante (le backend lit ?return=).
+    const steamLogin = B + "/auth/steam?return=" + encodeURIComponent(location.pathname + location.search);
 
     const OPTS = { color: KF.colors, slot: KF.slots, motion: KF.motions };
     const sel = { color: "", slot: "off", motion: "flat" };
     let data = { steamId: "", steam: null, account: {}, killfeed: {} };
     let canSave = false;
+    let needReconnect = false;   // possède la couleur mais jeton manquant
 
     const ownsKillfeed = () => {
       const A = (data && data.account) || {};
@@ -70,16 +74,27 @@
       const prev = sel[field];
       if (prev === key) return;
       sel[field] = key; syncField(field); updatePreview();
-      if (!canSave) { toast("Aperçu — débloque la couleur killfeed pour enregistrer.", false); return; }
+      if (!canSave) {
+        toast(needReconnect ? "Reconnecte-toi via Steam pour enregistrer (bouton en haut)." : "Aperçu — débloque la couleur killfeed pour enregistrer.", false);
+        return;
+      }
       try {
         const r = await fetch(B + "/api/customize/killfeed", {
           method: "POST", credentials: "include", headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ steamId: data.steamId, token: authToken(), [field]: key }),
         });
         const d = await r.json();
-        if (d.ok) { data.killfeed = d.killfeed || data.killfeed; toast("Style enregistré ✓", true); }
-        else { sel[field] = prev; syncField(field); updatePreview(); toast(d.error || "Enregistrement impossible.", false); }
+        if (d.ok) { data.killfeed = d.killfeed || data.killfeed; toast("Style enregistré ✓", true); return; }
+        sel[field] = prev; syncField(field); updatePreview();
+        if (r.status === 401) { canSave = false; needReconnect = true; showReconnectBanner(); toast("Reconnecte-toi via Steam pour enregistrer (bouton en haut).", false); }
+        else toast(d.error || "Enregistrement impossible.", false);
       } catch { sel[field] = prev; syncField(field); updatePreview(); toast("Serveur injoignable — réessaie.", false); }
+    }
+
+    // Insère la bannière de reconnexion en haut du sélecteur si absente.
+    function showReconnectBanner() {
+      if (root.querySelector(".kf-banner")) return;
+      root.insertAdjacentHTML("afterbegin", bannerReconnect);
     }
 
     function syncField(field) {
@@ -166,8 +181,9 @@
     document.addEventListener("click", () => closeAll(null));
     document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeAll(null); });
 
-    const bannerGuest = `<div class="kf-banner"><p>👀 <b>Mode aperçu</b> — connecte-toi avec Steam et débloque la couleur killfeed pour enregistrer ton style.</p><a class="btn btn-gold" href="${B}/auth/steam">Connexion Steam</a></div>`;
+    const bannerGuest = `<div class="kf-banner"><p>👀 <b>Mode aperçu</b> — connecte-toi avec Steam et débloque la couleur killfeed pour enregistrer ton style.</p><a class="btn btn-gold" href="${steamLogin}">Connexion Steam</a></div>`;
     const bannerLocked = `<div class="kf-banner"><p>👀 <b>Mode aperçu</b> — tu ne possèdes pas encore la couleur killfeed. Débloque-la pour enregistrer ton style en jeu.</p><a class="btn btn-gold" href="/produit.html?id=col-kf">Débloquer</a></div>`;
+    const bannerReconnect = `<div class="kf-banner"><p>🔑 <b>Reconnexion requise</b> — tu possèdes bien la couleur killfeed, mais ta session doit être réactivée pour enregistrer. Reconnecte-toi via Steam (une seule fois).</p><a class="btn btn-gold" href="${steamLogin}">Reconnexion Steam</a></div>`;
 
     if (!B || !steamId || !/^7656\d{13}$/.test(steamId)) {
       canSave = false;
@@ -182,8 +198,12 @@
         if (kf.color) sel.color = kf.color;
         if (kf.slot) sel.slot = kf.slot;
         if (kf.motion) sel.motion = kf.motion;
-        canSave = ownsKillfeed();
-        renderChooser(canSave ? "" : bannerLocked);
+        const owns = ownsKillfeed();
+        // Possède + jeton valide → enregistrement actif. Possède sans jeton →
+        // reconnexion Steam requise. Ne possède pas → invitation à acheter.
+        canSave = owns && hasToken();
+        needReconnect = owns && !hasToken();
+        renderChooser(!owns ? bannerLocked : (canSave ? "" : bannerReconnect));
       })
       .catch(() => { renderChooser(bannerLocked); });
   }
