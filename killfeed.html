@@ -7,36 +7,22 @@
   <link rel="icon" href="/img/logo.png" />
   <link rel="stylesheet" href="/style.css?v=9" />
   <style>
-    .kf-page { max-width: 1180px; margin: 0 auto; padding: 30px 24px 80px; }
+    .kf-page { max-width: 760px; margin: 0 auto; padding: 30px 24px 90px; }
     .back-link { font-family: var(--font-head); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted-2); text-decoration: none; }
     .back-link:hover { color: var(--gold); }
     .kf-head { margin: 24px 0 22px; }
     .kf-head h1 { font-family: var(--font-head); font-size: clamp(30px, 4.4vw, 46px); text-transform: uppercase; margin: 0; line-height: 1; }
-    .kf-head p { max-width: 72ch; font-size: 14.5px; line-height: 1.6; color: var(--muted); margin-top: 12px; }
+    .kf-head p { font-size: 14.5px; line-height: 1.6; color: var(--muted); margin-top: 12px; }
 
     /* Aperçu en direct */
-    .kf-preview {
-      position: sticky; top: 12px; z-index: 5; margin-bottom: 26px;
-      border: 1px solid var(--border-2); border-radius: 10px; overflow: hidden;
-      background: linear-gradient(135deg, #0c1428, #080d1c);
-    }
+    .kf-preview { margin-bottom: 26px; border: 1px solid var(--border-2); border-radius: 10px; overflow: hidden; background: linear-gradient(135deg, #0c1428, #080d1c); }
     .kf-preview-label { font-family: var(--font-head); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted-4); padding: 12px 18px 0; }
-    .kf-feed { padding: 16px 18px 20px; display: flex; flex-direction: column; gap: 8px; }
-    .kf-line {
-      position: relative; overflow: hidden; align-self: flex-start;
-      display: inline-flex; align-items: center; gap: 10px; max-width: 100%;
-      padding: 9px 16px; border-radius: 5px; background: #0d1526; border: 1px solid #1c2947;
-      font-family: var(--font-head); font-size: 18px; letter-spacing: .03em;
-    }
+    .kf-feed { padding: 16px 18px 20px; }
+    .kf-line { position: relative; overflow: hidden; align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; max-width: 100%;
+      padding: 9px 16px; border-radius: 5px; background: #0d1526; border: 1px solid #1c2947; font-family: var(--font-head); font-size: 18px; letter-spacing: .03em; }
     .kf-line .kf-victim { color: var(--muted-3); }
     .kf-line .kf-skull { opacity: .6; }
-    .kf-name {
-      font-weight: 700;
-      background-image: var(--kf-grad, linear-gradient(90deg,#f2efe9,#f2efe9));
-      -webkit-background-clip: text; background-clip: text; color: transparent;
-      background-size: 200% auto;
-    }
-    /* Slots (fond du slot killfeed) */
+    .kf-name { font-weight: 700; background-image: var(--kf-grad, linear-gradient(90deg,#f2efe9,#f2efe9)); -webkit-background-clip: text; background-clip: text; color: transparent; background-size: 200% auto; }
     .kf-slot-chromatic { border-image: linear-gradient(90deg,#ff2bd6,#22e0ff,#ffe017,#ff2bd6) 1; animation: kfChroma 4s linear infinite; }
     .kf-slot-symbiote { background: linear-gradient(135deg,#1a1030,#3a1550,#0a0512); }
     .kf-slot-shockwave::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 0% 50%, rgba(34,224,255,.5), transparent 60%); animation: kfShock 2.2s ease-out infinite; }
@@ -47,10 +33,9 @@
     @keyframes kfShock { 0% { opacity: .8; transform: scale(.6); } 100% { opacity: 0; transform: scale(1.6); } }
     @keyframes kfSweep { 0% { left: -45%; } 100% { left: 105%; } }
     @keyframes kfEmbers { 0% { transform: translateY(0); opacity: .9; } 100% { transform: translateY(-14px); opacity: 0; } }
-    /* Motions (animation du nom) */
     .kf-motion-wave .kf-name { animation: kfWave 1.6s ease-in-out infinite; }
     .kf-motion-breathing .kf-name { animation: kfBreath 2.4s ease-in-out infinite; }
-    .kf-motion-marquee .kf-name { background-position: 0 0; animation: kfMarquee 3s linear infinite; }
+    .kf-motion-marquee .kf-name { animation: kfMarquee 3s linear infinite; }
     .kf-motion-static .kf-name { animation: kfStatic .18s steps(2) infinite; }
     .kf-motion-beat .kf-name { animation: kfBeat 1s ease-in-out infinite; }
     .kf-motion-fade .kf-name { animation: kfFade 2.2s ease-in-out infinite; }
@@ -61,43 +46,42 @@
     @keyframes kfBeat { 0%,100% { transform: scale(1); } 20% { transform: scale(1.12); } 40% { transform: scale(1); } }
     @keyframes kfFade { 0%,100% { opacity: .25; } 50% { opacity: 1; } }
 
-    /* Sections + cartes d'option */
-    .kf-section { margin-bottom: 30px; }
-    .kf-section-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; }
-    .kf-section-head h2 { font-family: var(--font-head); font-size: 17px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); margin: 0; }
-    .kf-section-head span { font-size: 12px; color: var(--muted-4); }
-    .kf-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
-    .kf-card {
-      position: relative; cursor: pointer; border: 1px solid var(--border); border-radius: 8px;
-      background: var(--card); overflow: hidden; transition: border-color .18s, transform .18s, box-shadow .18s;
-    }
-    .kf-card:hover { border-color: var(--gold); transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,.4); }
-    .kf-card.selected { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold), 0 0 20px rgba(232,187,69,.22); }
-    .kf-card-media {
-      position: relative; height: 92px; display: grid; place-items: center; overflow: hidden;
-      border-bottom: 1px solid var(--border);
-    }
-    .kf-card-media video, .kf-card-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .kf-card-swatch { position: absolute; inset: 0; }
-    .kf-card-demo { position: relative; font-family: var(--font-head); font-weight: 700; font-size: 19px; letter-spacing: .04em;
-      background-image: var(--sw); -webkit-background-clip: text; background-clip: text; color: transparent;
-      text-shadow: 0 2px 10px rgba(0,0,0,.5); background-size: 200% auto; }
-    .kf-card-body { padding: 11px 13px 13px; }
-    .kf-card-body .t { font-family: var(--font-head); font-size: 15px; color: var(--text); letter-spacing: .02em; }
-    .kf-card-body .d { font-size: 11.5px; color: var(--muted-3); margin-top: 3px; line-height: 1.4; }
-    .kf-used {
-      position: absolute; top: 9px; right: 9px; z-index: 2;
-      font-family: var(--font-head); font-size: 9.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
-      padding: 3px 8px; border-radius: 3px; background: linear-gradient(180deg, var(--gold-2), var(--gold-3)); color: #12183a;
-    }
+    /* Listes déroulantes (une par catégorie) */
+    .kf-select { margin-bottom: 16px; }
+    .kf-select > label { display: block; font-family: var(--font-head); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+    .kf-select-wrap { position: relative; }
+    .kf-select-btn { width: 100%; display: flex; align-items: center; gap: 13px; padding: 13px 15px; cursor: pointer;
+      background: var(--card); border: 1px solid var(--border-2); border-radius: 8px; color: var(--text); text-align: left; transition: border-color .18s; }
+    .kf-select-btn:hover, .kf-select-btn[aria-expanded="true"] { border-color: var(--gold); }
+    .kf-thumb { flex: none; width: 42px; height: 30px; border-radius: 5px; border: 1px solid var(--border-2); overflow: hidden; position: relative; }
+    .kf-thumb video, .kf-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .kf-thumb .sw { position: absolute; inset: 0; }
+    .kf-thumb .demo { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--font-head); font-weight: 700; font-size: 11px;
+      background-image: var(--sw); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .kf-select-cur { flex: 1; min-width: 0; }
+    .kf-select-cur .t { font-family: var(--font-head); font-size: 16px; letter-spacing: .02em; }
+    .kf-select-cur .d { font-size: 12px; color: var(--muted-3); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .kf-chev { flex: none; color: var(--muted-3); transition: transform .2s; }
+    .kf-select-btn[aria-expanded="true"] .kf-chev { transform: rotate(180deg); color: var(--gold); }
+
+    .kf-panel { position: absolute; z-index: 20; left: 0; right: 0; top: calc(100% + 6px); max-height: 340px; overflow-y: auto;
+      background: #101a31; border: 1px solid var(--border-2); border-radius: 8px; box-shadow: 0 20px 50px rgba(0,0,0,.55); padding: 6px; }
+    .kf-panel[hidden] { display: none; }
+    .kf-opt { width: 100%; display: flex; align-items: center; gap: 12px; padding: 9px 10px; cursor: pointer; border: none; border-radius: 6px; background: none; color: var(--text); text-align: left; }
+    .kf-opt:hover { background: rgba(232,187,69,.08); }
+    .kf-opt.on { background: rgba(232,187,69,.12); }
+    .kf-opt .t { font-family: var(--font-head); font-size: 15px; letter-spacing: .02em; }
+    .kf-opt .d { font-size: 11.5px; color: var(--muted-3); margin-top: 1px; }
+    .kf-opt .info { flex: 1; min-width: 0; }
+    .kf-opt-check { flex: none; color: var(--green); font-weight: 700; opacity: 0; }
+    .kf-opt.on .kf-opt-check { opacity: 1; }
 
     .kf-locked { text-align: center; padding: 40px 24px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; }
     .kf-locked b { display: block; font-family: var(--font-head); font-size: 19px; text-transform: uppercase; color: var(--text); margin-bottom: 8px; }
     .kf-locked p { font-size: 14px; color: var(--muted-3); max-width: 52ch; margin: 0 auto 18px; line-height: 1.6; }
-    .kf-msg { position: fixed; left: 50%; transform: translateX(-50%); bottom: 22px; z-index: 40; max-width: 90vw;
-      padding: 12px 20px; border-radius: 6px; font-family: var(--font-head); font-size: 14px; box-shadow: 0 14px 40px rgba(0,0,0,.5);
-      opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; }
-    .kf-msg.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .kf-msg { position: fixed; left: 50%; transform: translateX(-50%); bottom: 22px; z-index: 40; max-width: 90vw; padding: 12px 20px; border-radius: 6px;
+      font-family: var(--font-head); font-size: 14px; box-shadow: 0 14px 40px rgba(0,0,0,.5); opacity: 0; pointer-events: none; transition: opacity .25s; }
+    .kf-msg.show { opacity: 1; }
     .kf-msg.ok { background: #0e2a1a; border: 1px solid var(--green); color: #a8f2c0; }
     .kf-msg.ko { background: #2a120e; border: 1px solid #e05a4e; color: #f2b4ab; }
     .loading { text-align: center; padding: 40px; color: var(--muted-3); }
@@ -114,7 +98,7 @@
     <div class="kf-head">
       <div class="sec-eyebrow">Couleur de nom · Killfeed</div>
       <h1>Ton style dans le killfeed</h1>
-      <p>Compose ton apparence à chaque élimination : une couleur de nom, un style de slot et une animation. Ton choix est enregistré et s'appliquera en jeu. Aperçu en direct ci-dessous.</p>
+      <p>Choisis une option dans chaque liste : couleur de nom, style de slot et animation. Ton choix est enregistré et s'appliquera en jeu. Aperçu en direct ci-dessous.</p>
     </div>
     <div id="kfRoot"><p class="loading">Chargement…</p></div>
   </div>
@@ -139,10 +123,9 @@
     const authToken = () => get("lexil_token");
 
     let data = null;
-    // Sélection courante (clés) — défauts si rien de choisi.
     const sel = { color: "", slot: "off", motion: "flat" };
-
-    const byKey = (arr, k) => arr.find((o) => o.key === k) || null;
+    const byKey = (arr, k) => (arr || []).find((o) => o.key === k) || null;
+    const isColorField = (f) => f === "color";
 
     function ownsKillfeed() {
       const A = (data && data.account) || {};
@@ -153,26 +136,34 @@
     }
 
     function toast(txt, ok) {
-      const m = $("kfMsg");
-      m.textContent = txt; m.className = "kf-msg show " + (ok ? "ok" : "ko");
-      clearTimeout(toast._t); toast._t = setTimeout(() => (m.className = "kf-msg"), 3200);
+      const m = $("kfMsg"); m.textContent = txt; m.className = "kf-msg show " + (ok ? "ok" : "ko");
+      clearTimeout(toast._t); toast._t = setTimeout(() => (m.className = "kf-msg"), 3000);
     }
 
-    /* Aperçu en direct */
+    // Vignette d'une option : vidéo/photo si `media`, sinon dégradé (+ "Ab" stylé pour les couleurs).
+    function thumb(o, field) {
+      if (o.media) {
+        return /\.(mp4|webm)$/i.test(o.media)
+          ? `<span class="kf-thumb"><video src="${esc(o.media)}" autoplay muted loop playsinline></video></span>`
+          : `<span class="kf-thumb"><img src="${esc(o.media)}" alt="" loading="lazy"/></span>`;
+      }
+      return isColorField(field)
+        ? `<span class="kf-thumb"><span class="sw" style="background:${o.preview};opacity:.2"></span><span class="demo" style="--sw:${o.preview}">Ab</span></span>`
+        : `<span class="kf-thumb"><span class="sw" style="background:${o.preview}"></span></span>`;
+    }
+
     function updatePreview() {
       const line = $("kfLine"), name = $("kfName");
       if (!line) return;
       const col = byKey(KF.colors, sel.color);
       name.style.setProperty("--kf-grad", col ? col.preview : "linear-gradient(90deg,#f2efe9,#f2efe9)");
-      line.className = "kf-line" +
-        (sel.slot && sel.slot !== "off" ? " kf-slot-" + sel.slot : "") +
-        (sel.motion ? " kf-motion-" + sel.motion : "");
+      line.className = "kf-line" + (sel.slot && sel.slot !== "off" ? " kf-slot-" + sel.slot : "") + (sel.motion ? " kf-motion-" + sel.motion : "");
     }
 
-    /* Enregistre un champ (color|slot|motion) */
     async function save(field, key) {
       const prev = sel[field];
-      sel[field] = key; markSelected(field); updatePreview();
+      if (prev === key) return;
+      sel[field] = key; syncField(field); updatePreview();
       try {
         const r = await fetch(B + "/api/customize/killfeed", {
           method: "POST", credentials: "include", headers: { "Content-Type": "application/json" },
@@ -180,44 +171,53 @@
         });
         const d = await r.json();
         if (d.ok) { data.killfeed = d.killfeed || data.killfeed; toast("Style enregistré ✓", true); }
-        else { sel[field] = prev; markSelected(field); updatePreview(); toast(d.error || "Enregistrement impossible.", false); }
-      } catch { sel[field] = prev; markSelected(field); updatePreview(); toast("Serveur injoignable — réessaie.", false); }
+        else { sel[field] = prev; syncField(field); updatePreview(); toast(d.error || "Enregistrement impossible.", false); }
+      } catch { sel[field] = prev; syncField(field); updatePreview(); toast("Serveur injoignable — réessaie.", false); }
     }
 
-    function markSelected(field) {
-      document.querySelectorAll(`[data-field="${field}"] .kf-card`).forEach((c) => {
-        const on = c.dataset.key === sel[field];
-        c.classList.toggle("selected", on);
-        const used = c.querySelector(".kf-used");
-        if (on && !used) c.insertAdjacentHTML("afterbegin", '<span class="kf-used">Utilisé</span>');
-        if (!on && used) used.remove();
-      });
+    const OPTS = { color: KF.colors, slot: KF.slots, motion: KF.motions };
+
+    // Met à jour le bouton (option courante) + les coches du panneau d'un champ.
+    function syncField(field) {
+      const wrap = document.querySelector(`.kf-select[data-field="${field}"]`);
+      if (!wrap) return;
+      const o = byKey(OPTS[field], sel[field]) || OPTS[field][0];
+      wrap.querySelector(".kf-select-cur").innerHTML = `<div class="t">${esc(o.label)}</div><div class="d">${esc(o.desc)}</div>`;
+      const btnThumb = wrap.querySelector(".kf-btn-thumb");
+      if (btnThumb) btnThumb.outerHTML = thumb(o, field).replace('class="kf-thumb"', 'class="kf-thumb kf-btn-thumb"');
+      wrap.querySelectorAll(".kf-opt").forEach((op) => op.classList.toggle("on", op.dataset.key === sel[field]));
     }
 
-    function cardMedia(o, isColor) {
-      if (o.media) {
-        return /\.(mp4|webm)$/i.test(o.media)
-          ? `<video src="${esc(o.media)}" autoplay muted loop playsinline></video>`
-          : `<img src="${esc(o.media)}" alt="" loading="lazy"/>`;
-      }
-      // Placeholder provisoire : dégradé + libellé stylé (remplacé par la photo/vidéo plus tard).
-      return `<span class="kf-card-swatch" style="background:${o.preview};opacity:${isColor ? .18 : .5}"></span>` +
-             (isColor ? `<span class="kf-card-demo" style="--sw:${o.preview}">Pseudo</span>` : "");
-    }
-
-    function section(title, field, opts, isColor) {
+    function dropdown(title, field) {
+      const opts = OPTS[field];
+      const cur = byKey(opts, sel[field]) || opts[0];
       return `
-        <div class="kf-section" data-field="${field}">
-          <div class="kf-section-head"><h2>${title}</h2><span>${opts.length} options</span></div>
-          <div class="kf-grid">
-            ${opts.map((o) => `
-              <div class="kf-card ${sel[field] === o.key ? "selected" : ""}" data-key="${o.key}">
-                ${sel[field] === o.key ? '<span class="kf-used">Utilisé</span>' : ""}
-                <div class="kf-card-media">${cardMedia(o, isColor)}</div>
-                <div class="kf-card-body"><div class="t">${esc(o.label)}</div><div class="d">${esc(o.desc)}</div></div>
-              </div>`).join("")}
+        <div class="kf-select" data-field="${field}">
+          <label>${title} <span style="color:var(--muted-4);font-size:11px">· ${opts.length} options</span></label>
+          <div class="kf-select-wrap">
+            <button class="kf-select-btn" type="button" aria-expanded="false">
+              ${thumb(cur, field).replace('class="kf-thumb"', 'class="kf-thumb kf-btn-thumb"')}
+              <span class="kf-select-cur"><div class="t">${esc(cur.label)}</div><div class="d">${esc(cur.desc)}</div></span>
+              <span class="kf-chev">▾</span>
+            </button>
+            <div class="kf-panel" hidden>
+              ${opts.map((o) => `
+                <button class="kf-opt ${o.key === sel[field] ? "on" : ""}" type="button" data-key="${o.key}">
+                  ${thumb(o, field)}
+                  <span class="info"><div class="t">${esc(o.label)}</div><div class="d">${esc(o.desc)}</div></span>
+                  <span class="kf-opt-check">✓</span>
+                </button>`).join("")}
+            </div>
           </div>
         </div>`;
+    }
+
+    function closeAll(except) {
+      document.querySelectorAll(".kf-select-btn").forEach((b) => {
+        if (b === except) return;
+        b.setAttribute("aria-expanded", "false");
+        b.parentElement.querySelector(".kf-panel").hidden = true;
+      });
     }
 
     function renderChooser() {
@@ -232,38 +232,48 @@
             </div>
           </div>
         </div>
-        ${section("Couleur du nom", "color", KF.colors, true)}
-        ${section("Slot style", "slot", KF.slots, false)}
-        ${section("Name motion", "motion", KF.motions, false)}`;
+        ${dropdown("Couleur du nom", "color")}
+        ${dropdown("Slot style", "slot")}
+        ${dropdown("Name motion", "motion")}`;
 
-      document.querySelectorAll(".kf-section").forEach((secEl) => {
-        const field = secEl.dataset.field;
-        secEl.querySelectorAll(".kf-card").forEach((c) =>
-          c.addEventListener("click", () => save(field, c.dataset.key))
+      document.querySelectorAll(".kf-select").forEach((wrap) => {
+        const field = wrap.dataset.field;
+        const btn = wrap.querySelector(".kf-select-btn");
+        const panel = wrap.querySelector(".kf-panel");
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const open = btn.getAttribute("aria-expanded") === "true";
+          closeAll(open ? null : btn);
+          btn.setAttribute("aria-expanded", String(!open));
+          panel.hidden = open;
+        });
+        panel.querySelectorAll(".kf-opt").forEach((op) =>
+          op.addEventListener("click", (e) => {
+            e.stopPropagation();
+            save(field, op.dataset.key);
+            btn.setAttribute("aria-expanded", "false"); panel.hidden = true;
+          })
         );
       });
       updatePreview();
     }
 
+    document.addEventListener("click", () => closeAll(null));
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeAll(null); });
+
     function renderLocked() {
       $("kfRoot").innerHTML = `
-        <div class="kf-locked">
-          <b>🔒 Style killfeed verrouillé</b>
+        <div class="kf-locked"><b>🔒 Style killfeed verrouillé</b>
           <p>Ces styles nécessitent le produit <b>Couleur de nom — Killfeed</b>. Débloque-le pour composer ton apparence à chaque élimination.</p>
-          <a class="btn btn-gold" href="/#boutique">Voir la boutique</a>
-        </div>`;
+          <a class="btn btn-gold" href="/#boutique">Voir la boutique</a></div>`;
     }
-
     function renderLoggedOut() {
       $("kfRoot").innerHTML = `
-        <div class="kf-locked">
-          <b>Connexion requise</b>
+        <div class="kf-locked"><b>Connexion requise</b>
           <p>Connecte-toi avec Steam pour choisir et enregistrer ton style de killfeed.</p>
-          <a class="btn btn-gold" href="${B}/auth/steam">Connexion Steam</a>
-        </div>`;
+          <a class="btn btn-gold" href="${B}/auth/steam">Connexion Steam</a></div>`;
     }
 
-    /* Chargement */
     if (!steamId || !/^7656\d{13}$/.test(steamId) || !B) { renderLoggedOut(); return; }
     fetch(B + "/api/account?steamId=" + encodeURIComponent(steamId))
       .then((r) => r.json())
@@ -276,7 +286,7 @@
         if (!ownsKillfeed()) return renderLocked();
         renderChooser();
       })
-      .catch(() => { $("kfRoot").innerHTML = '<div class="kf-locked"><b>Compte indisponible</b><p>Impossible de contacter le serveur. Réessaie dans un instant.</p></div>'; });
+      .catch(() => { $("kfRoot").innerHTML = '<div class="kf-locked"><b>Compte indisponible</b><p>Impossible de contacter le serveur. Réessaie.</p></div>'; });
   })();
   </script>
 </body>
